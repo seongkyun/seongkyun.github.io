@@ -16,10 +16,10 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Site Title - a"
+title                    : "Seongkyun Han's blog"
 title_separator          : "-"
-name                     : "Your Name - a"
-description              : "An amazing website. - a"
+name                     : "Seongkyun Han"
+description              : "Things that I studied."
 url                      : "https://seongkyun.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -103,10 +103,10 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name - b"
+  name             : "Seongkyun Han"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an amazing person. - b"
-  location         : "Somewhere - b"
+  bio              : "Logs what I studied"
+  location         : "Seoul, Republic of Korea"
   email            :
   links:
     - label: "Email"
