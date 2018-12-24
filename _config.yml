@@ -42,7 +42,6 @@ nav:
     - '/'
     # - { Categories All: '/blog/categories/' } #sample
     
-    - { TIL (Today I Learned): '/blog/categories/#til' }
     #- { TIL (Today I Learned): '/blog/categories/#til' }
     #- { 컴퓨터공학 : '/blog/categories/#컴퓨터공학' }
     #- { Django: '/blog/categories/#django' }
@@ -53,7 +52,7 @@ nav:
     #- { 알고리즘 문제풀이: '/blog/categories/#알고리즘-문제풀이' }
     #- { git: '/blog/categories/#git' }
     #- { firebase: '/blog/categories/#firebase' }
-    #- { etc: '/blog/categories/#etc' }
+    - { etc: '/blog/categories/#etc' }
     # - { Tags: '/blog/tags/' }
   About:
     - '/about/'
