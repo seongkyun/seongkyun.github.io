@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Test uploading
-category: etc
+category: others
 comments: true
 ---
 ## Uploading testing
