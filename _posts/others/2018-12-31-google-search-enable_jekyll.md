@@ -22,9 +22,10 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
 
 ## sitemap.xml 파일 생성
 1. Github 최상위 디렉터리에 `Create new file`로 'sitemap.xml'파일 생성
-    - (파일명 ex.yourname.github.io/sitemap.xml)
+    - (파일명 ex. yourname.github.io/sitemap.xml)
 2. 만들어진 sitemap.xml 파일의 내용은 아래의 내용 복붙
-```
+```xml
+
 ---
 ---
 <?xml version="1.0" encoding="UTF-8"?>
@@ -45,9 +46,11 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
     {% endif %}
     {% endfor %}
 </urlset>
+
 ```
     - 필수로 맨 위의 --- 두 줄을 포함하여야 함
     - 자신의 Github blog 관리 페이지의(ex. https://github.com/yourname/yourname.github.io) _config.yml 파일의 url이 자신 홈페이지의 주소(ex. https://yourname.github.io)로 되어있어야 함
+    
     ```
     url: https://yourname.github.io
     ```
@@ -57,7 +60,7 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
 2. 자신이 추가한 속성(Github blog) 선택
 <center>
  <figure>
- <img src="/assets/post-img/others/fig1.png" alt="views">
+ <img src="/assets/post-img/others/fig2.PNG" alt="views">
  <figcaption>Search Console 속성 선택 예시 </figcaption>
  </figure>
  </center>
@@ -67,12 +70,13 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
     - ex. https://yourname.github.io/sitemap.xml
  <center>
  <figure>
- <img src="/assets/post-img/others/fig3.png" alt="views">
+ <img src="/assets/post-img/others/fig3.PNG" alt="views">
  <figcaption> 제출된 sitemap.xml 파일 예시 </figcaption>
  </figure>
  </center>
 6. 테스트 후 문제 없을시 제출 버튼 누르기
 
 - [참고 글]
+
     http://joelglovier.com/writing/sitemaps-for-jekyll-sites
     https://wayhome25.github.io/etc/2017/02/20/google-search-sitemap-jekyll/
