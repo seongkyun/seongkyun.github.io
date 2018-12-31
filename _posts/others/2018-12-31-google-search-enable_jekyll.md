@@ -49,15 +49,15 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
 </urlset>
 {%endraw%}
 ```
-
+.
     - 필수로 맨 위의 --- 두 줄을 포함하여야 함
     - 자신의 Github blog 관리 페이지의(ex. https://github.com/yourname/yourname.github.io) _config.yml 파일의 url이 자신 홈페이지의 주소(ex. https://yourname.github.io)로 되어있어야 함
     
-    ```
-    {%raw%}
-    url: https://yourname.github.io
-    {%endraw%}
-    ```
+```
+{%raw%}
+url: https://yourname.github.io
+{%endraw%}
+```
 
 ## 구글 Search Console에 sitemap.xml 제출
 1. 구글 [Search Console](https://www.google.com/webmasters/tools/home?hl=ko) 접속
