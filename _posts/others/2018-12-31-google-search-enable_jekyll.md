@@ -24,7 +24,8 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
 1. Github 최상위 디렉터리에 `Create new file`로 'sitemap.xml'파일 생성
     - (파일명 ex. yourname.github.io/sitemap.xml)
 2. 만들어진 sitemap.xml 파일의 내용은 아래의 내용 복붙
-```xml
+```
+{%raw%}
 
 ---
 ---
@@ -51,7 +52,8 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
     - 필수로 맨 위의 --- 두 줄을 포함하여야 함
     - 자신의 Github blog 관리 페이지의(ex. https://github.com/yourname/yourname.github.io) _config.yml 파일의 url이 자신 홈페이지의 주소(ex. https://yourname.github.io)로 되어있어야 함
     
-    ```yml
+    ```
+    {%raw%}
     url: https://yourname.github.io
     ```
 
@@ -65,6 +67,7 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
  </figure>
  </center>
  
+ 
 3. 좌측 메뉴바 중 크롤링 -> Sitemaps 선택
 4. 우측 상단의 빨간색 `SITEMAP 추가/테스트` 선택
 5. 자신의 Github blog 관리 페이지의 sitemap.xml 주소 입력
@@ -75,6 +78,7 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
  <figcaption> 제출된 sitemap.xml 파일 예시 </figcaption>
  </figure>
  </center>
+ 
  
 6. 테스트 후 문제 없을시 제출 버튼 누르기
 
