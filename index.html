@@ -73,7 +73,8 @@ title: Home
 
   <!-- 카테고리 글 숨김, 표시 전환 코드 -->
   <script type="text/javascript">
-
+  $(this).children().css("color", "#2d3e50")
+    
     $(".category-title").click(function(){
 
       if ($(this).next().css('display') === 'block'){
