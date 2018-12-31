@@ -2,7 +2,7 @@
 layout: post
 title: Github blog 글을 구글(Google)에서 검색되도록 설정하는 방법
 category: others
-tagsL [github, blog, jekyll, 구글검색]
+tags: [github, blog, jekyll, 구글검색]
 comments: true
 ---
 
