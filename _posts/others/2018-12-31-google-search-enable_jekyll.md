@@ -24,6 +24,7 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
 1. Github 최상위 디렉터리에 `Create new file`로 'sitemap.xml'파일 생성
 - (파일명 ex. yourname.github.io/sitemap.xml)
 2. 만들어진 sitemap.xml 파일의 내용은 아래의 내용 복붙
+
 ```
 {%raw%}
 
@@ -85,6 +86,5 @@ url: https://yourname.github.io
 
 - [참고 글]
 
-    http://joelglovier.com/writing/sitemaps-for-jekyll-sites
-    
-    https://wayhome25.github.io/etc/2017/02/20/google-search-sitemap-jekyll/
+http://joelglovier.com/writing/sitemaps-for-jekyll-sites
+https://wayhome25.github.io/etc/2017/02/20/google-search-sitemap-jekyll/
