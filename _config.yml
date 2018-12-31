@@ -52,7 +52,7 @@ nav:
     #- { 알고리즘 문제풀이: '/blog/categories/#알고리즘-문제풀이' }
     #- { git: '/blog/categories/#git' }
     #- { firebase: '/blog/categories/#firebase' }
-    - { etc: '/blog/categories/#etc' }
+    - { others: '/blog/categories/#others' }
     # - { Tags: '/blog/tags/' }
   About:
     - '/about/'
