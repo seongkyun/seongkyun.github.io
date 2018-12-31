@@ -72,7 +72,7 @@ url: https://yourname.github.io
 3. 좌측 메뉴바 중 크롤링 -> Sitemaps 선택
 4. 우측 상단의 빨간색 `SITEMAP 추가/테스트` 선택
 5. 자신의 Github blog 관리 페이지의 sitemap.xml 주소 입력
-    - ex. https://yourname.github.io/sitemap.xml
+- ex. https://yourname.github.io/sitemap.xml
  <center>
  <figure>
  <img src="/assets/images/post-img/others/fig3.PNG" alt="views">
