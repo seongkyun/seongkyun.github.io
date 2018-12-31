@@ -24,6 +24,8 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
 1. Github 최상위 디렉터리에 `Create new file`로 'sitemap.xml'파일 생성
 - (파일명 ex. yourname.github.io/sitemap.xml)
 2. 만들어진 sitemap.xml 파일의 내용은 아래의 내용 복붙
+- 필수로 맨 위의 --- 두 줄을 포함하여야 함
+- 자신의 Github blog 관리 페이지의(ex. https://github.com/yourname/yourname.github.io) _config.yml 파일의 url이 자신 홈페이지의 주소(ex. https://yourname.github.io)로 되어있어야 함
 
 ```
 {%raw%}
@@ -48,10 +50,7 @@ Github로 만든 blog의 글은 별도 설정 없이 구글에서 검색이 불�
     {% endfor %}
 </urlset>
 {%endraw%}
-```
-- 필수로 맨 위의 --- 두 줄을 포함하여야 함
-- 자신의 Github blog 관리 페이지의(ex. https://github.com/yourname/yourname.github.io) _config.yml 파일의 url이 자신 홈페이지의 주소(ex. https://yourname.github.io)로 되어있어야 함
-    
+```    
 ```
 {%raw%}
 url: https://yourname.github.io
