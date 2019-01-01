@@ -23,10 +23,10 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
 </figure>
 </center>
 
-(a): 1-dilated convolution으로 기존의 일반적인 convolution 연산과 동일
-(b): 2-dilated convolution. 각 빨간점만 convolution 연산에 사용.(나머지는 0으로 채워짐)
+- (a): 1-dilated convolution으로 기존의 일반적인 convolution 연산과 동일
+- (b): 2-dilated convolution. 각 빨간점만 convolution 연산에 사용.(나머지는 0으로 채워짐)
   - Receptive field 크기가 7x7 영역으로 커지는 꼴
-(c): 4-dilated convolution. Receptive field 크기가 15x15로 커지는 꼴
+- (c): 4-dilated convolution. Receptive field 크기가 15x15로 커지는 꼴
 
 - Dilated convolution 사용 시 receptive field가 커지는 효과를 얻을 수 있음.
   - 파라미터 개수(연산량)가 늘어나지 않으며 큰 receptive field를 취할 수 있는 장점이 존재(conv 표현력 대비 연산량 감소)
@@ -107,7 +107,7 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
 
 
 - 지금까지 deep learning 분야의 많은 연구들은 predictor의 weight 값(parameter, w)을 구하는데 초점을 맞춤
-- 위 논문들은 어떤 데이터 x를 뽑을 것인가에 대해 
+- 위 논문들은 어떤 데이터 x를 뽑을 것인가에 대해 초점을 
 
 - [참고 글]
 
