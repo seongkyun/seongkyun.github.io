@@ -107,7 +107,8 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
 
 
 - 지금까지 deep learning 분야의 많은 연구들은 predictor의 weight 값(parameter, w)을 구하는데 초점을 맞춤
-- 위 논문들은 어떤 데이터 x를 뽑을 것인가에 대해 초점을 
+- 위 논문들은 어떤 데이터 x를 뽑을 것인가에 대해 초점을 맞춤
+
 
 - [참고 글]
 
