@@ -27,12 +27,11 @@ author:
   name: SEONHKYUN HAN
   description: 한성균(SEONGKYUN HAN)
   contact:
-    # linkedin:  https://www.linkedin.com/in/lizhihao
+    # linkedin:  https://www.linkedin.com/in/myname
     github:    https://github.com/seongkyun
     facebook:  https://www.facebook.com/seongkyun.han
-    # twitter:   https://twitter.com/Li_Zhihao
-    # weibo:     http://weibo.com/41173780
-    email:    mailto:skhan3410@naver.com
+    # twitter:   https://twitter.com/myname
+    email:    skhan3410@naver.com
 
 # Navigation (2nd level links supported)
 nav:
@@ -42,16 +41,10 @@ nav:
     - '/'
     # - { Categories All: '/blog/categories/' } #sample
     
-    #- { TIL (Today I Learned): '/blog/categories/#til' }
-    #- { 컴퓨터공학 : '/blog/categories/#컴퓨터공학' }
-    #- { Django: '/blog/categories/#django' }
-    #- { python: '/blog/categories/#python' }
-    #- { javascript: '/blog/categories/#javascript' }
-    #- { nodejs: '/blog/categories/#nodejs' }
-    #- { MySQL: '/blog/categories/#MySQL' }
     #- { 알고리즘 문제풀이: '/blog/categories/#알고리즘-문제풀이' }
-    #- { git: '/blog/categories/#git' }
-    #- { firebase: '/blog/categories/#firebase' }
+    - { study: '/blog/categories/#study' }
+    - { papers: '/blog/categories/#papers' }
+    - { git: '/blog/categories/#git' }
     - { others: '/blog/categories/#others' }
     # - { Tags: '/blog/tags/' }
   About:
@@ -66,7 +59,7 @@ category_page: '/blog/categories/'
 
 # Puglins
 mathjax: true # whether support mathjax
-#google_analytics_token: 'UA-92094009-1' # leave blank if you don't want google analytics
+#google_analytics_token: 'token_number' # leave blank if you don't want google analytics
 disqus_short_name: 'seongkyunhan-github-io' # leave blank if you don't want disqus
 
 
