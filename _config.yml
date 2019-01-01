@@ -41,10 +41,10 @@ nav:
     - '/'
     # - { Categories All: '/blog/categories/' } #sample
     
-    #- { 알고리즘 문제풀이: '/blog/categories/#알고리즘-문제풀이' }
     - { study: '/blog/categories/#study' }
     - { papers: '/blog/categories/#papers' }
     - { git: '/blog/categories/#git' }
+    - { baekjoon: '/blog/categories/#baekjoon' }
     - { others: '/blog/categories/#others' }
     # - { Tags: '/blog/tags/' }
   About:
