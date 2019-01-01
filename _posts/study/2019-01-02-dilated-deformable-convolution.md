@@ -18,7 +18,7 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
   - 이유? 해상도 손실 없이 receptive field 크기 확장 가능
 <center>
 <figure>
-<img src="assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig1.PNG" alt="views">
+<img src="/assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig1.PNG" alt="views">
 <figcaption>Dilated Convolution </figcaption>
 </figure>
 </center>
@@ -41,7 +41,7 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
   - Pooling을 이용한 receptive field의 확장효과를 얻는 CNN보다 양질의 feature map을 얻을 수 있음(표현력이 더 좋음)
 <center>
 <figure>
-<img src="assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig2.PNG" alt="views">
+<img src="/assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig2.PNG" alt="views">
 <figcaption>상: CNN with Pooling layer / 하: Dilated Convolution, image from DeepLab paper </figcaption>
 </figure>
 </center>
@@ -52,7 +52,7 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
 - CNN Layer에서 사용하는 convolution은 receptive field 크기가 항상 같음
 <center>
 <figure>
-<img src="assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig3.PNG" alt="views">
+<img src="/assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig3.PNG" alt="views">
 <figcaption>Deformable convolution</figcaption>
 </figure>
 </center>
@@ -61,7 +61,7 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
 - (a)에 offset을 더해(초록 화살표) (b), (c), (d)의 파란 점들처럼 다양한 패턴으로 convolution을 변형시켜 사용 가능=
 <center>
 <figure>
-<img src="assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig4.PNG" alt="views">
+<img src="/assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig4.PNG" alt="views">
 <figcaption>3x3 Deformable Convolution 예시 구조</figcaption>
 </figure>
 </center>
@@ -74,7 +74,7 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
   - 여기서 'offset을 정하는 convolution kernel'은 얼마나 어떻게 멀어질지 정하는 convolutiond
 <center>
 <figure>
-<img src="assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig5.PNG" alt="views">
+<img src="/assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig5.PNG" alt="views">
 <figcaption>Convolution filter의 sampling 위치를 보여주는 예제</figcaption>
 </figure>
 </center>
@@ -89,7 +89,7 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
 - Deformable conv와 다른점은 offset 학습에 convolution이 아니라 fc layer를 사용(이유는 논문에도 안나와있음...)
 <center>
 <figure>
-<img src="assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig6.PNG" alt="views">
+<img src="/assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig6.PNG" alt="views">
 <figcaption>Deformable ROI pooling </figcaption>
 </figure>
 </center>
@@ -97,7 +97,7 @@ Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extracto
 - Training 과정에서 offset을 결정하는 fc later도 back-propagation을 통해 학습됨(parameter update)
 <center>
 <figure>
-<img src="assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig7.PNG" alt="views">
+<img src="/assets/post_img/study/2019-01-02-dilated-deformable-convolution/fig7.PNG" alt="views">
 <figcaption>입력(노란 박스)에 대한 출력(붉은 박스) 결과 </figcaption>
 </figure>
 </center>
