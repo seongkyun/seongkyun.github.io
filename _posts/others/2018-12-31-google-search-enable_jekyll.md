@@ -62,7 +62,7 @@ url: https://yourname.github.io
 2. 자신이 추가한 속성(Github blog) 선택
 <center>
  <figure>
- <img src="/assets/post_img/others/fig2.PNG" alt="views">
+ <img src="/assets/post_img/others/2018-12-31-google-search-enable_jekyll/fig2.PNG" alt="views">
  <figcaption>Search Console 속성 선택 예시 </figcaption>
  </figure>
  </center>
@@ -75,7 +75,7 @@ url: https://yourname.github.io
 - ex. https://yourname.github.io/sitemap.xml
  <center>
  <figure>
- <img src="/assets/post_img/others/fig3.PNG" alt="views">
+ <img src="/assets/post_img/others/2018-12-31-google-search-enable_jekyll/fig3.PNG" alt="views">
  <figcaption> sitemap.xml 파일이 잘 제출된 경우 위처럼 보임 </figcaption>
  </figure>
  </center>
