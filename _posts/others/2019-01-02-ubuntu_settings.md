@@ -1,8 +1,8 @@
 ---
 layout: post
-title: Dilated Convolution과 Deformalbe Convolution
+title: [Ubuntu] PC에 우분투(Ubuntu) CUDA개발환경 세팅하기
 category: study
-tags: [dilated, deformable, convolution, deep learning]
+tags: [Ubuntu, 환경 , deep learning]
 comments: true
 ---
 
