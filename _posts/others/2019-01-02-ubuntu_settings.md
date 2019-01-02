@@ -81,6 +81,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/lib64:$LD_LIBRARY_PATH
 - 우분투에 설치된 각종 패키지의 충돌 등을 방지하기 위해 사용한다.
 - Tensorflow/Pytorch 등 각종 툴킷들의 버전 관리에도 편리하다.
 - Pytorch(Caffe2)의 경우, Source code로 빌드하는 경우엔 virtualenv 내에서는 불가능하다(Python에서의 해결 불가능한 에러가 발생)
+
 1. `pip3 install virtualenv`
 2. 가상환경 생성
 - Python 2, 3.5, 3.6등 버전별로 관리가 가능하다.
