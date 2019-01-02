@@ -38,12 +38,13 @@ PC에 우분투(Ubuntu)를 설치하고, 딥러닝 개발환경을 세팅하는 
 ## 그래픽 드라이버 및 CUDA 설치(CUDA 9.0)
 - CUDA를 설치하면 자동으로 그래픽 드라이버를 같이 설치해주므로 그게 오류가 적고 속편하다.
 
-1. [링크](https://developer.nvidia.com/cuda-90-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1604&target_type=runfilelocal)로 들어가 아래의 옵션에 맞게 세팅 후 "Base Installer" 다운로드
 <center>
 <figure>
 <img src="/assets/post_img/others/2019-01-02-ubuntu_settings/fig1.PNG" alt="views">
 </figure>
 </center>
+
+1. [링크](https://developer.nvidia.com/cuda-90-download-archive?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1604&target_type=runfilelocal)로 들어가 의 옵션에 맞게 세팅 후 "Base Installer" 다운로드
 
 2. `Ctrl + Alt + F1` 동시에 누르기(Virtual terminal 들어가기)
 - 아이디랑 비밀번호 입력(Ubuntu 설치 시 생성한 아이디 및 비밀번호)
