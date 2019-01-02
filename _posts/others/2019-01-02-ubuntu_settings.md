@@ -14,11 +14,14 @@ PC에 우분투(Ubuntu)를 설치하고, 딥러닝 개발환경을 세팅하는 
 - 우분투는 각종 오류가 많으므로.. 최신보다는 이전 버전을 설치하는것이 유리하다.(16.04LTS 추천)
 1. 우분투 이미지 다운로드('Ubuntu 16.04'라고 치면 바로 뜸)
 - [다운로드](http://releases.ubuntu.com/16.04/ubuntu-16.04.5-desktop-amd64.iso)
+
 2. 다운로드 된 이미지를 이용하여 부팅용 USB 제작
 - [Universal USB Installer](https://universal-usb-installer.kr.uptodown.com/windows) 사용
+
 3. 완성 된 부팅 USB를 이용하여 설치하고자 하는 PC에 꽂고 부팅
 - 이 때, 부팅순서 키(Board 회사마다 다름)를 눌러 USB로 부팅
 - 부팅 시에는 Secure boot? Fast boot 옵션이 추가된 USB 말고 일반 USB로 선택해야 오류가 뜨질 않음
+
 4. 설치 완료
 
 ## Tty 콘솔 진입 설정
