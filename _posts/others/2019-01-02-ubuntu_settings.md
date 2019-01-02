@@ -56,6 +56,7 @@ PC에 우분투(Ubuntu)를 설치하고, 딥러닝 개발환경을 세팅하는 
 5. CUDA 환경변수 설정
 - 재부팅 후 `vim ~/.bashrc`
 - 맨 아랫줄에 하기 내용 입력
+
 ```
 {%raw%}
 export PATH
@@ -63,6 +64,7 @@ export PATH=/usr/local/cuda/bin:$PATH
 export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/lib64:$LD_LIBRARY_PATH
 {%endraw%}
 ```
+
 - 파일을 저장하고 빠져나옴
 - `source ~/.bashrc`
 - `nvcc --version`으로 CUDA 버전 잡히면 설치 완료
@@ -83,6 +85,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/lib64:$LD_LIBRARY_PATH
 - Python 2, 3.5, 3.6등 버전별로 관리가 가능하다.
 - Python 2에서 사용 할 경우, 위의 pip 및 virtualenv 설치 시 pip3 대신 pip를 입력하면 된다.
 - Python 버전별 가상환경 생성 명령어는 아래와 같다.
+
 ```
 {%raw%}
 # python 2
@@ -95,8 +98,10 @@ $ virtualenv directory --python=python3.5
 $ virtualenv directory --python=python3.6
 {%endraw%}
 ```
+
 - 생성 된 가상환경을 제거하고 싶을 경우, 생성된 폴더를 그냥 `sudo rm -rf directory`로 날려버리면 된다.
 - 생성 된 가상환경에 설치된 모듈들을 txt파일로 저장하고싶으면 가상환경이 활성화 된 상태에서 아래의 명령어를 이용한다.
+
 ```
 {%raw%}
 (venv) $ pip freeze > requirement.txt
