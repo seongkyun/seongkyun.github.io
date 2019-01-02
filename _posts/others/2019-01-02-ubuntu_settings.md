@@ -39,6 +39,7 @@ PC에 우분투(Ubuntu)를 설치하고, 딥러닝 개발환경을 세팅하는 
 <img src="/assets/post_img/others/2019-01-02-ubuntu_settings/fig1.PNG" alt="views">
 </figure>
 </center>
+
 2. `Ctrl + Alt + F1` 동시에 누르기(Virtual terminal 들어가기)
 - 아이디랑 비밀번호 입력(Ubuntu 설치 시 생성한 아이디 및 비밀번호)
 3. CUDA 및 그래픽 드라이버 설치
