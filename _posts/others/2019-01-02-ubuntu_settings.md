@@ -7,6 +7,7 @@ comments: true
 ---
 
 # [Ubuntu] PC에 우분투(Ubuntu) CUDA개발환경 세팅하기
+
 PC에 우분투(Ubuntu)를 설치하고, 딥러닝 개발환경을 세팅하는 방법을 정리해봤다.
 
 ## Ubuntu 설치(단일 운영체제 부팅)
