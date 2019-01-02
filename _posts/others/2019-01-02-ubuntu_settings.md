@@ -84,6 +84,7 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/lib64:$LD_LIBRARY_PATH
 
 1. `pip3 install virtualenv`
 2. 가상환경 생성
+
 - Python 2, 3.5, 3.6등 버전별로 관리가 가능하다.
 - Python 2에서 사용 할 경우, 위의 pip 및 virtualenv 설치 시 pip3 대신 pip를 입력하면 된다.
 - Python 버전별 가상환경 생성 명령어는 아래와 같다.
