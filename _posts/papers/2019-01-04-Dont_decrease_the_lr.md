@@ -105,19 +105,13 @@ $$\frac{dw}{dt}=-\frac{dC}{dw}+\eta(t)$$
 - 위 식에서 $\eta(t)$(SGD를 쓰기때문에 발생하는 noise)의 variance가 $$<\eta(t)\eta(t')>=gF(w)\delta(t-t')$$ 가 된다고 분석(mean = 0)
 
 - Noise scale $g$
-
-$$g=\epsilon(\frac{N}{B}-1)$$
-
-
+  - $$g=\epsilon(\frac{N}{B}-1)$$
   - $\epsilon$은 learning rate, $N$은 전체 traning data size, $B$는 batch size를 의미
   - $g$를 수학적(stochastic differential equation)으로 풀어서 왼쪽의 관계가 나옴(과정은 다른논문)
   - 결론적으로, SGD를 사용함으로써 생기는 variance가 위의 식에 비례
   - 위의 식이 linear scaling rule을 의미
   - 보통 $N>>B$이므로, -1항은 무시 가능하여 아래의 식으로 근사화가 가능
-
-$$g\approx\epsilon\frac{N}{B}\longrightarrow g\propto\frac{\epsilon}{B}$$
-
-
+  - $$g\approx\epsilon\frac{N}{B}\longrightarrow g\propto\frac{\epsilon}{B}$$
   - Batch size를 조절하면 똑같이 lr($\epsilon$)을 비례해서 키워줘야 하고, SGD로부터 발생한 noise(random fluctuation)가 동일(일정)하게 유지 될 수 있다(linear scaling rule)
   - 이로부터 generalization이 유지가 된다고 생각 할 수 있음
 - Random fluctuation이 generalization에 가장 영향을 크게 미침(일정하게 유지되어야 함)
@@ -141,18 +135,13 @@ $$g\approx\epsilon\frac{N}{B}\longrightarrow g\propto\frac{\epsilon}{B}$$
 ## The effective learning rate and the accumulation variable
 
 - Noise scale of random fluctuation in the SGD with momentum dynamics
-
-$$g=\frac{\epsilon}{1-m}(\frac{N}{B}-1)\approx\frac{\epsilon N}{B(1-m)}$$
-
-
+  - $$g=\frac{\epsilon}{1-m}(\frac{N}{B}-1)\approx\frac{\epsilon N}{B(1-m)}$$
   - 즉, momentum ($m$: momentum coefficient)함수 쓸 때 $g$는 위의 관계를 가짐
   - 하지만, 실제로는 결과가 좋지 않게 나옴
+
 - Problem analysis
-
-$$\Delta A=-(1-m)A+\frac{d\hat{C}}{dw}$$
-$$\Delta w=A\epsilon$$
-
-
+  - $$\Delta A=-(1-m)A+\frac{d\hat{C}}{dw}$$
+  - $$\Delta w=A\epsilon$$
   - 이유: momentum이 처음에 0으로 초기화
   - 즉, 0에 초반에 biased 되어 있게 되므로 weight update가 원래 계산보다 더 적게 수행됨
   - $g=\approx\frac{\epsilon N}{B(1-m)}$이므로, $g$를 유지하면서 batch size($B$)를 키우려면 momentum ($m$)을 키워야 함
@@ -172,7 +161,7 @@ $$\Delta w=A\epsilon$$
   - 따라서, 전체가 아닌 Sampled data에 대해서만 Statistics(variance, mean)을 계산하여 batch normalization을 수행
 
 ## Simulated annealing in Wide ResNet
-- Three scheduling strategies (Cifar-10 datset)
+
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-03-Dont_decrease_the_lr/fig3.PNG" alt="views">
@@ -180,27 +169,26 @@ $$\Delta w=A\epsilon$$
 </figure>
 </center>
 
-
+- Three scheduling strategies (Cifar-10 datset)
   - Lr decay factor: 5, 3가지 Scheduling rule 사용
   - 파란 선: 일반적인 방법
   - 초록 선: 초반에는 Batch size 증가, 그다음엔 lr decaying
   - 빨간 선: lr을 유지하면서 batch size를 5배씩 증가
 
-- Training loss curve
-  - Loss curve가 동일하다는것을 보여주려 함
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-03-Dont_decrease_the_lr/fig4.PNG" alt="views">
+  <figcaption>Training loss curve</figcaption>
 </figure>
 </center>
 
-
+- Training loss curve
+  - Loss curve가 동일하다는것을 보여주려 함
   - (a): Loss curves are identical
   - (b): Increasing batch size strategy significantly reduces the number of parameter updates
   - Batch size가 커지는 경우 parameter update 수는 줄어들어 더 빠른 학습이 가능
   - Batch size를 조절하는 것이 random fluctuation에 끼치는 영향이 같으므로 generalization이 똑같이 잘 된다(Traning)
 
-- Test loss curves (Test set에 대한 accuracy)
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-03-Dont_decrease_the_lr/fig5.PNG" alt="views">
@@ -208,9 +196,10 @@ $$\Delta w=A\epsilon$$
 </figure>
 </center>
 
-
+- Test loss curves A(Test set에 대한 accuracy)
   - (a): SGD with momentum, (b): SGD with Nestrov momentum
   - 다른 momentum을 사용하더라도 결과는 거의 동일한것을 알 수 있음
+  
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-03-Dont_decrease_the_lr/fig6.PNG" alt="views">
@@ -218,21 +207,19 @@ $$\Delta w=A\epsilon$$
 </figure>
 </center>
 
-
+- Test loss curves B
   - (a): Vanilla SGD, (b): Adam
 
 - 결국 논문에서 제안하는 방법과 기존 방법의 차이에 대한 성능 변화가 적음
 
 ## Increasing the effective learning rate
-- Momentum coefficient를 변화시킨 실험 결과
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-03-Dont_decrease_the_lr/fig7.PNG" alt="views">
 <figcaption>Momentum coefficient 변화시킨 실험결과</figcaption>
 </figure>
 </center>
-
-
+- Momentum coefficient를 변화시킨 실험 결과
   - Default settings: initial LR 0.1, decay factor 5, momentum 0.9, batch size 128
   - “Increasing batch size”: increasing batch size by a factor 5
   - “Increased initial learning rate”: initial LR 0.5, initial batch size 640, increasing batch size
@@ -242,7 +229,7 @@ $$\Delta w=A\epsilon$$
   - 논문에선 보라색 그래프(제일 좌측)가 아직 수렴하지 않았으므로 더 학습 할 경우 정확도가 개선 될 것이라 판단하나 실험적으로 내용을 넣진 않음...
 
 ## Training ImageNet in 2500 parameter updates
-- Control batch size only (ImageNet dataset)
+
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-03-Dont_decrease_the_lr/fig8.PNG" alt="views">
@@ -250,7 +237,7 @@ $$\Delta w=A\epsilon$$
 </figure>
 </center>
 
-
+- Control batch size only (ImageNet dataset)
   - 실험 1, 2는 두 실험 간의 variance를 보이기 위하여 두 번을 수행
   - Trained Inception-ResNet-V2
   - Ghost batch size 32, initial LR 3.0, momentum 0.9, initial batch size 8192
@@ -260,7 +247,6 @@ $$\Delta w=A\epsilon$$
   - 결과가 조금 안좋아짐. 논문에선 원래 실험 자체 variance가 있으니 그 variance 안에 들어가므로 상관이 없다고 주장...
   - 하지만 실제로는 1%정도의 정확도 하락을 보임
 
-- Control batch size and momentum coefficient
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-03-Dont_decrease_the_lr/fig9.PNG" alt="views">
@@ -268,7 +254,7 @@ $$\Delta w=A\epsilon$$
 </figure>
 </center>
 
-
+- Control batch size and momentum coefficient
   - Initial LR 3.0 and Ghost batch size 64
   - “Momentum 0.9”: initial batch size 8192
   - “Momentum 0.95”: initial batch size 16384
