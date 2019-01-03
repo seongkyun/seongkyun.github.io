@@ -18,6 +18,6 @@ print('hello world!')
 
 ## LaTex testing
 
-$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$
+- Inline testing is following: $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$ . The outline testing is below:
 
 $$\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$$
