@@ -86,8 +86,10 @@ Authors: Samuel L. Smith, Pieter-Jan Kindermans, Chris Ying, Quoc V. Le (Google 
 - Convergence conditions of SGD
   - Convex surface(Convex loss function)에서 수렴하는 조건(SGD가 수렴하기 위한 조건)
   - For fixed batch size
+
 1. $$\sum^\infty_{i=1}\epsilon_i = \infty$$
 2. $$\sum^\infty_{i=1}\epsilon^2_i < \infty$$
+
 - 1에서, 수렴하기 위해서는 lr의 sum이 무한대
 - 2에서, lr의 제곱의 모든 sum이 유한해야 함
 - 직관적으로
@@ -96,18 +98,26 @@ Authors: Samuel L. Smith, Pieter-Jan Kindermans, Chris Ying, Quoc V. Le (Google 
 
 - Interpretation of SGD for various batch size
   - 위의 논의를 다양한 batch size에 대해서도 확장
+
 $$\frac{dw}{dt}=-\frac{dC}{dw}+\eta(t)$$
+
 - $\frac{dC}{dw}$은 Cost function의 gradient, $\eta(t)$은 gradient를 의미
 - 위 식에서 $\eta(t)$(SGD를 쓰기때문에 발생하는 noise)의 variance가 $$<\eta(t)\eta(t')>=gF(w)\delta(t-t')$$ 가 된다고 분석(mean = 0)
 
 - Noise scale $g$
+
 $$g=\epsilon(\frac{N}{B}-1)$$
+
+-
   - $\epsilon$은 learning rate, $N$은 전체 traning data size, $B$는 batch size를 의미
   - $g$를 수학적(stochastic differential equation)으로 풀어서 왼쪽의 관계가 나옴(과정은 다른논문)
   - 결론적으로, SGD를 사용함으로써 생기는 variance가 위의 식에 비례
   - 위의 식이 linear scaling rule을 의미
   - 보통 $N>>B$이므로, -1항은 무시 가능하여 아래의 식으로 근사화가 가능
+
 $$g\approx\epsilon\frac{N}{B}\longrightarrow g\propto\frac{\epsilon}{B}$$
+
+-
   - Batch size를 조절하면 똑같이 lr($\epsilon$)을 비례해서 키워줘야 하고, SGD로부터 발생한 noise(random fluctuation)가 동일(일정)하게 유지 될 수 있다(linear scaling rule)
   - 이로부터 generalization이 유지가 된다고 생각 할 수 있음
 - Random fluctuation이 generalization에 가장 영향을 크게 미침(일정하게 유지되어야 함)
@@ -131,12 +141,18 @@ $$g\approx\epsilon\frac{N}{B}\longrightarrow g\propto\frac{\epsilon}{B}$$
 ## The effective learning rate and the accumulation variable
 
 - Noise scale of random fluctuation in the SGD with momentum dynamics
+
 $$g=\frac{\epsilon}{1-m}(\frac{N}{B}-1)\approx\frac{\epsilon N}{B(1-m)}$$
+
+-
   - 즉, momentum ($m$: momentum coefficient)함수 쓸 때 $g$는 위의 관계를 가짐
   - 하지만, 실제로는 결과가 좋지 않게 나옴
 - Problem analysis
+
 $$\Delta A=-(1-m)A+\frac{d\hat{C}}{dw}$$
 $$\Delta w=A\epsilon$$
+
+-
   - 이유: momentum이 처음에 0으로 초기화
   - 즉, 0에 초반에 biased 되어 있게 되므로 weight update가 원래 계산보다 더 적게 수행됨
   - $g=\approx\frac{\epsilon N}{B(1-m)}$이므로, $g$를 유지하면서 batch size($B$)를 키우려면 momentum ($m$)을 키워야 함
@@ -262,7 +278,9 @@ $$\Delta w=A\epsilon$$
 
 ## Conlusion
 - Scaling rule
+
 $$B\propto \frac{\epsilon}{(1-m)}$$
+
 - 더 빠른 학습을 수행
   - Large batch size와 momentum을 증가시킴
   - 더 낮은 accuracy loss
