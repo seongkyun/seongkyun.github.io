@@ -54,8 +54,8 @@ Authors: Samuel L. Smith, Pieter-Jan Kindermans, Chris Ying, Quoc V. Le (Google 
   - 즉, Sharp minimum -> bad to generalization / Broad minimum -> good to generalization
 - SGD와 batch size의 관계에서 보는 generalization의 영향
   - SGD W/O noise: $\Theta_{t+1} \leftarrow \Theta_{t} + \alpha_{t}\nabla\Theta$
-  - SGD W/ noise: $\Theta_{t+1} \leftarrow \Theta_{t} + \alpha_{t}(\nabla\Theta + \mathnormal{N}(0, \sigma^2_t))$
-  - Noise term: $\mathnormal{N}(0, \sigma^2_t)$ -> Noise가 minima를 general하게 만들어줌
+  - SGD W/ noise: $\Theta_{t+1} \leftarrow \Theta_{t} + \alpha_{t}(\nabla\Theta + N(0, \sigma^2_t))$
+  - Noise term: $N(0, \sigma^2_t)$ -> Noise가 minima를 general하게 만들어줌
 - 작은 batch 사이즈
   - Weight parameter 업데이트 횟수가 많음
   - SGD가 많은 noise component를 가짐
@@ -96,12 +96,12 @@ Authors: Samuel L. Smith, Pieter-Jan Kindermans, Chris Ying, Quoc V. Le (Google 
 
 - Interpretation of SGD for various batch size
   - 위의 논의를 다양한 batch size에 대해서도 확장
-$$\frac{dw}{dt}=-\frac{d\mathnormal{C}}{dw}+\eta(t)$$
-- $\frac{d\mathnormal{C}}{dw}$은 Cost function의 gradient, $\eta(t)$은 gradient를 의미
-- 위 식에서 $\eta(t)$(SGD를 쓰기때문에 발생하는 noise)의 variance가 $$<\eta(t)\eta(t')>=\mathnormal{g}F(w)\delta(t-t')$$ 가 된다고 분석(mean = 0)
+$$\frac{dw}{dt}=-\frac{dC}{dw}+\eta(t)$$
+- $\frac{dC}{dw}$은 Cost function의 gradient, $\eta(t)$은 gradient를 의미
+- 위 식에서 $\eta(t)$(SGD를 쓰기때문에 발생하는 noise)의 variance가 $$<\eta(t)\eta(t')>=gF(w)\delta(t-t')$$ 가 된다고 분석(mean = 0)
 
-- Noise scale $\mathnormal{g}$
-$$\mathnormal{g}=\epsilon(\frac{\mathnormal{N}}{\mathnormal{B}}-1)$$
+- Noise scale $g$
+$$g=\epsilon(\frac{N}{B}-1)$$
   - $\epsilon$은 learning rate, $N$은 전체 traning data size, $B$는 batch size를 의미
   - $g$를 수학적(stochastic differential equation)으로 풀어서 왼쪽의 관계가 나옴(과정은 다른논문)
   - 결론적으로, SGD를 사용함으로써 생기는 variance가 위의 식에 비례
