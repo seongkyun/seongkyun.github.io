@@ -1,7 +1,7 @@
 ---
 layout: post
 title: PC에 우분투(Ubuntu) CUDA개발환경 세팅하기
-category: study
+category: others
 tags: [Ubuntu, 환경 , deep learning]
 comments: true
 ---
