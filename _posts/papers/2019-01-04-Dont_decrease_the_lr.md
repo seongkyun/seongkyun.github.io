@@ -270,7 +270,7 @@ $$B\propto \frac{\epsilon}{(1-m)}$$
 - 더 빠른 학습을 수행
   - Large batch size와 momentum을 증가시킴
   - 더 낮은 accuracy loss
-- Inception-ResNet-V2를 사용해 ImageNet datset에 대해 2500번의 weight parameter update만을 가지고 77%의 정확도를 
+- Inception-ResNet-V2를 사용해 ImageNet datset에 대해 2500번의 weight parameter update만을 가지고 77%의 정확도를 달성
   
 ---
 - [참고 글]
