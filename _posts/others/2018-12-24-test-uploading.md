@@ -16,7 +16,7 @@ print('hello world!')
 {% endraw %}
 ```
 
-## LaTex testing
+## MathJax testing
 
 - Inline testing is following: $\sum_{i=0}^n i^2 = \frac{(n^2+n)(2n+1)}{6}$ . The outline testing is below:
 
