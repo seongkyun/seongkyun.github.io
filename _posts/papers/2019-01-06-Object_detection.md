@@ -246,14 +246,14 @@ comments: true
 - Mean Average Precision of PASCAL VOC 2007
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-01-06-Object_detection/fig16.PNG" alt="views">
+<img src="/assets/post_img/papers/2019-01-06-Object_detection/fig16.png" alt="views">
 </figure>
 </center>
 
 - Mean Average Precision of PASCAL VOC 2012
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-01-06-Object_detection/fig17.PNG" alt="views">
+<img src="/assets/post_img/papers/2019-01-06-Object_detection/fig17.png" alt="views">
 </figure>
 </center>
 
@@ -261,23 +261,16 @@ comments: true
   - Non-maximum suppression 알고리즘에 대한 효율성 개선의 여지가 남아있음
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-01-06-Object_detection/fig18.PNG" alt="views">
+<img src="/assets/post_img/papers/2019-01-06-Object_detection/fig18.png" alt="views">
 </figure>
 </center>
 
 - Visualization
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-01-06-Object_detection/fig19.PNG" alt="views">
+<img src="/assets/post_img/papers/2019-01-06-Object_detection/fig19.png" alt="views">
 </figure>
 </center>
-
-
-
-
-
-
-
 
 
 ---
