@@ -189,6 +189,7 @@ comments: true
 <img src="/assets/post_img/papers/2019-01-06-Object_detection/temp1.PNG" alt="views">
 </figure>
 </center>
+
 - $\hat{g}^{cx}_j=(g^{cx}_j-d^{cx}_i)/d^w_i \qquad \hat{g}^{cy}_j=(g^{cy}_j-d^{cy}_i)/d^h_i$
 - $\hat{g}^w_j=log(\frac{g^w_j}{d^w_i}) \qquad \hat{g}^h_j=log(\frac{g^h_j}{d^h_i})$
   - $N$: 검출된 박스 개수
