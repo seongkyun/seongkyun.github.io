@@ -184,8 +184,8 @@ comments: true
 - $L(x, c, l, g)=\frac{1}{N}(L_{conf}(x, c)+\alpha L_{loc}(x, l, g))$
 - Loss function은 객체에 대한 confidence와 경계박스에 대한 localization을 더한 형태
 - $$L_{loc}(x, l, g)=\sum^N_{i\in{Pos}}\sum_{m\in{\left\{ cx, cy, w, h \right\}}} x^k_{ij}smooth_{L1}(l^m_i-\hat{g}^m_j)$$
-- $\hat{g}^{cx}_j=(g^{cx}_j-d^{cx}_i)/d^w_i$     $\hat{g}^{cy}_j=(g^{cy}_j-d^{cy}_i)/d^h_i$
-- $\hat{g}^w_j=log(\frac{g^w_j}{d^w_i})$     $\hat{g}^h_j=log(\frac{g^h_j}{d^h_i})$
+- $\hat{g}^{cx}_j=(g^{cx}_j-d^{cx}_i)/d^w_i \qquad \hat{g}^{cy}_j=(g^{cy}_j-d^{cy}_i)/d^h_i$
+- $\hat{g}^w_j=log(\frac{g^w_j}{d^w_i}) \qquad \hat{g}^h_j=log(\frac{g^h_j}{d^h_i})$
 - $$smooth_{L1}(x)=\left\{\begin{matrix} 0.5x^2, & \mbox{if }\abs{x}<1\\ \abs{x}-0.5, & \mbox{otherwise} \end{matrix}\rig$$
   - $N$: 검출된 박스 개수
   - $g$ : ground truth box (실제 박스의 변수들)
@@ -196,7 +196,13 @@ comments: true
   - $w, h$ : width and height
   - $\alpha$ : weight term( $\alpha$ = 1)
 - The confidence loss is the softmax loss over multiple classes confidences ($c$).
-- $$L_{conf}(x, c)=-\sum^N_{i\in{Pos}}x^p_{ij}log(\hat{c}^p_i)-\sum_{i\in{Neg}}log(\hat{c}^0_i) \quad \mbox{where} \; \hat{c}^p_i=\frac{exp(c^p_i)}{\sum_pexp(c^p_i)}$$
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-01-06-Object_detection/temp1.PNG" alt="views">
+<figcaption>Positive/Negative 비율</figcaption>
+</figure>
+</center>
+
 - The weight term $\alpha$ is set to 1 by cross validation.
 
 <center>
