@@ -200,13 +200,6 @@ comments: true
   - $w, h$ : width and height
   - $\alpha$ : weight term( $\alpha$ = 1)
 - The confidence loss is the softmax loss over multiple classes confidences ($c$).
-<center>
-<figure>
-<img src="/assets/post_img/papers/2019-01-06-Object_detection/temp1.PNG" alt="views">
-<figcaption>Positive/Negative 비율</figcaption>
-</figure>
-</center>
-
 - The weight term $\alpha$ is set to 1 by cross validation.
 
 <center>
