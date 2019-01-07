@@ -165,7 +165,7 @@ comments: true
 - Jaccard overlap(IoU) 계산 방법
   - $s_{k}=s_{min}+\frac{s_{max}-s_{min}}{m-1}(k-1)$,   $k\in[1,m]$
   - Jaccard overlap 계산을 위해 스케일 계수 $s_k$를 이용하여 디폴드 박스 가로/세로를 구함.
-  - $a_r\in{	\left\{ {1, 2, 3, \frac{1}{2}, \frac{1}{3}} \right\}}$
+  - $a_r\in{\left\{ {1, 2, 3, \frac{1}{2}, \frac{1}{3}} \right\}}$
   - $\left( {w_k^a=s_k\sqrt{a_r}} \right)$
   - $\left( {h_k^a=\frac{s_k}{\sqrt{a_r}}} \right)$
   - 위 공식을 이용하여 넓이가 1인 디폴드 박스의 가로, 세로 길이를 정의
