@@ -49,13 +49,13 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
 </center>
 
 - 두 연산방법간의 연산량 차이는 아래와 같음. 
-  - Input: $h_i*w_i*d_i$ 크기의 Tensor
-  - Output: $h_i*w_i*d_j$ 크기의 Feature map
-  - Kernel size: $k*k$
-  - Sandard convolution의 연산량: $h_i*w_i*d_i*d_j*k*k$
-  - Depthwise separable convolution의 연산량: $h_i*w_i*d_i*(k^2+d_j)$
+  - Input: $h_{i}\times w_{i}\times d_{i}$ 크기의 Tensor
+  - Output: $h_{i}\times w_{i}\times d_{j}$ 크기의 Feature map
+  - Kernel size: $k\times k$
+  - Sandard convolution의 연산량: $h_{i}\times w_{i}\times d_{i}\times d_{j}\times k\times k$
+  - Depthwise separable convolution의 연산량: $h_{i}\times w_{i}\times d_{i}\times (k^{2}+d_{j})$
   - 즉, Standard convolution에 비해 $\frac{1}{d_j}+\frac{1}{k^2}$배 만큼의 연산량 감소 효과가 있음.
-  - $3*3$컨벌루션 연산 시 약 8~9배 가량의 연산량 감소 효과
+  - $3\times 3$컨벌루션 연산 시 약 8~9배 가량의 연산량 감소 효과
 
 ## Linear Bottleneck
 - 각 layer에서 focusing하는 feature들은 조금씩 다름.
