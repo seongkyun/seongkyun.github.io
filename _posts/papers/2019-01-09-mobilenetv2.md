@@ -109,9 +109,62 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
   - t: Channel expansion parameter
   - ReLU6 사용. Mobile 환경에서는 ReLU6가 더 연산/메모리측면에서 효율적이라고 사용한다던데...
 - 연산량의 차이
-  - Input size: $hwd'$, kernel size: $k$, output channel: $d''$
+  - Input size: $h\times w\times d'$, kernel size: $k$, output channel: $d''$
   - Bottleneck convolution
-    - 수식 수식 
+    - $h\times w\times d'\times t\times (d'+k^{2}+d'')$
+    - $=(k\times w\times d'\times t\times d')+\{ h\times w\times d'\times t\times (k^{2}+d'')\}$
+    - $(k\times w\times d'\times t\times d')$: Reduction
+    - ${ h\times w\times d'\times t\times (k^{2}+d'')\}$: Expansion (DW convolution)
+    - 실제 연산량은 extra term에 의해 더 많아보이나, 실제로는 오히려 적음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig7.png" alt="views">
+<figcaption>MobileNet V2, ShuffleNet 과의 연산량 비교</figcaption>
+</figure>
+</center>
+  
+- MobileNet V2와 ShuffleNet간의 연산량을 비교할 때, MobileNet V2의 연산량이 더 적음을 알 수 있음
+
+## Memory efficiency inference
+- Inverted Residual block의 bottleneck layer은 memory를 효율적으로 사용 할 수 있게 해줌
+- Memory의 효율적 사용 문제는 Mobile application에서 매우 중요함
+
+## Experiment
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig8.png" alt="views">
+</figure>
+</center>
+
+- Parameter의 수, 연산량이 증가하나 정확도가 크게 개선되는 것을 확인 할 수 있음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig9.png" alt="views">
+</figure>
+</center>
+
+- SSD Lite는 SSD의 prediction layer를 depthwise separable convolution으로 바꿔 파라미터의 수/연산량을 획기적으로 줄인 구조
+  - Model size가 작아짐
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig10.png" alt="views">
+</figure>
+</center>
+
+- 정확도 측면에서 기존 방법에 비해 competitive한 결과를 보이나, 파라미터의 수/연산량 비교시 훨씬 효율적인 모델임을 알 수 있음
+
+## Conclusion
+
+- Linear bottleneck, Inverted residual block을 이용해 MobileNet V1을 개선함.
+- SSD Lite의 경우, YOLO V2보다 연산량, 파라미터의 수를 획기적으로 줄임.
+  - 매우 효율적인 구조
+- 논문에서 제안한 convolution block을 exploring 하는것이 향후 연구의 중요한 방향이 될 것임.
+
+
+
 
 
 
