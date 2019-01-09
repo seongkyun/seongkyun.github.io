@@ -111,7 +111,7 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
 - 연산량의 차이
   - Input size: $hwd'$, kernel size: $k$, output channel: $d''$
   - Bottleneck convolution
-  -- 
+  -- 수식 수식 
 
 
 
