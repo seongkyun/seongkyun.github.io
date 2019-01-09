@@ -1,8 +1,8 @@
 ---
 layout: post
-title: MobileNetV2: Inverted Residuals and Linear Bottlenecks
+title: MobileNetV2- Inverted Residuals and Linear Bottlenecks
 category: papers
-tags: [Deep learning, mobilenetv2, linear bottleneck]
+tags: [Deep learning, Mobilenetv2, Linear bottleneck]
 comments: true
 ---
 
