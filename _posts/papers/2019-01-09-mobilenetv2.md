@@ -163,16 +163,11 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
   - 매우 효율적인 구조
 - 논문에서 제안한 convolution block을 exploring 하는것이 향후 연구의 중요한 방향이 될 것임.
 
-
-
-
-
-
-
-
 ---
 
 - [참고 글]
+
+Sandler, Mark, et al. "Mobilenetv2: Inverted residuals and linear bottlenecks." 2018 IEEE/CVF Conference on Computer Vision and Pattern Recognition. IEEE, 2018.
 
 http://eremo2002.tistory.com/48
 
