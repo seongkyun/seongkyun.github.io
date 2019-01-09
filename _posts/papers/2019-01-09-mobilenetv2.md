@@ -68,6 +68,46 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
   - MobileNet V1의 Width-multiplier를 이용해 채널을 조정하는 것
 - 이러한 방법으로 어떤 manifold of interest 부분이 entire space가 될 때까지 차원을 축소 시킬 수 있음
   - 의미있는 정보와 의미 없는 정보가 담긴 정보량들에 대해, 의미없는 정보를 버리고 의미있는 정보만이 남도록 정보가 존재하는 차원을 줄이고, 이로 인해 메모리의 효율성이 좋아지는것을 의미
+- 하지만, 차원을 줄이는 과정(Sub-space로 엠베딩 시키는 과정)에서 쓰이는 ReLU와 같은 비선형 함수에 의해 문제가 발생
+  - if) ReLU를 지난 출력이 S인 경우, S가 non-zero라면, S에 맵핑 된 input의 각 값은 선형변환 된 것.
+  - 하지만, 0 이하의 값은 버려져 정보의 손실이 발생하게 됨.(쓸모있는 정보가 손실 됨)
+  - 이를 방지하고자 channel reduction이 아닌 channel expansion을 이용
+  - 채널을 확장시키는 경우, 채널의 깊이가 깊어져 low-dimensional sub-space로 embed해도 비선형 변환(ReLU)에 의한 정보의 손실이 적어짐.
+
+- 정리하자면,
+1. Manifold of interest 부분이 ReLU(비선형 변환)를 거친 후에도 Non-zero volume를 갖는다면, linear transformation에 해당
+2. Input manifold가 input의 low-dimensional sub-space에 놓여있다면, ReLU가 input manifold에 대해 완전한 정보의 보호가 가능해짐
+
+- 만약 Manifold of interest가 low-dimension이라 가정하면, convolution block에 linear bottleneck layer를 삽입해 이를 capture 할 수 있게 됨.
+  - ReLU(비선형 변환)의 정보의 손실을 방지할 수 있음
+
+## Inverted Residuals
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig5.png" alt="views">
+<figcaption>(a) Residual block  (b) Inverted residual block</figcaption>
+</figure>
+</center>
+
+- Resudual block과 비슷하나, 반대의 구조를 띔
+  - Resnet의 Residual block은 bottleneck 이후 채널을 축소시키지만, 본 논문에서 제시하는 Inverted Residual Block은 bottleneck 이후 채널을 확장시킴
+- Bottleneck이 필요한 정보를 모두 갖고있고, expansion layer는 tensor의 비선형 변형과 같은 역할만 하기에 bottleneck 사이를 연결하는 구조로 사용됨.
+- Residual block은 채널이 큰 특징맵끼리 연결되어 있으나, Inverted Residual Block은 bottleneck 끼리 연결
+- Shortcut 연결은 Resnet처럼 gradient 전파를 효율적으로 하기 위함임.
+- Inverted 구조는 메모리 사용측면에서 효율적
+
+## Inverted Residual Block Structure
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig6.png" alt="views">
+<figcaption>Depthwise separable convolution / 채널(깊이) 방향의 convolution</figcaption>
+</figure>
+</center>
+
+
+
+
 
 
 
