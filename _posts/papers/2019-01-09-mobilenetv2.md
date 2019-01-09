@@ -28,7 +28,7 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig1.png" alt="views">
-<figcaption>Normal convolution</figcaption>
+<figcaption>Standard convolution</figcaption>
 </figure>
 </center>
 
@@ -47,6 +47,28 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
 <figcaption>Depthwise separable convolution / 채널(깊이) 방향의 convolution</figcaption>
 </figure>
 </center>
+
+- 두 연산방법간의 연산량 차이는 아래와 같음. 
+  - Input: $h_i*w_i*d_i$ 크기의 Tensor
+  - Output: $h_i*w_i*d_j$ 크기의 Feature map
+  - Kernel size: $k*k$
+  - Sandard convolution의 연산량: $h_i*w_i*d_i*d_j*k*k$
+  - Depthwise separable convolution의 연산량: $h_i*w_i*d_i*(k^2+d_j)$
+  - 즉, Standard convolution에 비해 $\frac{1}{d_j}+\frac{1}{k^2}$배 만큼의 연산량 감소 효과가 있음.
+  - $3*3$컨벌루션 연산 시 약 8~9배 가량의 연산량 감소 효과
+
+## Linear Bottleneck
+- 각 layer에서 focusing하는 feature들은 조금씩 다름.
+- Conv 연산으로 feature map에 담긴 정보를 전체 채널을 따져 고려하면, 결국 중요한 정보는 몇 몇 manifold에 존재.
+  - 이것을 다시 low-dimensional sub-space로 만들 수 있음.
+
+- 즉, feature map에 존재하는 모든 값들이 의미있는 정보를 나타내지 않고, 의미있는 정보를 나타내는 값은 특정 부분에 몰려있거나 전체에 여러 영역에 걸쳐 나타날 수 있다는 것을 의미.
+
+- MobileNet V1에선 이런 manifold를 low-dimensional sup-space로 만듦
+  - MobileNet V1의 Width-multiplier를 이용해 채널을 조정하는 것
+- 이러한 방법으로 어떤 manifold of interest 부분이 entire space가 될 때까지 차원을 축소 시킬 수 있음
+  - 의미있는 정보와 의미 없는 정보가 담긴 정보량들에 대해, 의미없는 정보를 버리고 의미있는 정보만이 남도록 정보가 존재하는 차원을 줄이고, 이로 인해 메모리의 효율성이 좋아지는것을 의미
+
 
 
 ---
