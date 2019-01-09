@@ -101,11 +101,17 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig6.png" alt="views">
-<figcaption>Depthwise separable convolution / 채널(깊이) 방향의 convolution</figcaption>
+<figcaption>Inverted Residual Block basic structure</figcaption>
 </figure>
 </center>
 
-
+- 기본적인 구조는 위와 같음.
+  - t: Channel expansion parameter
+  - ReLU6 사용. Mobile 환경에서는 ReLU6가 더 연산/메모리측면에서 효율적이라고 사용한다던데...
+- 연산량의 차이
+  - Input size: $hwd'$, kernel size: $k$, output channel: $d''$
+  - Bottleneck convolution
+  -- 
 
 
 
