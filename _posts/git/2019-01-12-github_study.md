@@ -14,6 +14,7 @@ comments: true
 - 코드가 복잡해질수록 버전관리의 필요성을 느끼게 된다.
 - 따라서 생활코딩의 ‘지옥에서 온 git’이라는 강좌로 공부를 시작해보려 한다.
   - (https://opentutorials.org/course/2708/15242)
+
 ## 설치 방법
 - `sudo apt-get install git`으로 설치 가능
 - 설치 후 커맨드라인에 `git`이라고 친 후 git 관련 명령어가 뜨면 설치 된 상태
