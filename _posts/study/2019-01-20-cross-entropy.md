@@ -6,4 +6,4 @@ tags: [cross entropy loss, deep learning, machine learning]
 comments: true
 #---
 
-# 제목
+# Cross entropy loss in machine learning
