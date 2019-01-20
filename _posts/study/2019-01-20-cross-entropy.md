@@ -15,9 +15,9 @@ comments: true
 
 ## Cost/Loss function
 ### Squared loss
-- $$E(w)=\frac{1}{2}\sum_{d\in{D}}(y_{d}-\hat{y}_{d})^{2} \quad where \abs{D}=학습집합의\; 크기$$
+- $$E(w)=\frac{1}{2}\sum_{d\in{D}}(y_{d}-\hat{y}_{d})^{2} \quad where \;\left\vert D \right\vert=학습집합의\; 크기$$
 ### Mean squared loss
-- $$E(w)=\frac{1}{2}\frac{1}{\left\vert D \right\vert}\sum_{d\in{D}}(y_{d}-\hat{y}_{d})^{2} \quad where \abs{D}=학습집합의\; 크기$$
+- $$E(w)=\frac{1}{2}\frac{1}{\left\vert D \right\vert}\sum_{d\in{D}}(y_{d}-\hat{y}_{d})^{2} \quad where \;\left\vert D \right\vert=학습집합의\; 크기$$
 
 ## Information
 - 어떤 사건을 수치로 나타낸 것
@@ -34,7 +34,15 @@ comments: true
 - $$information\equiv log(p(x))^{-1}=-log(p(x))$$
 
 ## Entropy
-
+- 정보량의 기댓값
+- 확률변수 $X$의 기댓값에 대한 공식
+  - $E[X]=\sum_{x}xp(x)\quad$
+  - $p(x)$: 확률변수 $X$의 분포함수(확률질량함수, 확률밀도함수)
+- $E[aX+b]=\sum_{x}(ax+b)p(x)$ 이므로
+- $$E[f(x)]=\sum_{x}f(x)p(x)$$ 가 성립함
+- 따라서, $-log(p(x))$에 대해서 다음이 성립
+- $$E[-log(p(x))]=\sum_{x}-log(p(x))p(x)$$
+- $$entropy\equiv \sum_{x}-p(x)log(p(x))$$
 
 
 
