@@ -44,7 +44,17 @@ comments: true
 - $$E[-log(p(x))]=\sum_{x}-log(p(x))p(x)$$
 - $$entropy\equiv \sum_{x}-p(x)log(p(x))$$
 
+## Cross entropy
+- 다른 사건의 확률을 곱해서 entropy를 계산한 것
+- 예를 들어 0 또는 1만 가지는 확률변수 $X$가 있을 때(Bernoulli),
+- $$entropy=-p(x=0)log(p(X=0))-p(X=1)log(p(X=1))$$
+- $$cross-entropy=-p(X=1)log(p(X=0))-p(X=0)log(p(X=1))$$
 
+## 신경망의 손실함수로 활용
+- $E(w)\equiv \frac{1}{2}\frac{1}{\left\vert D \right\vert}\sum_{d\in D}(y_{d}-\hat{y}_d)^{2}$ 일 때,
+- $$cross-entropy loss\equiv E(w)\equiv \frac{1}{\left\vert D \right\vert}\sum_{d\in D}(-y_{d}log(\hat{y}_{d})-(1-y_{d})log(1-\hat{y}_{d}))$$
+- $(-y_{d}log(\hat{y}_{d})-(1-y_{d})log(1-\hat{y}_{d}))$은 베르누이 확률변수를 n회 시행해서 얻은 샘플로부터 베르누이 확률변수의 평균과 분산을 추정하는 어떤 방법으로부터 유도 가능
+  - Maximum likelihood estimation
 
 
 
