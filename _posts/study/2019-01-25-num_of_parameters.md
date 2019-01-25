@@ -34,7 +34,32 @@ comments: true
 - 본 글에서는 AlexNet을 이용하여 아래의 내용을 알아본다.
   - 각 단계에서 텐서의 크기를 계산하는 방법
   - 네트워크에서 총 파라미터 개수를 계산하는 방법
+
+## Convolution layer의 output tensor size
+- 각각 기호를 아래와 같이 정의
+  - $O$: Size(width) of output image
+  - $I$: Size(width) of input image
+  - $K$: Size(width) of kernels used in the Conv layer
+  - $N$: Number of kernels
+  - $S$: Stride of the convolution operation
+  - $P$: Padding size
+- $O$(Size(width) of output image)는 다음과 같이 정의 됨
+
+$$O=\frac{I-K+2P}{S}+1$$
+
+- 출력 이미지의 채널 수는 커널의 갯수($N$)와 같음
+
+### Example on AlexNet
+- AlexNet의 입력 이미지 크기는 227*227*3
+- 첫 번째 conv layer(Conv-1)는 11*11*3 크기의 커널 96개, stride=4, padding=0
+
+$$O=\frac{227-11+2*0}{4}+1=55$$
+
+- 따라서, Conv-1 의 출력 출력 tensor size는 $55\times 55\times 96$임.
+  - 각 커널 당 하나의 채널을 나타내므로, 3채널(RGB) 이미지에 대해 3배가 곱해져 총 $55\times 55\times 96\times 3$이 됨.
+  - Conv-2, 3, 4, 5도 동일한 방법으로 계산 가능
   
+
 
 ---
 - [참고 글]
