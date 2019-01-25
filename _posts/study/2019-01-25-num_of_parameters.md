@@ -58,7 +58,73 @@ $$O=\frac{227-11+2*0}{4}+1=55$$
 - 따라서, Conv-1 의 출력 출력 tensor size는 $55\times 55\times 96$임.
   - 각 커널 당 하나의 채널을 나타내므로, 3채널(RGB) 이미지에 대해 3배가 곱해져 총 $55\times 55\times 96\times 3$이 됨.
   - Conv-2, 3, 4, 5도 동일한 방법으로 계산 가능
+
+## MaxPool layer의 output tensor size
+- 각각 기호를 아래와 같이 정의
+  - $O$: Size(width) of output image
+  - $I$: Size(width) of input image
+  - $S$: Stride of the convolution operation
+  - $P_{s}$: Pooling size
+- $O$(Size(width) of output image)는 다음과 같이 정의 됨
+
+$$O=\frac{I-P_{s}}{s}+1$$
+
+- Convolution layer와는 다르게 출력의 채널 수는 입력의 개수와 동일
+- Conv layer의 $O$ 수식에서 커널 크기($K$)를 $P_{s}$로 대체하고 $P=0$으로 설정하면 동일한 식이 됨
+
+### Example on AlexNet
+- MaxPool-1은 stride 2, 사이즈는 3*3, 이전 단(Conv-1)의 출력 크기는 $55\times 55\times 96$임
+
+$$O=\frac{55-3}{2}+1=27$$
+
+- 따라서 출력의 크기는 $27\times 27\times 96$
+- MaxPool-2, 3도 동일한 방법으로 계산
+
+## Fully Connected layer의 output tensor size
+- FC layer는 layer의 뉴런 수와 동일한 길의의 벡터를 출력
+- AlexNet summary
+  - AlexNet에서 입력은 크기 227x227x3의 이미지
+  - Conv-1의 출력은 MaxPool-1을 거치며 55x55x96에서 27x27x96으로 변환됨
+  - Conv-2 이후에는 size가 27x27x256에서 MaxPool-2을 거치며 13x13x256으로 변경됨
+  - Conv-3은 크기를 13x13x384로 변환
+  - Conv-4는 크기가 유지됨
+  - Conv-5는 크기를 27x27x256으로 변환함
+  - 마지막으로 MaxPool-3는 크기를 6x6x256으로 줄임
+  - 이 이미지는 크기 4096x1 크기의 벡터로 변환되는 FC-1에 feed됨
+  - FC-2는 크기를 유지
+  - FC-3 은 size를 1000x1로 변환
+
+## Convolution layer의 parameter 갯수
+- CNN의 각 layer는 weight parameter와 bias parameter가 존재.
+- 전체 네트워크의 parameter 수는 각 conv layer 파라미터 수의 합
+
+- 각각 기호를 아래와 같이 정의
+  - $W_{c}$: Number of weights of the Conv layer
+  - $B_{c}$: Number of biases of the Conv layer
+  - $P_{c}$: Number of parameters of the Conv layer
+  - $K$: Size(width) of kernels used in the Conv layer
+  - $N$: Number of kernels
+  - $C$: Number of channels of the input image
   
+$$W_{c}=K^{2}\times C\times N \\ B_{c}=N \\P_{c}=W_{c}+B_{c}$$
+  
+- Conv layer에서 모든 커널의 깊이는 항상 입력 이미지의 채널 수와 같음
+- 따라서 모든 커널에는 $K^{2}\times C$개의 parameter들이 있으며, 그러한 커널들이 $N$개 존재
+
+### Example on AlexNet
+- AlexNet의 Conv-1에 대해
+  - 입력 이미지의 채널 수 $C=3$
+  - Kernel size $K=11$
+  - 전체 커널 개수 $N=96$
+- 따라서 파라미터의 갯수는 아래와 같이 정의됨
+
+$$W_{c}=11^{2}\times 3\times 96=34,848 \\ B_{c}=96 \\P_{c}=94,848+96=34,944$$
+
+- Conv-2, 3, 4, 5도 동일한 방법으로 각각 614,656 , 885,120 , 1,327,488 , 8,849,992개의 parameter를 갖는것을 계산 가능
+- 전체 AlexNet의 parameter 개수는 3,747,200개
+- FC layer의 parameter 수가 더해지지 않았으므로 전체 네트워크의 parameter 개수가 아님
+- Conv layer의 장점은 weight parameter가 공유되므로 FC layer에 비해 매개변수가 훨씬 작다는 장점이 있음
+
 
 
 ---
