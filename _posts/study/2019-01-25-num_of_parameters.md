@@ -172,6 +172,17 @@ $$W_{ff}=4096\times 1000=4,096,000 \\ B_{ff}=1,000 \\ P_{ff}=W_{ff}+B_{ff}=4,097
 - FC-2 layer의 parameter 개수도 동일한 방법으로 16,781,312개로 계산 됨
 
 # AlexNet의 총 parameter 개수 및 tensor size
+- AlexNet의 전체 parameter 수는 5개의 convolution layer와 3개의 FC layer에서 계산되는 parameter 개수들의 합
+  - __62,378,344__ 개.
+- 자세한 parameter 및 tensor size는 
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-01-25-num_of_parameters/fig2.png" alt="views">
+</figure>
+</center>
+
+
 ---
 - [참고 글]
 
