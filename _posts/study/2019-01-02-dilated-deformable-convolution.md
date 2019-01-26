@@ -1,12 +1,12 @@
 ---
 layout: post
-title: Dilated Convolution과 Deformalbe Convolution
+title: Dilated Convolution과 Deformable Convolution
 category: study
 tags: [dilated, deformable, convolution, deep learning]
 comments: true
 ---
 
-# Dilated Convolution과 Deformalbe Convolution
+# Dilated Convolution과 Deformable Convolution
 
 Object detection에 관련된 딥러닝 논문을 읽다 보면 Feature extractor에서 사용되는 다양한 종류의 컨벌루션이 논해진다.
 그 중 RFBNet 논문을 읽으며 알게 된 Dilated Convolution과 Deformable Convolution에 대해 간단하게 공부해봤다.
