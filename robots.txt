@@ -1,0 +1,3 @@
+ser-agent: *
+Allow: /
+Sitemap: http://seongkyun.github.io/sitemap.xml
