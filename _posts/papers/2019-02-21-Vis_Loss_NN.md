@@ -14,6 +14,48 @@ Authors: Hao Li, Zheng Xu, Gavin Taylor, Christoph Studer, Tom Goldstein
 
 ## Abstract
 
+## Introduction
+
+### Contributions
+
+## Theoretical Background
+
+## The Basics of Loss Function Visualization
+
+### 1-Dimensional Linear Interpolation
+
+### Contour Plots & Random Directions
+
+## Proposed Visualization: Filter-Wise Normalization
+
+## The Sharp vs Flat Dilemma
+
+### Filter Normalizaed Plots
+
+## What Makes Neural Networks Trainable? Insights on the (Non)Convexity Structure of Loss Surfaces
+
+### Experimental Setup
+
+### The Effect of Network Depth
+
+### Shortcut Connections to the Rescue
+
+### Wide Models vs Thin Models
+
+### Implications for Network Initialization
+
+### Landscape Geometry Affects Generalization
+
+### A note of caution: Are we really seeing convexity?
+
+## Visualizing Optimization Paths
+
+### Why Random Directions Fail: Low-Dimensional Optimization Trajectories
+
+### Effective Trajectory Plotting using PCA Directions
+
+## Conclusion
+
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig1.png" alt="views">
