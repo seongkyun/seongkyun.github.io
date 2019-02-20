@@ -58,7 +58,7 @@ Authors: Hao Li, Zheng Xu, Gavin Taylor, Christoph Studer, Tom Goldstein
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-01-09-mobilenetv2/fig1.png" alt="views">
-<figcaption>Standard convolution</figcaption>
+<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig1.png" alt="views">
+<figcaption>contents</figcaption>
 </figure>
 </center>
