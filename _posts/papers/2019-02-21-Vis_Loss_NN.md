@@ -42,7 +42,7 @@ Authors: Hao Li, Zheng Xu, Gavin Taylor, Christoph Studer, Tom Goldstein
   - 논문에서는 SGD optimization의 궤적(trajectory)들의 시각화에 대한 연구를 한다. 논문에서는 이러한 궤적의 시각화에서 발생하는 어려움을 설명하고, extremely low dimensional space에 있는 optimization trajectory들을 보여준다. 이러한 low dimensionality는 논문의 2-dimensional visualization에서 관찰된 것 같이 loss landscape에 크게 볼록한 영역(large, nearly convex region)이 존재함으로 설명 가능하다.
 
 ## 3. The Basics of Loss Function Visualization
-- Neural network은 학습에 영상$\{x_{i}\}$과 label $\{y_{i}\}$ 같은 feature vector 뭉치(corpus)가 필요하며, $L(\theta)=\frac{1}{m}\sum^{m}_{i=1}l(\{x_{i}\}, \{y_{i}\};\theta)$와 같은 loss function을 최소화시는 과정이 포함되고, 그 과정에서 $\theta$로 정의되는 weight parameter를 $m$개의 샘플을 이용하여 잘 얻어지는지 계산한다. Neural net은 많은 파라미터를 포함하며, 따라서 loss function은 very high-dimensional space에 존재하게 된다. 하지만 시각화는 1D(line)나 2D(surface) plot등 low-dimension에서만 가능하며, dimensionality gap을 줄위기 위한 몇 가지 방법들이 존재한다.
+- Neural network은 학습에 영상$\{x_{i}\}$과 label $\{y_{i}\}$ 같은 feature vector 뭉치(corpus)가 필요하며, $L(\theta)=\frac{1}{m}\sum^{m}_{i=1}l(\{x_{i}\}, \{y_{i}\};\theta)$ 와 같은 loss function을 최소화시는 과정이 포함되고, 그 과정에서 $\theta$ 로 정의되는 weight parameter를 $m$ 개의 샘플을 이용하여 잘 얻어지는지 계산한다. Neural net은 많은 파라미터를 포함하며, 따라서 loss function은 very high-dimensional space에 존재하게 된다. 하지만 시각화는 1D(line)나 2D(surface) plot등 low-dimension에서만 가능하며, dimensionality gap을 줄위기 위한 몇 가지 방법들이 존재한다.
 - __1-Dimensional Linear Interpolation__
   - Loss function을 plot하기 위한 간단하고 가벼운 방법이다. 두 개의 파라미터 세트인 $\theta$와 $\theta'$를 설정하고, loss function의 값들을 이러한 두 점을 이어 plot한다.
 
