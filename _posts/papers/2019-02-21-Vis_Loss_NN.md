@@ -197,11 +197,7 @@ __A note of caution: Are we really seeing convexity?__
 - 학습 초반의 stage에서는 loss surface의 contour로 수직하게(perpendicular) path가 움직이는 경향이 있었으며, 즉 비 확률적(non-stochastic) gradient descent로부터 기대할 수 있는 것처럼 gradient 방향을 따르게 된다.(gradient가 큰 방향으로 loss가 감소하게 된다는 것을 의미) 확률성(stochasticity)은 점점 training의 뒤 stage로 갈수록(학습의 후반부에 갈수록) 여러 plot들에 대해 뚜렷해진다. 이러한 현상은 weight decay와 small batch를 사용하는 경우 더 도드라진다(batch가 작을수록 gradient noise가 많아지고, 결정론적(deterministic) gradient direction으로부터 더 급진적(radical)으로 출발(departure)하게 됨). (즉, batch가 작아질수록 noise성분이 많아져 더 빠르게 minima에 도달 할 수 있게 된다는 의미) Weight decay와 small batch가 사용된 경우, contour와 거의 평행한 방향으로 path가 변하는 것을 볼 수 있으며 stepsize가 클수록(radical departure) solution을 orbit(궤도에 진입)시킬 수 있게 된다. Stepsize가 빨간 점처럼 떨어지게 될 경우, system의 효과적인 noise는 감소하게 되며, path가 가장 가까운 local minimizer에 빠지면 구부러지기(kink) 시작하는것을 확인 할 수 있다.
 - 마지막으로, descent path를 매우 낮은 차원에서 관찰하였는데, 오직 2차원의 공간에 descent path의 변화(variation)의 40~90%가 존재한다는 것을 알 수 있다. Figure 9의 optimization trajectories는 가까운 attractor direction으로의 움직임(movement)에 의해 지배적인것(dominated by)으로 보인다. 이러한 low dimensionality는 non-chaotic landscape들이 wide, nearly convex minimizer들에 의해 지배적이게 되는 것데 대해 관찰한 Section 6의 관찰과 호환 될 수 있다.
 
-## Conclusion
+## 8. Conclusion
+- 논문에서는 network 구조, optimizer 선택, batch size를 포함하는 neural network practitioner의 다양한 선택의 결과에 대한 통찰력을 제공하는 시각화(visualization) technique을 제안했다. Neural network들은 복잡한 가정(assumption)을 가진 입증되지 않은(anecdotal) 지식(knowledge)과 이론적인 결과를 바탕으로 최근 극적으로(dramatically) 발전하였다. (연구의) 진척(progress)이 계속되기 위해서는 neural network의 구조에 대한 일반적인 이해가 더 필요하다. 효과적인 시각화(visualization)가 이론의 지속적인 발전과 결합되면 보다 빠른 training, 단순한 모델구조, 그리고 더 나은 일반화(generalization)가 가능해 질 것으로 기대된다.
 
-<center>
-<figure>
-<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig1.png" alt="views">
-<figcaption>contents</figcaption>
-</figure>
-</center>
+- 어후 ㅅㅂ 논문 왜이렇게 길어
