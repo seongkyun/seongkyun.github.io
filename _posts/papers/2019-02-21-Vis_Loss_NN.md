@@ -54,7 +54,8 @@ Neural net은 많은 파라미터를 포함하며, 따라서 loss function은 ve
   $f(\alpha , \beta)=L(\theta^{\ast}+\alpha \delta +\beta \eta)$ (식 1)의 2D surface로 plot한다. 하지만 2D plotting은 연산량이 매우 많고 이러한 방법들은 보통 loss surface의 complex non-convexity를 capture하지 못하는 small region을 저 해상도(low-resolution)로 plot 한다. 이러한 이유로 본 논문에서는 weight space의 large slice에 대해 고 해상도 시각화를 사용하여 네트워크 디자인(설계)가 non-convex structure에 미치는 영향을 시각화 한다.
 
 ## 4. Proposed Visualization: Filter-Wise Normalization
-
+- 논문의 연구는 밑에서 서술되는 적절한 scaling이 적용된 random Gaussian distribution에서 sampled된 random direction vector $\delta$, $\eta$를 사용하는 (식 1)의 plot 방식이 적용된다. Random directions가 plotting을 간단하게 만들어도 loss surface의 고유한 지형(geometry)을 capture하는것을 실패하기때문에 서로 다른 두 minimizer나 네트워크의 geometryt의 비교에 사용 할 수 없게 된다. 이는 네트워크 weight 파라미터들의  _scale invariance_ 라는 특성 때문이다. 예를들어 네트워크에 ReLU non-linearities가 사용될 경우, 네트워크의 어떤 레이어에서 얻어지는 weight값들에 10을 곱한 후 다음 레이어에서 10으로 나누더라도 ReLU에 의해 그 차이는 존재하지 않게 된다.(자세한것은 ReLU참조!) 이러한 불변성(invariance)은 batch normalization이 사용될 경우 더 중요하게 작용한다. 이런 경우 각 레이어의 출력이 batch normalization에 의해 re-scaled 되므로 필터의 사이즈(norm)가 무관하다. 따라서 네트워크의 동작은 결국 weight를 re-scale 하더라도 바뀌지 않게 된다.(단, scale invariance는 rectified network에서만 작용)
+- 
 ## The Sharp vs Flat Dilemma
 
 ### Filter Normalizaed Plots
