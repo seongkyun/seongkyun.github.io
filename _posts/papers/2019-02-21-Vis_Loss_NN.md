@@ -165,11 +165,22 @@ __A note of caution: Are we really seeing convexity?__
 </figure>
 </center>
 
-- 이러한 analysis가 충분히 가정에 대해 안심시키지만(reassuring), 만약 이러한 시각화(visualization)가 포착(capture)하지 못하는 중요한 숨겨진 non-convexity가 존재할 수 있는지 궁금할 수 있다. 이것에 대한 대답으로, 우리는 Hessian의 _minimum_ eigenvalue $\lambda_{min}$과 _maximum_ eigenvalue $\lambda_{max}를 계산했다. Figure 7의 map들은 위에서 연구된 loss surface들(같은 minimizer와 같은 random direction들을 사용했을 때)에 대한 $\left|\lambda_{min}/\lambda_{max}\right|$ 비율이다. 파란색은 더 convex한 지역을 의미하며(양의 eigenvalue에 비해 0에 가까운 음의 eigenvalue), 노란색은 눈에띄는 negative curvature를 의미한다. 논문의 surface plot에서의 convex-looking region들은 실제로 무의미한 negative eigenvalue들을 가진 지역에 해당하며(즉, plot에 포함되지 않는 중요한 non-convex feature는 없다는 의미), 동시에 chaotic region은 large negative curvature들을 포함한다. DenseNet과 같은 convex-looking surface의 경우에는 plot의 넓은 지역에서 negative eigenvalue들이 매우 작게 남아있는것을 확인 할 수 있다(less than 1% the size of the positive curbatures).
+- 이러한 analysis가 충분히 가정에 대해 안심시키지만(reassuring), 만약 이러한 시각화(visualization)가 포착(capture)하지 못하는 중요한 숨겨진 non-convexity가 존재할 수 있는지 궁금할 수 있다. 이것에 대한 대답으로, 우리는 Hessian의 _minimum_ eigenvalue $\lambda_{min}$ 과 _maximum_ eigenvalue $\lambda_{max}$ 를 계산했다. Figure 7의 map들은 위에서 연구된 loss surface들(같은 minimizer와 같은 random direction들을 사용했을 때)에 대한 $\left|\lambda_{min}/\lambda_{max}\right|$ 비율이다. 파란색은 더 convex한 지역을 의미하며(양의 eigenvalue에 비해 0에 가까운 음의 eigenvalue), 노란색은 눈에띄는 negative curvature를 의미한다. 논문의 surface plot에서의 convex-looking region들은 실제로 무의미한 negative eigenvalue들을 가진 지역에 해당하며(즉, plot에 포함되지 않는 중요한 non-convex feature는 없다는 의미), 동시에 chaotic region은 large negative curvature들을 포함한다. DenseNet과 같은 convex-looking surface의 경우에는 plot의 넓은 지역에서 negative eigenvalue들이 매우 작게 남아있는것을 확인 할 수 있다(less than 1% the size of the positive curbatures).
 
-## Visualizing Optimization Paths
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig8.PNG" alt="views">
+<figcaption>Figure 8. Optimizer 궤적의 효과적이지 못한 시각화 예시. 이러한 시각화 방법들은 고차원에서의 random dirction의 직교성으로 인해 제대로 동작하기 힘들다.
+</figcaption>
+</figure>
+</center>
 
-### Why Random Directions Fail: Low-Dimensional Optimization Trajectories
+## 7. Visualizing Optimization Paths
+- 마지막으로, 서로 다른 optimizer의 궤적(trajectory)들을 시각화 하는 방법에 대해 탐구한다. 이 application의 경우, random direction은 효과적이지 못하다. 논문에서는 왜 random direction이 효과적이지 못한지에 대한 이론적인 설명과 함께 효과적으로 loss function contour의 위에 궤적(trajectory)을 효과적으로 plotting하는 방법에 대해 연구한다.
+- 몇몇의 저자들이 왜 random direction이 optimization 궤적의 변화를 capture하는것이 실패하는지에 대한 연구했다[10, 29, 28, 27]. Figure 8에선 실패한 시각화에 대한 예시를 보인다. Figure 8(a)에서는 SGD가 두 random direction으로 정의되는 평면에 반복적으로 영사한(나타낸) 궤적을 보인다. 실제로 움직임(motion)이 거의 capture 되지 않았다(참고로 축방향으로 엄청나게 확대 되어있으며 random하게 움직이는듯 함). 이러한 문제는 [13]에서 발견되었으며, 이를 위한 solution으로 one random direction을 이용하여 궤적을 초기화하였다. 이 방접근법은 Figure 8(b)에 나와있다. Figure 8(c)는 random axis가 거의 변화가 없으므로 직선 경로로 잘못된 optimization path를 보인다.
+
+### 7.1. Why Random Directions Fail: Low-Dimensional Optimization Trajectories
+- 고 차원의 공간에 존재하는 두 random vector들은 높은 확률로 직교한다는것은 잘 알려져있다. 사실 예상되는 $n$ 차원의 Gaussian random vector들간의 cosine similarity는 대략적으로 $\sqrt{2/(\pi n)}$이다([12], Lemma 5). 하지만 이러한것들은 저 차원 공간에 optimization 궤적이 존재할 때 문제가 된다. 이런 경우 random하게 선택된 vector가 optimization path를 포함하는 low-rank 공간에 orthogonal하게 존재하게 되며, random direction의 projection의 변화가 거의 없게 된다. Figure 8(b)는 optimization 궤적이 저 차원이라는 것을 제안하는데, random direction이 random direction이 optimization path를 따라 가리키는(points) 벡터보다 적은 크기의 변화를 포착(capture)하기 때문이다. 아래에서는 PCA directions를 이용하여 직접적으로 이러한 low dimensionality를 증명하엿으며, 효과적인 시각화 자료를 만들어냈다.
 
 ### Effective Trajectory Plotting using PCA Directions
 
