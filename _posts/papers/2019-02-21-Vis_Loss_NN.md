@@ -77,7 +77,7 @@ $f(\alpha , \beta)=L(\theta^{\ast}+\alpha \delta +\beta \eta)$ (식 1)의 2D sur
 </figure>
 </center>
 
-- Figure 2(a)는 linear interpolation polt으로, x축 0 근처는 $\theta^{s}$를 나타내는 small batch size일 때의 경우, x축 1 근처는 $\theta^{l}$을 나타내는 large batch size일때를 의미한다. [24]에서 논의된 바 처럼, small batch solution이 더 넓고, large batch solution은 좁고 sharp한 solution을 보이는것을 확인 할 수 있다. 하지만, 이러한 sharpness balance는 weight decay[25]를 적용함으로써 확 바뀔 수 있다. Figure 2(d)는 같은 실험에 대해 non-zero weight decay parameter가 적용되어 실험동안 weight decay가 적용된 것에 대한 solution을 확인 할 수 있다. (a)와 비교했을 때 small batch minimizer가 sharp해지고 large batch minimizer의 그래프 모양이 flatten 된 것을 확인 할 수 있다. __하지만 논문에선 small batch가 모든 실험에대해 실험적으로 generalize를 잘 시키는 것을 확인했기 때문에 이 실험에선 sharpness가 generalization과 명확한 연관이 있는 것을 확인하지 못했다.__ 뒤쪽에서 이러한 sharpness 비교가 왜 엄청난 오해의 소지가 있고, minima의 내면의 특성을 다 잡아내지(capture) 못하는지에 대한 것을 다룬다.
+- Figure 2(a)는 linear interpolation polt으로, x축 0 근처는 $\theta^{s}$를 나타내는 small batch size일 때의 경우, x축 1 근처는 $\theta^{l}$을 나타내는 large batch size일때를 의미한다. [24]에서 논의된 바 처럼, small batch solution이 더 넓고, large batch solution은 좁고 sharp한 solution을 보이는것을 확인 할 수 있다. 하지만, 이러한 sharpness balance는 weight decay[25]를 적용함으로써 확 바뀔 수 있다. Figure 2(d)는 같은 실험에 대해 non-zero weight decay parameter가 적용되어 실험동안 weight decay가 적용된 것에 대한 solution을 확인 할 수 있다. (a)와 비교했을 때 small batch minimizer가 sharp해지고 large batch minimizer의 그래프 모양이 flatten 된 것을 확인 할 수 있다. __하지만 이번 실험에선 small batch가 모든 실험에대해 실험적으로 generalize를 잘 시키는 것을 확인했기 때문에 이 실험에선 sharpness가 generalization과 명확한 연관이 있는 것을 확인하지 못했다.__ 뒤쪽에서 이러한 sharpness 비교가 왜 엄청난 오해의 소지가 있고, minima의 내면의 특성을 다 잡아내지(capture) 못하는지에 대한 것을 다룬다.
 - Sharpness의 분명한 차이들은 각 minimizer들의 weight들에 대한 검토를 통해 설명이 가능하다. Network weight histogram들은 Figure 2(c)와 (f)에서 보여진다. Large batch와 zero weight decay가 사용되었을 때 small batch를 사용한 경우보다 더 작은 weight값들을 갖는 경향을 보인다. 즉, weight 값의 분포가 0에 더 치우쳐져 있다. 이러한 scale의 차이는 간단한 이유로 인해 발생한다. 더 작은 batch size가 더 큰 batch size보다 더 많은 한 epoch당 더 많은 weight update를 하기 때문에 weight decay의 효과(norm of the weights에 대한 penalty를 줌) 감소가 더 두드러지게 되는것이다. 학습 중 weight normalization(norm)에 의한 변화는 Figure 2(b)와 (e)에서 볼 수 있다. Figure 2는 minimizer들의 내부의 sharpness를 시각화하지 않고 (무관한) 그냥 weight scaling에 대한 것만을 시각화한다. Batch normalization는 unit variance(단위 분산, 즉 분산값이 1)를 갖기 위해 출력물을 다시 scaling하기 때문에 batch normalization을 사용하는 네트워크의 weight scaling은 의미가 없다. 하지만 작은 weight들은 더 변화에 민감하며, 더 sharp하게 보이는 minimizer들을 만들어낸다.
 
 <center>
@@ -93,15 +93,56 @@ __Filter Normalizaed Plots__
 - 이곳에선 Figure 2의 실험을 다시 반복했다. 하지만 이번엔 random filter-normalized directions를 사용하여 각 minimizer 근처에서의 loss function을 개별적으로 plot하였다. 이로 인해 Figure 2(c)와 (f)에서 보여지는 scaling에 의해 발생되는 지형(geometry)의 차이가 사라진다. Figure 3의 실험 결과는 small batch와 large batch minima 사이의 sharpness 차이를 여전히 보이지만, 이러한 차이는 un-normalized plot에서 보이는 것보다 훨씬 작은 것을 알 수 있다. 비교를 위해 samole un-normalized plot과 layer-nodrmalized plot을 Appendix Section A.2에 실어놓았으니 참고할것... 또한 논문에서는 두 개의 random directions과 contour plot들을 이용한 실험 결과를 시각화했다. 실험 결과 sharper large batch minimzer보다 small batch size와 non-zero weight decay 모델이 더 넓은 contour를 갖는 결과를 얻었다. ResNet-56의 실험결과는 Appendix의 Figure 15에 나와있다. Figure 3에서 filter-normalizeed plot을 이용할 때, 이로인해 minimizer간의 side-by-side(나란한) 비교가 가능했으며 이로부터 sharpness가 generalization error와 밀접한 연관이 있음을 볼 수 있었다. __Large batch는 시각적으로 더 sharp한 minima(비록 엄청나게 명확하진 않지만)를 만들어내고 더 높은 test error를 보였다.__
 
 ## 6. What Makes Neural Networks Trainable? Insights on the (Non)Convexity Structure of Loss Surfaces
+- Neural loss function의 global minimizer를 찾는 능력은 일반적이지 않다(쉬운일이 아니다). 즉 global minimizer를 찾는 일은 어떠한 neural architecture들이 다른것들보다 minimize하기 쉬운 case에 대해서는 찾기 쉽다는 의미다. 예를 들어, skip connection을 쓰는 경우, [17]의 저자들은 매우 깊은 구조(architecture)의 모델들을 학습시켰으며, 그와비슷한 깊은 구조의 네트워크들은 학습이 불가능했다. 더해서 이러한 네트워크를 학습시키는 능력은 학습을 시작 할 대 초기 파라미터와 큰 관련이 있다. 시각화 방법을 이용하여 논문에선 neural architecture에 대한 실증적인 연구를 수행하여 왜 loss function의 non-convexity가 어떤 상황에서는 문제가 되고, 어떨땐 아닌지에 대한 조사를 했다.
+- 논문에선 다음 질문들에 대한 통찰력(insight)을 제공하고자 했다. 
+  - Loss function은 중요한 non-convexity를 모두 가지고 있는가? 
+  - 만약 눈에 띄는 non-convexity가 있는 경우 왜 그러한 non-convexity들이 항상 문제가 되지 않는가?
+  - 왜 일부 archecture들은 쉽게 훈련 할 수 있고, 결과가 initialization에 매우 민감한 이유는 무엇인가?
+- 논문에선 이러한 질문에 답하는 non-convexity 구조에서의 극단적인(extreme) 차이를 갖는 아키텍쳐에 대해 살펴보고, 이러한 차이점들이 generalization error와 연관이 있음을 살펴본다.
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig4.PNG" alt="views">
+<figcaption>Figure 4. ResNet-110-noshort과 DenseNet의 CIFAR-10에 대한 loss surface
+</figcaption>
+</figure>
+</center>
 
-### Experimental Setup
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig5.PNG" alt="views">
+<figcaption>Figure 5. 서로 다른 depth에서의 ResNet과 ResNet-noshort의 2D loss surface visuzlization
+</figcaption>
+</figure>
+</center>
 
-### The Effect of Network Depth
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig6.PNG" alt="views">
+<figcaption>Figure 6. CIFAR-10에 대한 Wide-ResNet-56 실험 결과이며, 상단은 W/ shortcut connection, 하단은 W/O shortcut connection. 레이블 k=2는 레이어당 1배의 많은 filter들이 존재하는것을 뜻한다. 테스트 에러는 각 figure 밑에 표기되어있다.
+</figcaption>
+</figure>
+</center>
 
-### Shortcut Connections to the Rescue
+__Experimental Setup__
 
-### Wide Models vs Thin Models
+- Non-convexity의 network architecture에 대한 효과를 이해하기 위해 논문에서는 다양한 네트워크에 대한 학습을 진행하였고, 섹션 4에서 설명하는 filter-normalized random direction method를 사용하여 얻어진 minimizer들 주변의 landscape를 plot하였다. 실험에서는 neural network들에 대한 세 가지 class들을 고려하였다.
+  - 1) CIFAR-10에서의 성능에 대해 optimize된 ResNets[17] 사용. 실험에선 ResNet-20/56/110을 사용하였고, 각 숫자는 layer의 숫자를 의미한다.
+  - 2) Shortcut이나 skip connection을 포함하지 않는 'VGG-like' 네트워크들을 사용. 실험에선 ResNet들의 shortcut connection을 제거하여 적용했다.
+  - 3) CIFAR-10 optimized network보다 더 많은 레이어당 필터 갯수를 갖는 'Wide' ResNets 사용.
+- 모든 모델들은 CIFAR-10 데이터셋에 대해 Nesterov momentum을 이용한 SGD를 이용하였으며, batch-size 128, 0.0005 weight decay/300 epochs가 적용되었다. Learning rate는 0.1로 초기화되었으며 150, 225, 275 epoch마다 10배씩만큼 감소한다. 더 깊은 네트워크에 대한 VGG-like 실험은(밑에서 기술되는 ResNet-56-noshort같은) 0.01의 더 작은 learning rate를 적용하였다. 각각 다른 neural network의 minimizer에 대한 3개의 고 해상도 2D plot은 Figure 5와 Figure 6에서 확인 가능하다. 결과는 surface plot이 아닌 convour plot으로 표시되며, 이는 non-convex structures에 대한 sharpness를 쉽게 평가하도록 해준다. ResNet-56에 대한 surface plot은 Figure 1에서 참고 가능하다. 참고로 각 plot의 중심은 minimizer이며(minima), 두 축은 (1)과 같이 filter-wise normalization를 통해 두 개의 random direction을 매개변수화(parameterize)한 결과다. 논문에선 어떻게 architecture가 loss landscape에 영향을 미치는지에 대한 몇 가지 관점을 아래에 제시한다.
+
+__The Effect of Network Depth__
+
+- Figure 5에서, 
+
+__Shortcut Connections to the Rescue__
+
+- 
+
+__Wide Models vs Thin Models__
+
+- 
 
 ### Implications for Network Initialization
 
