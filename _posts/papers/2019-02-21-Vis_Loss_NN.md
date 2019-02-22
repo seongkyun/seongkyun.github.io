@@ -138,7 +138,7 @@ __The Effect of Network Depth__
 
 __Shortcut Connections to the Rescue__
 
-- 
+- Shortcut connection들은 loss function의 지형(geometry)에 대해 dramatic한 효과를 가져온다. Figure 5에서, 저자들은 residual connection이 네트워크의 깊이가 깊어짐에 따른 loss surface의 chaotic한 변화를 방지하는것을 확인했다. 사실 0.1-level contour의 width와 shape가 20-layer와 110-layer가 거의 동일한 것을 알 수 있다. 흥미롭게 skip connection의 효과는 deep network에 가장 중요한것 같다. ResNet-20이나 ResNet-20-noshort같은 shallow network에 대해서는 skip connection의 효과가 별로 없다(unnoticeable). 하지만 네트워크가 깊어질수록(networks get deep) non-convexity의 폭발적 증가(explosion)를 residual connection이 막아준다. 이 효과는 다른 종류의 skip connection에서도 존재한다. 이러한 residual connection의 효과는 다른 종류의 skip connection에도 적용되는 것을 보여주며, Figure 4에서는 DenseNet[20]의 loss landscape를 통해 다른 종류의 skip connection을 포함하므로 깊은 구조임에도 non-convexity를 보이지 않는 것을 확인 할 수 있다.
 
 __Wide Models vs Thin Models__
 
