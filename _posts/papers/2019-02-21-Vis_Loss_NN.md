@@ -182,7 +182,20 @@ __A note of caution: Are we really seeing convexity?__
 ### 7.1. Why Random Directions Fail: Low-Dimensional Optimization Trajectories
 - 고 차원의 공간에 존재하는 두 random vector들은 높은 확률로 직교한다는것은 잘 알려져있다. 사실 예상되는 $n$ 차원의 Gaussian random vector들간의 cosine similarity는 대략적으로 $\sqrt{2/(\pi n)}$이다([12], Lemma 5). 하지만 이러한것들은 저 차원 공간에 optimization 궤적이 존재할 때 문제가 된다. 이런 경우 random하게 선택된 vector가 optimization path를 포함하는 low-rank 공간에 orthogonal하게 존재하게 되며, random direction의 projection의 변화가 거의 없게 된다. Figure 8(b)는 optimization 궤적이 저 차원이라는 것을 제안하는데, random direction이 random direction이 optimization path를 따라 가리키는(points) 벡터보다 적은 크기의 변화를 포착(capture)하기 때문이다. 아래에서는 PCA directions를 이용하여 직접적으로 이러한 low dimensionality를 증명하엿으며, 효과적인 시각화 자료를 만들어냈다.
 
-### Effective Trajectory Plotting using PCA Directions
+### 7.2. Effective Trajectory Plotting using PCA Directions
+- 궤적의 변화를 포착(capture)하기 위해서, 논문에서는 non-random(and carefully chosen) direction이 필요하였다. 여기서 논문은 얼마나 변화가 포작되었는가를 감지할 수 있는 PCA를 기반으로 한 접근 방식을 제안하고 이를 이용해 loss surface의 contour를 따라 이러한 궤적(trajectory)들을 plot하였다.
+- $\theta_{i}$를 $i$번째 epoch의 model parameter라 하고, 학습과정에서 $n$ epoch 뒤의 마지막 parameter들을 $\theta_{n}$이라 하자. 주어진 n번의 epoch동안의 학습에서, matrix $M=\begin{bmatrix}\theta_{0}-\theta_{n} ; \cdots ; \theta_{n-1}-\theta_{n}\end{bmatrix}$에 PCA를 적용하고, 다음으로 두개의 explanatory(설명하기 위한) direction을 선택한다. Figure 9에선 PCA direction을 따라 optimizer의 궤적(파란 점)과 loss surface를 확인 할 수 있다. Learning rate가 감소되는 epoch에 대한 결과는 빨간 점으로 나타나있다. 각각의 축에 대해 PCA direction에 의해 포착된 하강(descent) path의 변화가 측정되어 있다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig9.PNG" alt="views">
+<figcaption>Figure 9. VGG-9의 nurmalized PCA direction을 이용하여 영사된 learning trajectories. 각 subfigure의 왼쪽이 batch size 128일 때, 우측이 batch size 8192일 때이다.
+</figcaption>
+</figure>
+</center>
+
+- 학습 초반의 stage에서는 loss surface의 contour로 수직하게(perpendicular) path가 움직이는 경향이 있었으며, 즉 비 확률적(non-stochastic) gradient descent로부터 기대할 수 있는 것처럼 gradient 방향을 따르게 된다.(gradient가 큰 방향으로 loss가 감소하게 된다는 것을 의미) 확률성(stochasticity)은 점점 training의 뒤 stage로 갈수록(학습의 후반부에 갈수록) 여러 plot들에 대해 뚜렷해진다. 이러한 현상은 weight decay와 small batch를 사용하는 경우 더 도드라진다(batch가 작을수록 gradient noise가 많아지고, 결정론적(deterministic) gradient direction으로부터 더 급진적(radical)으로 출발(departure)하게 됨). (즉, batch가 작아질수록 noise성분이 많아져 더 빠르게 minima에 도달 할 수 있게 된다는 의미) Weight decay와 small batch가 사용된 경우, contour와 거의 평행한 방향으로 path가 변하는 것을 볼 수 있으며 stepsize가 클수록(radical departure) solution을 orbit(궤도에 진입)시킬 수 있게 된다. Stepsize가 빨간 점처럼 떨어지게 될 경우, system의 효과적인 noise는 감소하게 되며, path가 가장 가까운 local minimizer에 빠지면 구부러지기(kink) 시작하는것을 확인 할 수 있다.
+- 마지막으로, descent path를 매우 낮은 차원에서 관찰하였는데, 오직 2차원의 공간에 descent path의 변화(variation)의 40~90%가 존재한다는 것을 알 수 있다. Figure 9의 optimization trajectories는 가까운 attractor direction으로의 움직임(movement)에 의해 지배적인것(dominated by)으로 보인다. 이러한 low dimensionality는 non-chaotic landscape들이 wide, nearly convex minimizer들에 의해 지배적이게 되는 것데 대해 관찰한 Section 6의 관찰과 호환 될 수 있다.
 
 ## Conclusion
 
