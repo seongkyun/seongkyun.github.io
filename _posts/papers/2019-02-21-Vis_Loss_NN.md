@@ -55,8 +55,16 @@ Neural net은 많은 파라미터를 포함하며, 따라서 loss function은 ve
 
 ## 4. Proposed Visualization: Filter-Wise Normalization
 - 논문의 연구는 밑에서 서술되는 적절한 scaling이 적용된 random Gaussian distribution에서 sampled된 random direction vector $\delta$, $\eta$를 사용하는 (식 1)의 plot 방식이 적용된다. Random directions가 plotting을 간단하게 만들어도 loss surface의 고유한 지형(geometry)을 capture하는것을 실패하기때문에 서로 다른 두 minimizer나 네트워크의 geometryt의 비교에 사용 할 수 없게 된다. 이는 네트워크 weight 파라미터들의  _scale invariance_ 라는 특성 때문이다. 예를들어 네트워크에 ReLU non-linearities가 사용될 경우, 네트워크의 어떤 레이어에서 얻어지는 weight값들에 10을 곱한 후 다음 레이어에서 10으로 나누더라도 ReLU에 의해 그 차이는 존재하지 않게 된다.(자세한것은 ReLU참조!) 이러한 불변성(invariance)은 batch normalization이 사용될 경우 더 중요하게 작용한다. 이런 경우 각 레이어의 출력이 batch normalization에 의해 re-scaled 되므로 필터의 사이즈(norm)가 무관하다. 따라서 네트워크의 동작은 결국 weight를 re-scale 하더라도 바뀌지 않게 된다.(단, scale invariance는 rectified network에서만 작용)
-- 
-## The Sharp vs Flat Dilemma
+- Scale invariance는 이를 방지하는 특별한 방법을 적용함에도 불구하고 plot들에 대한 비교에서 의미있는 결과를 만드는것들 방해한다. Large weights를 갖는 neural network은 smooth하고 slowly하게 변하는 loss function을 갖는것 처럼 보일 수 있다. 하나의 단위로 weight를 교란(perturbing)시키는 것은 만약 weight가 1보다 훨씬 큰 scale의 weight가 남아있다 하더라도 네트워크의 성능에 매우 적은 영향을 미칠 것이다.
+- 하지만, 만약 weight가 1보다 매우 작다면 같은 unit perturbation이 catastrophic effect을 만들어 낼 것이며, loss function을 weight perturbation에 대해 매우 민감하게 만들 것이다. Neural nets들은 scale invariant하다는 점을 상기시켜보면, 만약 small-parameter와 large-parameter 네트워크가 존재한다 할 때 두 모델은 동일한 모델이 되며, 그렇다면 loss function에 대한 어떠한 분명한 차이도 단지 인공적인 scale invariance에 의한 것들일 것이다.
+- 이러한 scaling effect를 제거하기 위해 논문에서는 loss function을 filter-wise normalized directions를 이용하여 plot 하였다. 파라미터들 $\theta$를 포함하는 네트워크의 direction을 얻기 위해 random Gaussian driection vector $d$와 dimension compatible $\theta$를 만들어냈다. 그 다음에 $\theta$와 상응하는 같은 norm을 얻기위해 각각의 $d$에 존재하는 filter를 normalize했다. 즉, $d_{i,j}\leftarrow \frac{\parallel d_{i,j} \parallel}{d_{i,j}}\parallel \theta_{i,j}\parallel$로의 변화를 만들어냈다.
+  - where $d_{i,j}$: $d$ layer의 $i$번째 $j$번째 필터를 의미(단 $j$번째 weight를 나타내지 않음)
+  - $\parallel \; \dot \; \parallel$: Frobenius norm
+- (참고: FC layer는 $1\times 1$의 출력 feature map을 만들어내는  Conv layer와 같다.)
+
+## 5. The Sharp vs Flat Dilemma
+- 이번 섹션에선 flat minimizer보다 sharp minimizer가 더 잘 일반화(generalize)를 시키는지 아닌지에 대한 것을 말한다.
+
 
 ### Filter Normalizaed Plots
 
