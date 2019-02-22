@@ -67,6 +67,16 @@ Neural net은 많은 파라미터를 포함하며, 따라서 loss function은 ve
 - Large-batch는 일반화(generalize)를 잘 시키지 못하는 sharp minima를 만들어내는 반면, Small-batch SGD는 일반화를 잘 시키는 flat한 minimizer를 만들어낸다고 알려져 있다[3, 24, 18]. 하지만 이에대한것은 아직 논의중으로, 일반화가 직접적으로 loss surface의 curvature에 연관되어있지 않으며, large batch size로도 좋은 성능을 내는 모델들이 존재한다[7, 23, 19, 14, 6]. 이 섹션에선 sharp minimizer와 flat minimizer의 차이에 대해 탐구한다. 우선 이러한 시각화(visualization)를 수행함에 있어 생기는 문제점들에 대해 논하고, 어떻게 적절한 normalization이 왜곡된 결과(distorted result)를 만들어내는것을 방지하는지에 대해 논한다.
 - 논문에서는 CIFAR-10 데이터셋을 VGG-9 네트워크[33]를 이용하여 학습시키며 batch normalization를 일정한 epoch마다 규칙적으로 수행한다. 또한 2개의 batch size를 사용하며, large batch size로 8192(16.4% of training data of CIFAR-10)를, small batch size로 128을 사용한다. $\theta^{s}$와 $\theta^{l}$은 각각 small batch size와 large batch size를 사용하여 SGD를 동작시켰을 때 얻어지는 결과를 나타낸다. [13]의 linear interpolation approach를 이용하여, 논문에서는 $f(\alpha)=L(\theta^{s}+\alpha (\theta^{l}-\thata^{s}))$로 정의되는 두 solution direction이 표함되어 CIFAR-10의 학습/테스트 데이터셋에 대한 loss 값들을 plot한다.
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig2.PNG" alt="views">
+<figcaption>Figure 2. (a)와 (b)는 VGG-9에 대한 small/large batch 학습 결과의 1D linear interpolation이다. 파란 선은 loss value, 빨간 선은 accuracy이며 실선은 training curve, 점선은 testing curve다. Small batch 실험결과는 (a)에서 가로축 0 근처, large batch는 가로축 1 근처이다. 각 실험에 대한 우측에 보여진다. (b)와 (e)는 training에서의 weight norm $\parallel \theta \parallel_{2}$의 변화를 나타낸다. Weight decay(WD)가 없는 경우(WE=0) weight norm이 training동안 서서히 계속 증가한다. (c)와 (f)는 weight decay의 차이에 의한 weight histogram을 보이며, weight decay가 적용 되었을 경우 더 0에 가까운 weight 값들을 출력하게 되는것을 알 수 있다.
+</figcaption>
+</figure>
+</center>
+
+- Figure 2(a)는 linear interpolation polt으로, x축 0 근처는 $\theta^{s}$를 나타내는 small batch size일 때의 경우, x축 1 근처는 $\theta^{l}$을 나타내는 large batch size일때를 의미한다. [24]에서 논의된 바 처럼, small batch solution이 더 넓고, large batch solution은 좁고 sharp한 solution을 보이는것을 확인 할 수 있다. 하지만, 이러한 sharpness balance는 weight decay[25]를 적용함으로써 확 바뀔 수 있다. Figure 2(d)는 같은 실험에 대해 non-zero weight decay parameter가 적용되어 실험동안 weight decay가 적용된 것에 대한 solution을 확인 할 수 있다. (a)와 비교했을 때 small batch minimizer가 sharp해지고 large batch minimizer의 그래프 모양이 flatten 된 것을 확인 할 수 있다. __하지만 논문에선 small batch가 모든 실험에대해 실험적으로 generalize를 잘 시키는 것을 확인했기 때문에 이 실험에선 sharpness가 generalization과 명확한 연관이 있는 것을 확인하지 못했다.__ 뒤쪽에서 이러한 sharpness 비교가 왜 엄청난 오해의 소지가 있고, minima의 내면의 특성을 다 잡아내지(capture) 못하는지에 대한 것을 다룬다.
+- 
 
 ### Filter Normalizaed Plots
 
