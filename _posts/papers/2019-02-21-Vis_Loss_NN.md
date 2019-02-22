@@ -134,7 +134,7 @@ __Experimental Setup__
 
 __The Effect of Network Depth__
 
-- Figure 5에서, 
+- Figure 5에서, 네트워크의 깊이가 skip connection들의 유무에 따라 어떻게 neural network의 loss surface에 영향을 미치는가에 대한 것을 볼 수 있다. ResNet-20-noshort 네트워크에 대한 실험 결과를 볼 때, 중앙에 상당히 부드러운(benign) 지역에 의해 좋은 landscape를 갖고 있으며, 극단적인 non-convex(비 볼록성)는 없다.(네트워크가 얕기때문에 shortcut에 의한 영향력이 적다는 의미) 그다지 놀랍지 않은게 원래 ImageNet에 대한 original VGG네트워크를 보면 19개의 레이어를 갖고 효율적으로 학습이 가능했다[33]. 하지만 네트워크의 깊이가 깊어질수록 VGG-like 네트워크의 loss surface가 자발적으로(spontaneously) nealy convex에서 chaotic으로 변하게 된다.(네트워크가 깊어질수록 loss landscape가 복잡해진다는 의미) ResNet-50-noshort은 극단적인 non-convexity를 가지며 넓은 지역에서 gradient direction이 중앙의 minimizer를 가리키지 않게 되는 것을 확인 할 수 있다.(surface가 복잡하므로 확률적으로 당연히 중양의 minima로 optimization 되기 힘듦) 또한 loss function이 어떤 방향으로 움직일때 때때로 극단적으로 커지게 된다. ResNet-110-noshort은 더 dramatic한 non-comvexity를 보인다. 그리고 plot에서 모든 방향으로 움직일 때 extremely하게 가파른 양상을 보인다. 거기에 더해서, 참고로 VGG-like 네트워크들의 중양의 minimizer들은 상당히(fairly) sharp한 모습을 보인다. ResNet-56-noshort의 경우 minimizer가 꽤 ill-conditioned(불량 조건) 상태이며 minimizer 주변의 contour들을 볼 때 상당히 기이한(eccentricity) 꼴을 보인다.
 
 __Shortcut Connections to the Rescue__
 
