@@ -142,9 +142,11 @@ __Shortcut Connections to the Rescue__
 
 __Wide Models vs Thin Models__
 
-- 
+- 레이어당 convolutional filter의 갯수의 효과에 대해 보기 위해서 논문에서는 narrow CIFAR-optimized ResNets(ResNet-56)을 이용한 Wide-ResNets[41]을 사용하였으며, 이는 필터의 갯수를 레이어당 k=2, 4, 8로 k 배수만큼 많게 한 모델이다. Figure 6에서는 모델이(k가 큰 모델) wider할수록 눈에띌만한 chaotic한 변화를 갖는 loss landscape가 없는것을 확인 할 수 있다.(wider 할수록 모델 모양이 더 안정적이게 된다는 의미) 네트워크의 넓이(width)를 넓게할수록 minima는 flat한 minima와 넓은 convexity(볼록) 영역이 나타난다. 마지막으로, 참고하자면 __sharpness는 test error와 극단적으로 연관이 있다.__
 
-### Implications for Network Initialization
+__Implications for Network Initialization__
+
+- Figure 5에서 보여지는 하나의 재미있는 특성은 모든 네트워크에 대해 loss landscape들이 high loss value의 well-defined region과 non-convex contour들로 둘러쌓인 low loss value의 well-defined region과 convex contour로 나뉘어진다고 판단된다. 이러한 chaotic과 convex 지역(region)의 분리성은(partitioning) 좋은 initialization strategies와 좋은 네트워크 구조가 학습이 쉽게 되는 특징의 중요성으로 설명가능하다. [11]에서 제안하는 normalized random initialization strategy같은 방법을 쓸 때, 전형적인 neural network들은 initial loss value를 2.5보다 적게 얻게된다. Figure 5의 ResNets나 얕은 VGG-like 네트워커와 같이 잘 동작되는(behaved)네트워크의 loss landscape는 loss value를 4 이상으로 커지는 large, flat, nearly convex한 attractor(끌어당기는것, 장점들)에 의해 주도된다. 이러한 landscape들에 대해, random initialization은 well-behaved loss region에 놓이게 될 것이며(landscape가 좋으면 random하게 weight를 초기화 하더라도 좋은 지역에 놓이게 될 것이라는 의미), optimizer 알고리즘들은 절대로 high-loss를 발생시키는 chaotic한 고원(plateau)이 발생시키는 non-convexity들을 볼 수 없을 것이다.(즉, 쉽게 optimization이 될 것이다.) ResNet-56/110-noshort의 chaotic한 loss landscape들은 loss값이 낮아지는 convexity가 더 좁은 지역에서 관찰된다.(즉, loss값이 낮아지는 방향으로 흘러갈 수 있는 확률이 낮아질 수 밖에 없음)
 
 ### Landscape Geometry Affects Generalization
 
