@@ -146,11 +146,26 @@ __Wide Models vs Thin Models__
 
 __Implications for Network Initialization__
 
-- Figure 5에서 보여지는 하나의 재미있는 특성은 모든 네트워크에 대해 loss landscape들이 high loss value의 well-defined region과 non-convex contour들로 둘러쌓인 low loss value의 well-defined region과 convex contour로 나뉘어진다고 판단된다. 이러한 chaotic과 convex 지역(region)의 분리성은(partitioning) 좋은 initialization strategies와 좋은 네트워크 구조가 학습이 쉽게 되는 특징의 중요성으로 설명가능하다. [11]에서 제안하는 normalized random initialization strategy같은 방법을 쓸 때, 전형적인 neural network들은 initial loss value를 2.5보다 적게 얻게된다. Figure 5의 ResNets나 얕은 VGG-like 네트워커와 같이 잘 동작되는(behaved)네트워크의 loss landscape는 loss value를 4 이상으로 커지는 large, flat, nearly convex한 attractor(끌어당기는것, 장점들)에 의해 주도된다. 이러한 landscape들에 대해, random initialization은 well-behaved loss region에 놓이게 될 것이며(landscape가 좋으면 random하게 weight를 초기화 하더라도 좋은 지역에 놓이게 될 것이라는 의미), optimizer 알고리즘들은 절대로 high-loss를 발생시키는 chaotic한 고원(plateau)이 발생시키는 non-convexity들을 볼 수 없을 것이다.(즉, 쉽게 optimization이 될 것이다.) ResNet-56/110-noshort의 chaotic한 loss landscape들은 loss값이 낮아지는 convexity가 더 좁은 지역에서 관찰된다.(즉, loss값이 낮아지는 방향으로 흘러갈 수 있는 확률이 낮아질 수 밖에 없음)
+- Figure 5에서 보여지는 하나의 재미있는 특성은 모든 네트워크에 대해 loss landscape들이 high loss value의 well-defined region과 non-convex contour들로 둘러쌓인 low loss value의 well-defined region과 convex contour로 나뉘어진다고 판단된다. 이러한 chaotic과 convex 지역(region)의 분리성은(partitioning) 좋은 initialization strategies와 좋은 네트워크 구조가 학습이 쉽게 되는 특징의 중요성으로 설명가능하다. [11]에서 제안하는 normalized random initialization strategy같은 방법을 쓸 때, 전형적인 neural network들은 initial loss value를 2.5보다 적게 얻게된다. Figure 5의 ResNets나 얕은 VGG-like 네트워커와 같이 잘 동작되는(behaved)네트워크의 loss landscape는 loss value를 4 이상으로 커지는 large, flat, nearly convex한 attractor(끌어당기는것, 장점들)에 의해 주도된다. 이러한 landscape들에 대해, random initialization은 well-behaved loss region에 놓이게 될 것이며(landscape가 좋으면 random하게 weight를 초기화 하더라도 좋은 지역에 놓이게 될 것이라는 의미), optimizer 알고리즘들은 절대로 high-loss를 발생시키는 chaotic한 고원(plateau)이 발생시키는 non-convexity들을 볼 수 없을 것이다.(즉, 쉽게 optimization이 될 것이다.) ResNet-56/110-noshort의 chaotic한 loss landscape들은 loss값이 낮아지는 convexity가 더 좁은 지역에서 관찰된다.(즉, loss값이 낮아지는 방향으로 흘러갈 수 있는 확률이 낮아질 수 밖에 없음) Shallow enough attractor를 가진 충분히 깊은 네트워크의 경우 초기 반복은 gradient 정보가 없는 쓸모없는(uniformative) chaotic region에 놓이게 된다. 이러한 경우 gradient들은 흩어지게 되며(statter)[1] 학습이 불가능하게 된다. SGD는 skip connection이 없는 156 레이어 네트워크의 학습이 불가능해서 이러한 가설에 힘을 실어주었다(심지어 매우 작은 learning rate로도).
 
-### Landscape Geometry Affects Generalization
+__Landscape Geometry Affects Generalization__
 
-### A note of caution: Are we really seeing convexity?
+- Figure 5와 6에서는 landscape의 지형이 일반화(generalization)에 미치는 dramatic한 효과에 대해 보여준다. 우선, 시각적으로 편평한 minimizer들은 계속 낮은 test error를 가지며, 논문에서 제안하는 filter normalization이 loss function의 geometry를 시각화하는 자연스러운 방법임에 더 큰 힘을 실어준다. 다음으로, skip connection이 없는 deep network의 chaotic landscape 결과들은 더 어려운 학습과 높은 test error를 보이며, 더 convex한 landscape일수록 낮은 error를 보인다. 사실 Figure 6의 윗줄에서 볼 수 있는 Wide-ResNets과 같은 가장 convex한 landscape들은 가장 일반화(generalize)를 잘 시키며 chaotic한 landscape 모습을 거의 찾아볼 수 없다.
+
+__A note of caution: Are we really seeing convexity?__
+
+- 논문에서는 dramatic한 dimensionality 감소를 통해 loss surface를 보고 있으므로 이러한 plot을 어떻게 하냐 설명함에 있어서 주의를 기울여야 한다. Loss function의 level을 측정하기 위한 하나의 방법으로는 _principle curvatures_ 를 계산하는 방법이 있는데, 이것은 간단하게 Hessian의 eigenvalue들을 뜻한다. Convex function은 non-negative curvature들을 갖으며(positive semi-definite Hessian), 동시에 non-convex function은 negative curvature들을 갖는다. 이는 dimensionality reduced plot(with random Gaussian directions)의 curvature 이론이 full-dimensional surface(where the weights are Chi-square random variables)의 curvaturee들의 weighted된 평균임을 이론적으로 의미한다.
+- 이것은 몇가지 결과를 갖는다. 우선, 만약 non-convexity가 dimensionality reduced plot에 존재한다면, non-convexity는 full-dimensional surface에도 또한 무조건 존재하게 된다. 하지만 분명한 convexity가 low-dimensional surface에 존재하더라도 high-dimensional function이 truly convex하다는것을 의미하지는 않는다. 오히려 positive curvature들이 dominant(지배적)함을 의미한다(더 공식적으로 mean curvature 또는 average eigenvalue가 양수임).
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig7.PNG" alt="views">
+<figcaption>Figure 7. 각각의 filter-normalized surface plot에 대해 Hessian의 maximum과 minimum eigenvalue를 계산하고, 이 두 eigenvalue에 대한 비율을 map으로 나타냈다.
+</figcaption>
+</figure>
+</center>
+
+- 이러한 analysis가 충분히 가정에 대해 안심시키지만(reassuring), 만약 이러한 시각화(visualization)가 포착(capture)하지 못하는 중요한 숨겨진 non-convexity가 존재할 수 있는지 궁금할 수 있다. 이것에 대한 대답으로, 우리는 Hessian의 _minimum_ eigenvalue $\lambda_{min}$과 _maximum_ eigenvalue $\lambda_{max}를 계산했다. Figure 7의 map들은 위에서 연구된 loss surface들(같은 minimizer와 같은 random direction들을 사용했을 때)에 대한 $\left|\lambda_{min}/\lambda_{max}\right|$ 비율이다. 파란색은 더 convex한 지역을 의미하며(양의 eigenvalue에 비해 0에 가까운 음의 eigenvalue), 노란색은 눈에띄는 negative curvature를 의미한다. 논문의 surface plot에서의 convex-looking region들은 실제로 무의미한 negative eigenvalue들을 가진 지역에 해당하며(즉, plot에 포함되지 않는 중요한 non-convex feature는 없다는 의미), 동시에 chaotic region은 large negative curvature들을 포함한다. DenseNet과 같은 convex-looking surface의 경우에는 plot의 넓은 지역에서 negative eigenvalue들이 매우 작게 남아있는것을 확인 할 수 있다(less than 1% the size of the positive curbatures).
 
 ## Visualizing Optimization Paths
 
