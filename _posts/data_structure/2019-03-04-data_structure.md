@@ -2,7 +2,7 @@
 layout: post
 title: 자료구조 공부 시작 
 category: data_structure
-tags: [data structure, ]
+tags: [data structure, 자료구조]
 comments: true
 ---
 
