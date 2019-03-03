@@ -47,7 +47,7 @@ nav:
     - { baekjoon: '/blog/categories/#baekjoon' }
     - { data structure: '/blog/categories/#datastructure' }
     - { others: '/blog/categories/#others' }
-    # - { Tags: '/blog/tags/' }
+    - { Tags: '/blog/tags/' }
   About:
     - '/about/'
   Search:
