@@ -45,7 +45,7 @@ nav:
     - { papers: '/blog/categories/#papers' }
     - { git: '/blog/categories/#git' }
     - { baekjoon: '/blog/categories/#baekjoon' }
-    - { data structure: '/blog/categories/#datastructure' }
+    - { data_structure: '/blog/categories/#data_structure' }
     - { others: '/blog/categories/#others' }
     - { Tags: '/blog/tags/' }
   About:
