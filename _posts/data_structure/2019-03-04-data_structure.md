@@ -1,8 +1,8 @@
 ---
 layout: post
 title: 자료구조 공부 시작 
-category: git
-tags: [github, 지옥에서 온 git]
+category: data_structure
+tags: [data structure, ]
 comments: true
 ---
 
