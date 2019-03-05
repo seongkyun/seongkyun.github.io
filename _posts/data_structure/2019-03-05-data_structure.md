@@ -98,17 +98,68 @@ int BSearchRecur(int ar[], int first, int last, int target)
   - B 기둥에 1, 2, 3을 옮긴 후, C 기둥으로 4를 옮기고 나머지는 3개의 원반인 경우와 동일하게 진행
   - B 기둥에 1, 2, 3을 옮기는 과정도 3개 원반인 경우와 동일
 - 막대 A에 꽂혀있는 원반 n개를 막대 C로 옮기는 과정
-  - 작은 원반 1 ~ n-1 을 A에서 B로 이동
-  - 큰 원반 n 을 A에서 C로 이동
-  - 작은 원반 1 ~ n-1 을 B에서 C로 이동
+  - 1단계: 작은 원반 1 ~ n-1 을(n-1개) A에서 B로 이동
+  - 2단계: 큰 원반 n 을 A에서 C로 이동
+  - 3단계: 작은 원반 1 ~ n-1 을(n-1개) B에서 C로 이동
 - 함수의 구성은 num 개의 원반을 by를 거쳐 from에서 to로 이동
   - `void HanoiTowerMove(int num, char from, char by, char to)`
+  - 하지만 연산의 구성에서 n-1 의 원반이 필요하므로 n = 1 일 때의 예외 처리가 필요(__탈출조건__)
 
+```c
+//frmo에 꽂혀있는 num개의 원반을 by를 거쳐서 to로 이동
+void HanoiTowerMove(int num, char from, char by, char to)
+{
+  if(num == 1) // 이동할 원반의 개수가 1개인 경우
+    printf("원반1을 %c에서 %c로 이동 \n", from, to);
+  else // 이동할 원반의 개수가 2개 이상일 경우
+  {
+    HanoiTowerMove(num-1, from, to, by); // 작은 원반 n-1개를 A에서 C를 거쳐 B로 이동
+  }
+}
+```
 
+- 2단계 __큰 원반 n을 A에서 C로 이동__ 와 3단계 __작은 원반 n-1개를 B에서 C로 이동__ 을 추가하면 아래와 같다.
 
+```c
+void HanoiTowerMove(int num, char from, char by, char to)
+{
+  if(num == 1)
+    printf("원반1을 %c에서 %c로 이동 \n", from, to);
+  else
+  {
+    HanoiTowerMove(num-1, from, to, by); // 작은 원반 n-1개를 A에서 C를 거쳐 B로 이동
+    printf("원반%d을(를) %c에서 %c로 이동 \n", num, from, to); // 큰 원반(n)을 A에서 C로 이동
+    HanoiTowerMove(num-1, by, from, to); // 작은 원반 n-1개를 B에서 C로 이동
+  }
+}
+```
 
+- 이를 기반으로 코드를 완성시키면 아래와 같음
 
+```c
+#pragma warning(disable:4996)
+#include<stdio.h>
 
+void HanoiTowerMove(int num, char from, char by, char to)
+{
+	if (num == 1)
+		printf("원반1을 %c에서 %c로 이동 \n", from, to);
+	else
+	{
+		HanoiTowerMove(num - 1, from, to, by);
+		printf("원반%d을(를) %c에서 %c로 이동 \n", num, from, to);
+		HanoiTowerMove(num - 1, by, from, to);
+	}
+}
+int main(void)
+{
+	HanoiTowerMove(5, 'A', 'B', 'C');
+	getchar();
+	return 0;
+}
+```
+
+- 재귀함수를 이용하여 복잡한 알고리즘을 간단하게 해결 
 
 
 
