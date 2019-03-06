@@ -31,5 +31,5 @@ comments: true
 
 - 작업이 완료되면 train 폴더 안에 카테고리별로, val 폴더 안에 카테고리별로 정리되어 들어간다.
 
-## ImageNet training in Pytorch
+## ImageNet training in Pytorch example
 - https://github.com/pytorch/examples/tree/master/imagenet 참조
