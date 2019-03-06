@@ -2,7 +2,7 @@
 layout: post
 title: ImageNet LSVRC 2012 데이터셋 다운로드 받기
 category: others
-tags: [ubuntu, hdd mount]
+tags: [ImageNet, download]
 comments: true
 ---
 
