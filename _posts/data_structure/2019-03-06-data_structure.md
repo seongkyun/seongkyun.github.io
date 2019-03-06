@@ -1,12 +1,12 @@
 ---
 layout: post
-title: CH3. 연결 리스트 (Linked list) 1
+title: CH3. 연결 리스트 (Linked list) 1-1
 category: data_structure
 tags: [data structure, 자료구조]
 comments: true
 ---
 
-# CH3. 연결 리스트 (Linked list) 1
+# CH3. 연결 리스트 (Linked list) 1-1
 
 ## 3-1 추상 자료형: Abstract Data Type
 - ADT와 자료구조의 관계
