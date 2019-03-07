@@ -11,7 +11,7 @@ comments: true
 ## 3-2 배열을 이용한 리스트의 구현
 
 ### 배열 기반 리스트의 헤더파일 정의
-- ""
+- "ArrayList.h"
 
 ```c
 #pragma warning(disable:4996)
