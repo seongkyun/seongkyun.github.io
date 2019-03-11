@@ -92,8 +92,8 @@ while(1)
 
 <center>
 <figure>
-<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig1.jpg" alt="views">
-<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig2.jpg" alt="views">
+<img src="/assets/post_img/data_structure/2019-03-11-data_structure/fig1.jpg" alt="views">
+<img src="/assets/post_img/data_structure/2019-03-11-data_structure/fig2.jpg" alt="views">
 <figcaption> </figcaption>
 </figure>
 </center>
@@ -120,7 +120,7 @@ else
 
 <center>
 <figure>
-<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig3.jpg" alt="views">
+<img src="/assets/post_img/data_structure/2019-03-11-data_structure/fig3.jpg" alt="views">
 <figcaption> </figcaption>
 </figure>
 </center>
@@ -153,7 +153,7 @@ else
 
 <center>
 <figure>
-<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig4.jpg" alt="views">
+<img src="/assets/post_img/data_structure/2019-03-11-data_structure/fig4.jpg" alt="views">
 <figcaption> </figcaption>
 </figure>
 </center>
