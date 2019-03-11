@@ -66,7 +66,7 @@ Node * newNode = NULL;
 int readData;
 ```
 
-- "LinkedRead.c"의 분석: 삽입 1회전
+- "LinkedRead.c"의 분석: 삽입
 
 ```c
 /**** 데이터를 입력 받는 과정 ****/
@@ -77,7 +77,7 @@ while(1)
 	if(readData < 1)  // 1보다 작은 경우 더 이상 노드를 추가하지 않고 빠져나감
 		break;
 
-	/*** 노드의 추가과정 ***/
+	/*** 노드의 추가과정(연결과정) ***/
 	newNode = (Node*)malloc(sizeof(Node));
 	newNode->data = readData;
 	newNode->next = NULL;
@@ -85,17 +85,75 @@ while(1)
 	if(head == NULL)
 		head = newNode;
 	else
-		tail->next = newNode;
-
+		tail->next = newNode; // tail이 가리키는 노드 멤버의 next
 	tail = newNode;
 }
 ```
 
-
 <center>
 <figure>
-<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig1.PNG" alt="views">
+<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig1.jpg" alt="views">
+<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig2.jpg" alt="views">
 <figcaption> </figcaption>
 </figure>
 </center>
 
+- "LinkedRead.c"의 분석: 데이터 조회
+
+```c
+if(head == NULL) 
+{
+  printf("저장된 자연수가 존재하지 않습니다. \n");
+}
+else 
+{
+  cur = head; 
+  printf("%d  ", cur->data);   // 첫 번째 데이터 출력
+
+  while(cur->next != NULL)    // 두 번째 이후의 데이터 출력
+  {
+    cur = cur->next;
+    printf("%d  ", cur->data);
+  }
+}
+```
+
+<center>
+<figure>
+<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig3.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- "LinkedRead.c"의 분석: 데이터 삭제
+
+```c
+if(head == NULL) 
+{
+  return 0;    // 해제할 노드가 존재하지 않는다.
+}
+else 
+{
+  Node * delNode = head;
+  Node * delNextNode = head->next;
+
+  printf("%d을(를) 삭제합니다. \n", head->data);
+  free(delNode);    // 첫 번째 노드의 삭제
+
+  while(delNextNode != NULL)    // 두 번째 이후의 노드 삭제 위한 반복문
+  {
+    delNode = delNextNode;
+    delNextNode = delNextNode->next;
+
+    printf("%d을(를) 삭제합니다. \n", delNode->data);
+    free(delNode);    // 두 번째 이후의 노드 삭제
+  }
+}
+```
+
+<center>
+<figure>
+<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig4.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
