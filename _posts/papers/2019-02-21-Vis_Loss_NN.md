@@ -154,7 +154,7 @@ __Landscape Geometry Affects Generalization__
 
 __A note of caution: Are we really seeing convexity?__
 
-- 논문에서는 dramatic한 dimensionality 감소를 통해 loss surface를 보고 있으므로 이러한 plot을 어떻게 하냐 설명함에 있어서 주의를 기울여야 한다. Loss function의 level을 측정하기 위한 하나의 방법으로는 _principle curvatures_ 를 계산하는 방법이 있는데, 이것은 간단하게 Hessian의 eigenvalue들을 뜻한다. Convex function은 non-negative curvature들을 갖으며(positive semi-definite Hessian), 동시에 non-convex function은 negative curvature들을 갖는다. 이는 dimensionality reduced plot(with random Gaussian directions)의 curvature 이론이 full-dimensional surface(where the weights are Chi-square random variables)의 curvaturee들의 weighted된 평균임을 이론적으로 의미한다.
+- 논문에서는 dramatic한 dimensionality 감소를 통해 loss surface를 보고 있으므로 이러한 plot을 어떻게 하냐 설명함에 있어서 주의를 기울여야 한다. Loss function의 level을 측정하기 위한 하나의 방법으로는 _principle curvatures()_ 를 계산하는 방법이 있는데, 이것은 간단하게 Hessian의 eigenvalue들을 뜻한다. Convex function은 non-negative curvature들을 갖으며(positive semi-definite Hessian), 동시에 non-convex function은 negative curvature들을 갖는다. 이는 dimensionality reduced plot(with random Gaussian directions)의 curvature 이론이 full-dimensional surface(where the weights are Chi-square random variables)의 curvaturee들의 weighted된 평균임을 이론적으로 의미한다.
 - 이것은 몇가지 결과를 갖는다. 우선, 만약 non-convexity가 dimensionality reduced plot에 존재한다면, non-convexity는 full-dimensional surface에도 또한 무조건 존재하게 된다. 하지만 분명한 convexity가 low-dimensional surface에 존재하더라도 high-dimensional function이 truly convex하다는것을 의미하지는 않는다. 오히려 positive curvature들이 dominant(지배적)함을 의미한다(더 공식적으로 mean curvature 또는 average eigenvalue가 양수임).
 
 <center>
