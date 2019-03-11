@@ -90,3 +90,12 @@ while(1)
 	tail = newNode;
 }
 ```
+
+
+<center>
+<figure>
+<img src="/assets/post_img/data_struct/2019-03-11-data_structure/fig1.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
