@@ -52,6 +52,9 @@ typedef struct _node
   - 2. 순차적 접근에 대한 것을 배울 수 있음
 
 - "LinkedRead.c"의 분석: 초기화
+  - head: 연결 리스트의 머리 부분을 가리키기 위한 포인터 변수
+  - tail: 연결 리스트의 꼬리 부분을 가리키기 위한 포인터 변수
+  - cur: 순차적 접근에 사용되는 포인터 변수(순차적 조회 시에만 필요)
 
 ```c
 // NULL 포인터 초기화
@@ -63,3 +66,27 @@ Node * newNode = NULL;
 int readData;
 ```
 
+- "LinkedRead.c"의 분석: 삽입 1회전
+
+```c
+/**** 데이터를 입력 받는 과정 ****/
+while(1)
+{
+	printf("자연수 입력: ");
+	scanf("%d", &readData); // 데이터를 입력하기위한 값을 입력받음
+	if(readData < 1)  // 1보다 작은 경우 더 이상 노드를 추가하지 않고 빠져나감
+		break;
+
+	/*** 노드의 추가과정 ***/
+	newNode = (Node*)malloc(sizeof(Node));
+	newNode->data = readData;
+	newNode->next = NULL;
+
+	if(head == NULL)
+		head = newNode;
+	else
+		tail->next = newNode;
+
+	tail = newNode;
+}
+```
