@@ -33,3 +33,8 @@ comments: true
 
 ## ImageNet training in Pytorch example
 - https://github.com/pytorch/examples/tree/master/imagenet 참조
+
+## 중요사항
+- 위의 모든 과정 수행 후 해당 폴더(imagenet dataset 저장 폴더)에 가서 `n숫자조합` 으로 되는 파일 구성이 아닌 다른 파일이나 폴더가 존재하면 삭제한다.
+  - 나중에 학습 과정에서 오류 발생
+  - ex. `train` 폴더 내의 `ILSVRC2012_img_train` 폴더나 `val` 폴더 내의 `ILSVRC2012_img_val.tar` 파일
