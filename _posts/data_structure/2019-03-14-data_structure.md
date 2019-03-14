@@ -28,7 +28,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/data_structure/2019-03-14data_structure/fig1.jpg" alt="views">
+<img src="/assets/post_img/data_structure/2019-03-14-data_structure/fig1.jpg" alt="views">
 <figcaption> </figcaption>
 </figure>
 </center>
@@ -40,7 +40,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/data_structure/2019-03-14data_structure/fig2.jpg" alt="views">
+<img src="/assets/post_img/data_structure/2019-03-14-data_structure/fig2.jpg" alt="views">
 <figcaption> </figcaption>
 </figure>
 </center>
@@ -52,7 +52,7 @@ comments: true
 - 새 노드를 생성
 - 새로운 포인터 변수인 pred를 정의하고, 이것을 입력된 리스트의 head가 가리키는 노드로 정의
   - 리스트가 처음 참조되는 경우라면 head는 dummy 노드를 가리키므로 pred 또한 dummy 노드를 가리키게 됨
-- 왜 pred 포인터는 입력된 리스트 plist의 head가 가리키는 노드를 가리킬까? (`pred = plist->head;`)
+- __왜 pred 포인터는 입력된 리스트 plist의 head가 가리키는 노드를 가리킬까?__ (`pred = plist->head;`)
   - 정렬을 정의하는 함수, 즉 comp 함수에는 인자로 (비교 할 숫자, 비교 당할 숫자)가 들어가게 됨
     - 따라서 comp 함수와 수 비교를 통해 비교 할 숫자가 비교 당할 숫자보다 작으면 무조건 비교한 숫자를 갖는 노드의 앞에 노드가 추가됨
   - 하지만 노드를 연결하는 순간에는 연결할 부위의 이전 노드의 주소와 이후 노드의 주소 두 주소를 알아야 연결 할 수 있음!
@@ -61,3 +61,51 @@ comments: true
   - 따라서 pred가 이전 노드(그림에서 2가 아닌 dummy부터 시작해야)를 가리켜야 새 노드 연결이 가능해짐
     - pred가 이전 노드를 카리키면 다음 노드는 pred->next 로 정의 가능
     - 그 사이 새 노드 newNode를 `newNode->next = pred->next;`, `pred->next = newNode;` 순서로 연결하여 리스트 완성
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-14-data_structure/fig3.jpg" alt="views">
+<img src="/assets/post_img/data_structure/2019-03-14-data_structure/fig4.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 새 노드가 들어갈 위치를 찾기 위한 반복문
+  - while문 조건의 `pred->next != Null`
+    - `pred->next == Null`을 만족하는 경우는 맨 마지막 노드를 가리키는 경우임
+    - 해당 조건을 만족하면 맨 마지막 노드를 만족하면 비교하는 수는 비교했던 그 어느 수(리스트 내의 모든 유효Data)보다도 큰 수므로 맨 마지막에 연결되어야 함
+  - while문 조건의 `plist->comp(data, pred->next->data) != 0`
+    - comp함수는 두 수의 대소를 비교
+    - data < pred->next->data 일 때 return 0, data > pred->next->data 일 때 return 1 
+    - data < pred->next->data 을 만족할때 0이 반환되므로 while문을 빠져나와 노드를 연결하게 됨
+
+### 정렬의 핵심인 while문
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-14-data_structure/fig5.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+### comp의 반환 값과 그 의미
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-14-data_structure/fig6.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+### 정렬의 기준을 설정하기 위한 함수의 정의
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-14-data_structure/fig7.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 연결 리스트의 함수 포인터는 함수 포인터 사용의 아주 좋은 예시가 됨
+  - 보통 잘 사용하지 않지만 연결 리스트에서의 새 노드 추가시 (새로운 데이터의 입력) 함수 포인터를 이용하면 손쉽게 조건에 따른 데이터의 추가를 정의할 수 있음
+  
