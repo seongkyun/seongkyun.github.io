@@ -12,7 +12,7 @@ comments: true
 <center>
 <figure>
 <img src="/assets/post_img/study/2019-03-18-Hessian_matrix/fig1.png" alt="views">
-<figcaption>None</figcaption>
+<figcaption></figcaption>
 </figure>
 </center>
 
@@ -42,7 +42,7 @@ $$H=\begin{pmatrix} I_{xx}& I_{xy} \\ I_{xy} & I_{yy} \end{pmatrix}$$
 <center>
 <figure>
 <img src="/assets/post_img/study/2019-03-18-Hessian_matrix/fig2.png" alt="views">
-<figcaption>None</figcaption>
+<figcaption></figcaption>
 </figure>
 </center>
  
