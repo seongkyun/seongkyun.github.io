@@ -167,6 +167,8 @@ __A note of caution: Are we really seeing convexity?__
 
 - 이러한 analysis가 충분히 가정에 대해 안심시키지만(reassuring), 만약 이러한 시각화(visualization)가 포착(capture)하지 못하는 중요한 숨겨진 non-convexity가 존재할 수 있는지 궁금할 수 있다. 이것에 대한 대답으로, 우리는 Hessian의 _minimum_ eigenvalue $\lambda_{min}$ 과 _maximum_ eigenvalue $\lambda_{max}$ 를 계산했다. Figure 7의 map들은 위에서 연구된 loss surface들(같은 minimizer와 같은 random direction들을 사용했을 때)에 대한 $\begin{vmatrix}\lambda_{min}/\lambda_{max}\end{vmatrix}$ 비율이다. 파란색은 더 convex한 지역을 의미하며(양의 eigenvalue에 비해 0에 가까운 음의 eigenvalue), 노란색은 눈에띄는 negative curvature를 의미한다. 논문의 surface plot에서의 convex-looking region들은 실제로 무의미한 negative eigenvalue들을 가진 지역에 해당하며(즉, plot에 포함되지 않는 중요한 non-convex feature는 없다는 의미), 동시에 chaotic region은 large negative curvature들을 포함한다. DenseNet과 같은 convex-looking surface의 경우에는 plot의 넓은 지역에서 negative eigenvalue들이 매우 작게 남아있는것을 확인 할 수 있다(less than 1% the size of the positive curbatures).
 
+- 즉, Figure 7에서 파란 부분은 아래로 볼록한 부분이며, 노란 부분은 위로 볼록한 것을 의미한다. 따라서 파란색이 넓게 분포할수록 더 loss surface에 chaotic한 부분이 덜 존재하는것을 의미하며, 이는 해당 모델이 Generalization이 더 잘 되어 있음을 의미한다. (negative curvature가 더 좁게 존재) 또한 고 차원의 loss surface를 저 차원으로 plot하면 고 차원에 숨겨진 non-convexity가 저 차원으로 plot 되지 못한다고 생각 할 수 있다. 이는 고 차원의 데이터에 대한 hessian matrix를 구한 후 계산되는 hessian eigenvector의 최솟값과 최댓값의 비율 plotting을 볼 때(Figure 7의 그림), chaotic한 부분은 large negative curvature(노란부분)로 eigenvalue plotting에서 나타나게 되므로 고 차원의 정보까지 plotting이 가능한것을 알 수 있다.
+
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-02-21-Vis_Loss_NN/fig8.PNG" alt="views">
