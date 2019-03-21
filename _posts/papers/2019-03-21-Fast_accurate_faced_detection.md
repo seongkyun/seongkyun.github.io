@@ -19,7 +19,8 @@ Authors: Rajeev Ranjan, Ankan Bansal, Jingxiao Zheng, Hongyu Xu, Joshua Gleason,
 - 논문에서는 제안하는 face detector를 이용하여 각종 데이터셋들에 대한 evaluation 결과를 제공하며, IARPA Janus Benchmarks A, B, C(IJB-A, B, C)와 Janus Challenge Set 5(CS5)에 대한 실험 결과를 제공한다.
 
 ## 1. Introduction
--  
+-  Facial analytics에 대한 많은 연구가 진행되어 있으며 이러한 연구는 law enforcement, active authentication on device, face biometrics for payment, 자율 주행차 등에 응용되어지고 있다. 또한 각종 dataset들의 등장으로 DCNN의 활용 가능성과 성능이 높아졌다.
+- 본 논문에선 새로은 face detector를 제안하고, 이는 훨씬 빠르고 다양한 scale의 얼굴에 대해 탐지 결과가 좋다. 또한 현존하는 DCNN 기반 자동 face detection pipeline을 적용하여 SOTA 기술에 대해 좋은 결과를 보인다. 
 
 ## 2. A brief survey of existing literature
 - 본 챕터에서는 간단하게 현존하는 다른 방법을 사용하는 face identification/verification pipeline 모듈들에 대한 overview를 제시한다. 우선 최근의 face detection  method에 대한 것을 다룬다. 다음으로 두 번째 모듈인 facial keypoint detection에 대해 고려한다. 마지막으로 feature learning에 관한 최근의 여러 연구에 대해 논하고 face verification과 identification에 대한 SOTA 연구들을 요약한다.
