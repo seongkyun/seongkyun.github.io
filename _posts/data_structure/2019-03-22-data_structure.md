@@ -180,6 +180,7 @@ typedef struct _node
   - 새 노드는 꼬리에 추가
 - 위 조건을 만족하는 LRemove 함수를 포함하는 양방향 연결 리스트를 구현
 
+- 풀이
 
 ```c
 #include <stdio.h>
@@ -267,6 +268,3 @@ Data LRemove(List *plist)
 	return rm;
 }
 ```
-
-
-
