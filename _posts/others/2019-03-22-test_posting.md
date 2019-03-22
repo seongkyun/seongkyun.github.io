@@ -1,6 +1,6 @@
 ---
 layout: post
-title: test posting
+title: \[test] test posting
 category: others
 tags: [Ubuntu, 우분투]
 comments: true
