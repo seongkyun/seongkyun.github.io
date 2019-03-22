@@ -174,6 +174,99 @@ typedef struct _node
 - LFirst, LNext는 단방향 연결리스트와 차이가 없고 LPrevious는 LNext와 이동 방향만 다름
 
 ### 문제 5-2
+- 조건
+  - Head, tail 포인터 변수 사용
+  - 더미 노드를 사용
+  - 새 노드는 꼬리에 추가
+- 위 조건을 만족하는 LRemove 함수를 포함하는 양방향 연결 리스트를 구현
+
+
+```c
+#include <stdio.h>
+#include <stdlib.h>
+#include "DBLinkedList.h"
+
+void ListInit(List * plist)
+{
+	plist->head = (Node *)malloc(sizeof(Node));
+	plist->tail = (Node *)malloc(sizeof(Node));
+
+	plist->head->prev = NULL;
+	plist->head->next = plist->tail;
+
+	plist->tail->prev = plist->head;
+	plist->tail->next = NULL;
+
+	plist->numOfData = 0;
+}
+
+void LInsert(List * plist, Data data)
+{
+	Node * newNode = (Node*)malloc(sizeof(Node));
+	newNode->data = data;
+
+	newNode->prev = plist->tail->prev;
+	plist->tail->prev->next = newNode;
+
+	newNode->next = plist->tail;
+	plist->tail->prev = newNode;
+
+	(plist->numOfData)++;
+}
+
+int LFirst(List * plist, Data * pdata)
+{
+	if (plist->head->next == plist->tail)
+		return FALSE;
+
+	plist->cur = plist->head->next;
+	*pdata = plist->cur->data;
+
+	return TRUE;
+}
+
+int LNext(List * plist, Data * pdata)
+{
+	if(plist->cur->next == plist->tail)
+		return FALSE;
+
+	plist->cur = plist->cur->next;
+	*pdata = plist->cur->data;
+
+	return TRUE;
+}
+
+int LPrevious(List * plist, Data * pdata)
+{
+	if(plist->cur->prev == plist->head)
+		return FALSE;
+
+	plist->cur = plist->cur->prev;
+	*pdata = plist->cur->data;
+
+	return TRUE;
+}
+
+int LCount(List * plist)
+{
+	return plist->numOfData;
+}
+
+Data LRemove(List *plist)
+{
+	Node *rpos = plist->cur;
+	Data rm = rpos->data;
+
+	plist->cur->prev->next = rpos->next;
+	plist->cur->next->prev = rpos->prev;
+
+	plist->cur = plist->cur->prev;
+
+	free(rpos);
+	(plist->numOfData)--;
+	return rm;
+}
+```
 
 
 
