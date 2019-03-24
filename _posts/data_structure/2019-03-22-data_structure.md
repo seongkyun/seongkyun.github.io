@@ -200,7 +200,7 @@ __(head) -> [dummy] <-> [2, old] <-> [4, new] <-> [dummy] <- (tail)__
   - 위 노드관계에서 [2, old] 노드를 삭제하는 과정
   - 1단계: head가 가리키는 dummy node의 next가 [4, new]를 가리키도록 함
   - 2단계: [4, new]의 prev가 head가 가리키는 dummy node를 가리키도록 함
-  - 3단계: [2, old] 노드를 삭제하고 
+  - 3단계: [2, old] 노드를 삭제하고 삭제된 값을 반환
   
 - 위의 조건을 바탕으로 ADT의 동작코드인 `DBLinkedList.c`를 작성하면 아래와 같다
 
