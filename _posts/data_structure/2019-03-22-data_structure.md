@@ -187,65 +187,72 @@ typedef struct _node
 - 초기상태
   - 리스트가 생성되고 초기화가 완료된 상태
   
-(head) -> [dummy] <-> [dummy] <- (tail)
+__(head) -> [dummy] <-> [dummy] <- (tail)__
 
 - 노드의 추가
  - 1단계: 새 노드를 생성하고 데이터를 저장
  - 2단계: 새 노드와 새 노드의 왼쪽에 위치할 노드가 서로 가리키도록 함
  - 3단계: 새 노드와 새 노드의 오른쪽에 위치할 노드가 서로를 가리키도록 함
  
-(head) -> [dummy] <-> [2, old] <-> [4, new] <-> [dummy] <- (tail)
+__(head) -> [dummy] <-> [2, old] <-> [4, new] <-> [dummy] <- (tail)__
 
 - 노드의 삭제
   - 위 노드관계에서 [2, old] 노드를 삭제하는 과정
   - 1단계: head가 가리키는 dummy node의 next가 [4, new]를 가리키도록 함
   - 2단계: [4, new]의 prev가 head가 가리키는 dummy node를 가리키도록 함
   - 3단계: [2, old] 노드를 삭제하고 
+  
+- 위의 조건을 바탕으로 ADT의 동작코드인 `DBLinkedList.c`를 작성하면 아래와 같다
 
 ```c
 #include <stdio.h>
 #include <stdlib.h>
 #include "DBLinkedList.h"
 
+// 초기화 함수 정의
 void ListInit(List * plist)
 {
-  plist->head = (Node *)malloc(sizeof(Node));
-  plist->tail = (Node *)malloc(sizeof(Node));
+  plist->head = (Node *)malloc(sizeof(Node)); // head 포인터에 더미노드 연결
+  plist->tail = (Node *)malloc(sizeof(Node)); // tail 포인터에 더미노드 연결
 
-  plist->head->prev = NULL;
-  plist->head->next = plist->tail;
+  plist->head->prev = NULL; // head가 가리키는 dummy node의 prev는 NULL로 초기화(맨 앞이므로 prev는 없음)
+  plist->head->next = plist->tail; // head가 가리키는 dummy node의 next는 tail이 가리키는 dummy node를 가리키도록 초기화
 
-  plist->tail->prev = plist->head;
-  plist->tail->next = NULL;
+  plist->tail->prev = plist->head; // tail이 가리키는 dummy node의 prev는 head가 가리키는 dummy node를 가리키도록 초기화
+  plist->tail->next = NULL; // tail이 가리키는 dummy node의 next는 NULL로 초기화(맨 마지막이므로 next는 없음)
 
-  plist->numOfData = 0;
+  plist->numOfData = 0; // 주어진 리스트의 유효 데이터의 갯수를 0으로 초기화(더미노드는 유효 데이터가 아님)
 }
 
+// 새 노드를 연결하는 함수(값의 추가)
 void LInsert(List * plist, Data data)
 {
-  Node * newNode = (Node*)malloc(sizeof(Node));
-  newNode->data = data;
+  Node * newNode = (Node*)malloc(sizeof(Node)); // 새 노드를 정의(동적할당)
+  newNode->data = data; // 새 노드에 값을 넣음
 
-  newNode->prev = plist->tail->prev;
-  plist->tail->prev->next = newNode;
+  // 새 노드는 맨 마지막에 추가되도록 해야 함(tail이 가리키는 dummy node의 바로 앞)
+  newNode->prev = plist->tail->prev; // 새 노드의 prev가 기존에 tail이 가리키던 dummy node의 prev가 가리키던 노드가 되도록 초기화([2, old])
+  plist->tail->prev->next = newNode; // tail이 가리키는 dummy node의 prev가 가리키던 node([2, old])의 next가 새 노드를 가리키도록 초기화
 
-  newNode->next = plist->tail;
-  plist->tail->prev = newNode;
+  newNode->next = plist->tail; // 새 노드의 next는 tail이 가리키는 dummy node를 가리키도록 초기화
+  plist->tail->prev = newNode; // tail이 가리키던 dummy node의 prev는 새 노드를 가리키도록 초기화
 
-  (plist->numOfData)++;
+  (plist->numOfData)++; // 유효 데이터의 갯수 1개 증가
 }
 
+// 데이터의 첫 번째 참조
 int LFirst(List * plist, Data * pdata)
 {
-  if (plist->head->next == plist->tail)
+  if (plist->head->next == plist->tail) // 유효 데이터가 하나도 저장되어있지 않은 초기상태일 경우
     return FALSE;
 
-  plist->cur = plist->head->next;
-  *pdata = plist->cur->data;
+  plist->cur = plist->head->next; // cur 포인터가 head가 가리키는 dummy node의 next를 가리키는 노드가 되도록 초기화 ([2, old])
+  *pdata = plist->cur->data; // 해당 포인터가 가리키는 노드의 data의 주소로 초기화
 
   return TRUE;
   }
 
+// LFirst와 동일하나 cur 포인터변수를 이용하여 동작.
 int LNext(List * plist, Data * pdata)
 {
   if(plist->cur->next == plist->tail)
@@ -257,6 +264,7 @@ int LNext(List * plist, Data * pdata)
   return TRUE;
 }
 
+// LNext와 동일하지만 이전 값을 참조하게끔 설정된다
 int LPrevious(List * plist, Data * pdata)
 {
   if(plist->cur->prev == plist->head)
@@ -273,18 +281,21 @@ int LCount(List * plist)
   return plist->numOfData;
 }
 
+// 데이터의 삭제과정
 Data LRemove(List *plist)
 {
-  Node *rpos = plist->cur;
-  Data rm = rpos->data;
+  Node *rpos = plist->cur; // 삭제 할 노드의 주소를 rpos로 초기화 (주어진 리스트의 cur 포인터가 가리키는 노드가 삭제됨)
+  Data rm = rpos->data; // 삭제 할 노드의 data를 rm에 초기화
 
-  plist->cur->prev->next = rpos->next;
-  plist->cur->next->prev = rpos->prev;
+  plist->cur->prev->next = rpos->next; // cur포인터가 가리키는 노드의 prev가 가리키는 노드의 next(head가 가리키는 dummy node의 next) 를 지울 노드(cur)의 next와 연결
+  plist->cur->next->prev = rpos->prev; // cur표인터가 가리키는 노드의 next가 가리키는 노드의 prev([4, new])를 지울 노드의 이전 노드와 연결(head가 가리키는 dummy node)
 
-  plist->cur = plist->cur->prev;
+  plist->cur = plist->cur->prev; // cur의 위치를 한칸 앞으로 당겨줌(cur가 가리키는 노드는 head가 가리키는 노드와 동일하게 됨)
 
-  free(rpos);
-  (plist->numOfData)--;
-  return rm;
+  free(rpos); // 메모리 해제
+  (plist->numOfData)--; // 데이터 수 감소
+  return rm; // 삭제된 데이터 반환
 }
 ```
+
+- 전체적으로 보면 복잡해보이지만, 문제를 쪼개고 하나의 일반적인 예시를 들어 관계를 풀어나가면 쉽게 이해되고 풀기 용이해진다!
