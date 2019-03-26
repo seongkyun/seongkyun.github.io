@@ -50,7 +50,8 @@ PC에 우분투(Ubuntu)를 설치하고, 딥러닝 개발환경을 세팅하는 
   - 다음으로 Python3.7을 default로 하고 엔터를 치면 됨
 - 완료 후 `python --version` 으로 현재 버전 확인
 - Path 변경이 있을 수 있으므로 `sudo reboot`로 재부팅
-- 재부팅 후 pip 이용 위해서 `sudo apt-get install pyhton3-pip` 로 pip 
+- 재부팅 후 pip 이용 위해서 `sudo apt-get install pyhton3-pip` 로 pip 설치
+- 만약 pip로 패키지 설치 시 `python3.7 -m pip install package_name`로 해야 python3.7에서 import 가능! 
 
 ## 그래픽 드라이버 및 CUDA 설치(CUDA 9.0)
 - CUDA를 설치하면 자동으로 그래픽 드라이버를 같이 설치해주므로 그게 오류가 적고 속편하다.
