@@ -38,3 +38,8 @@ comments: true
 # Bashrc 오타로 인한 명령어 먹지 않는 경우
 - 터미널에 `export PATH=/usr/bin:/bin` 입력
 - `vim ./bashrc` 들어가서 오타 다시 
+
+# 파일 소유권자 바꾸기
+- 간혹 sudo로 생성된 파일의 소유권자가 root로 설정되는 경우가 있다.
+- `sudo chown username:group filename/directory` 으로 변경 가능하다
+  - ex. `sudo chown han:han test.py`
