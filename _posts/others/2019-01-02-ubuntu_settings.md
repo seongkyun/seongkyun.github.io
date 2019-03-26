@@ -83,6 +83,15 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/lib64:$LD_LIBRARY_PATH
 - bashrc 파일 작성 시 오타가 포함될 경우 터미널상의 모든 명령어가 듣지 않는다.
 - 이럴 경우, 터미널에서 `export PATH=/usr/bin:/bin`을 입력한 후, 5번의 과정을 다시 수행하면 됨.
 
+## cuDNN 설치
+- https://developer.nvidia.com/cudnn 에서 로그인 후 다운로드(version 7.2 이상으로)
+- 로그인 후 다운로드 페이지에서 cuDNN Library for Linux 눌러서 다운로드(tgz 파일)
+- 다운로드 받은 파일 위치로 이동 후 `tar -zxvf cudnn-~.tgz` 파일 압축풀기
+- `cd cuda/include` 이동 후 파일 복사
+  - `sudo cp cudnn.h /usr/local/cuda/include`
+- `cd ../lib64` 이동 후 파일 복사
+  - `sudo cp libcudnn* /usr/local/cuda/lib64`
+
 ## ssh 설치(원격 사용을 위해) / pip 설치
 1. 우분투 터미널 열기
 2. `sudo apt-get install openssh-server pip3`
