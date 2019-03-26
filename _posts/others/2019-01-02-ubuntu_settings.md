@@ -48,7 +48,8 @@ PC에 우분투(Ubuntu)를 설치하고, 딥러닝 개발환경을 세팅하는 
     - `sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1`
     - `sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 2`
   - 다음으로 Python3.7을 default로 하고 엔터를 치면 됨
-- 완료 후 `python --version` 으로 현재 버전 
+- 완료 후 `python --version` 으로 현재 버전 확인
+- Path 변경이 있을 수 있으므로 `sudo reboot`로 
 
 ## 그래픽 드라이버 및 CUDA 설치(CUDA 9.0)
 - CUDA를 설치하면 자동으로 그래픽 드라이버를 같이 설치해주므로 그게 오류가 적고 속편하다.
