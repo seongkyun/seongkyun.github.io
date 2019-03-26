@@ -35,6 +35,21 @@ PC에 우분투(Ubuntu)를 설치하고, 딥러닝 개발환경을 세팅하는 
 7. sudo update-grub
 8. sudo reboot
 
+## 파이썬 버전 업그레이드(Python 3.7)
+- 나중에 문제가 발생할 수 있기 때문에 처음에 업그레이드 하는게 좋다.
+- `sudo apt update`
+- `sudo apt install software-properties-common`
+- `sudo add-apt-repository ppa:deadsnakes/ppa`
+- `sudo apt update`
+- `sudo apt install python3.7`
+- 설치 완료 후 python3 를 기본으로 설정
+  - `sudo update-alternatives --config python`
+    - 만약 `update-alternatives: error: no alternatives for python` 라고 등록된 버전이 없다고 뜨면
+    - `sudo update-alternatives --install /usr/bin/python python /usr/bin/python2.7 1`
+    - `sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.7 2`
+  - 다음으로 Python3.7을 default로 하고 엔터를 치면 됨
+- 완료 후 `python --version` 으로 현재 버전 
+
 ## 그래픽 드라이버 및 CUDA 설치(CUDA 9.0)
 - CUDA를 설치하면 자동으로 그래픽 드라이버를 같이 설치해주므로 그게 오류가 적고 속편하다.
 
