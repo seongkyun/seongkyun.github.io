@@ -99,3 +99,92 @@ Data SPeek(Stack * pstack)
 }
 ```
 
+## 6-4 계산기 프로그램 구현
+- 앞에 구현된 Stack의 내용을 갖고 계산기를 구현
+
+### 구현할 계산기 프로그램의 성격
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_17.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 사칙연산 우선순위, 괄호연산을 포함하여 계산의 우선순위를 따져서 계산이 가능해야 함
+  - 소괄호를 파악하여 그 부분을 먼저 연산
+  - 연산자의 우선순위(+,- 연산보다 \*, / 연산 먼저)를 근거로 연산의 순위를 결정
+- 계산기 구현 자체는 Stack의 알고리즘과 별개지만, 알고리즘의 구현에 Stack이 매우 중요하게 쓰임
+  - 계산기 연산의 구현만큼 Stack의 활용능력을 잘 보여주는 예시는 없음!
+  
+### 세 가지 수식의 표기법: 전위, 중위, 
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_18.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_19.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_20.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_21.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_22.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_23.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_24.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_25.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_26.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-03-25-data_structure/fig_27.jpg" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
