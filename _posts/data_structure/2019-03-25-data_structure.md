@@ -120,7 +120,7 @@ comments: true
 </figure>
 </center>
 
-## 스택의 연결 리스트 기반 구현
+## 6-3 스택의 연결 리스트 기반 구현
 
 <center>
 <figure>
