@@ -1,0 +1,39 @@
+---
+layout: post
+title: CH6. 스택 (Stack) 3
+category: data_structure
+tags: [data structure, 자료구조]
+comments: true
+---
+
+# CH6. 스택 (Stack) 3
+
+## 6-4 계산기 프로그램 구현
+
+### 문제 6-2
+- 중위 표기법의 후위 표기법으로의 변환
+  - 1: 3 + 2 \* 4
+  - 2: 2 \* 4 + 3
+  - 3: 2 \* 1 + 3 / 2
+- 1번 풀이
+  - 1: \* 4
+    - Stack: + <-top
+    - 변환수식: 3, 2
+  - 2: emtpy
+    - Stack: +, \* <-top
+    - 변환수식: 3, 2, 4
+  - 최종 답: 3, 2, 4, \*, +
+- 3번 풀이
+  - 1: 2 \* 1 + 3 / 2
+    - Stack: empty
+    - 변환수식: empty
+  - 2: + 3 / 2
+    - Stack: \* <-top
+    - 변환수식: 2, 1
+  - 3: / 2
+    - Stack: + <-top
+    - 변환수식: 2, 1, \*, 3
+  - 4: empty
+    - Stack: +, / <-top
+    - 변환수식: 2, 1, \*, 3, 2
+  - 최종 답: 2, 1, \*, 3, 2, /, +
