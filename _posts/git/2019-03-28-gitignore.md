@@ -2,7 +2,7 @@
 layout: post
 title: Gitignore 파일 생성 및 이용
 category: git
-tags: [github, 지옥에서 온 git]
+tags: [github]
 comments: true
 ---
 
