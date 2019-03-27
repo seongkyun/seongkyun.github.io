@@ -17,6 +17,6 @@ comments: true
   - ex 1. weight parameters가 저장된 용량이 큰 trained_nets 폴더를 제외시키고 싶다면
     - `trained_nets` 적은 후 wq로 저장
   - ex 2. \*.log 파일들을 제외시키고 싶다면
-    - `\*.log` 적은 후 wq로 저장
+    - `*.log` 적은 후 wq로 저장
   - 이렇듯 제외 시키고 싶은 파일 또는 폴더, 확장자명을 추가할 수 있다.
 - 다음을 `git add .` 로 모든 파일을 커밋 준비상태로 만든 후 `git push`로 커밋하게 되면 해당 파일들이 제외된 것을 확인 할 수 있다.
