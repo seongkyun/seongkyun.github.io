@@ -29,7 +29,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/others/2019-03-29-ubuntu_insatll/fig_swap.jpg" alt="views">
+<img src="/assets/post_img/others/2019-03-29-ubuntu_install/fig_swap.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -39,7 +39,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/others/2019-03-29-ubuntu_insatll/fig_slash.jpg" alt="views">
+<img src="/assets/post_img/others/2019-03-29-ubuntu_install/fig_slash.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -49,7 +49,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/others/2019-03-29-ubuntu_insatll/fig_home.jpg" alt="views">
+<img src="/assets/post_img/others/2019-03-29-ubuntu_install/fig_home.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -59,7 +59,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/others/2019-03-29-ubuntu_insatll/fig_partitions.jpg" alt="views">
+<img src="/assets/post_img/others/2019-03-29-ubuntu_install/fig_partitions.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
