@@ -29,6 +29,13 @@ comments: true
   - 충돌이 발생해서 해결하려면 귀찮아진다..
 - 지역저장소에서 작업 후 push 시에는 `git push origin master` 를 치면 된다.
 
+# Github에 수정된 파일 동기화(업로드) 시키기
+- 작업 전 `git pull` 로 동기화
+- 작업한 내용을 모두 저장 한 후 `git add .`로 git의 stage에 올려줌
+- 다음으로 `git commit -m "commit message"` 로 커밋
+- 커밋 후 `git push origin master`로 push
+  - 로그인 정보 치면 push 완료
+
 ---
 - [참고글]
 
