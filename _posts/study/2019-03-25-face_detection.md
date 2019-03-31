@@ -26,7 +26,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/study/2019-03-25-faec_detection/fig1.jpeg" alt="views">
+<img src="/assets/post_img/study/2019-03-25-face_detection/fig1.jpeg" alt="views">
 <figcaption>WIDER Face dataset variations</figcaption>
 </figure>
 </center>
@@ -42,7 +42,7 @@ comments: true
   
 <center>
 <figure>
-<img src="/assets/post_img/study/2019-03-25-faec_detection/fig2.png" alt="views">
+<img src="/assets/post_img/study/2019-03-25-face_detection/fig2.png" alt="views">
 <figcaption>IoU formula</figcaption>
 </figure>
 </center>
