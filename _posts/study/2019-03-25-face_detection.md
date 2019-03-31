@@ -80,7 +80,7 @@ $$Precision=\frac{True\; Positive}{True\; Positive+False\; Positive}$$
 
 <center>
 <figure>
-<img src="/assets/post_img/study/2019-03-25-faec_detection/fig3.jpeg" alt="views">
+<img src="/assets/post_img/study/2019-03-25-face_detection/fig3.jpeg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -89,7 +89,7 @@ $$Precision=\frac{True\; Positive}{True\; Positive+False\; Positive}$$
 
 <center>
 <figure>
-<img src="/assets/post_img/study/2019-03-25-faec_detection/fig4.jpeg" alt="views">
+<img src="/assets/post_img/study/2019-03-25-face_detection/fig4.jpeg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -98,7 +98,7 @@ $$Precision=\frac{True\; Positive}{True\; Positive+False\; Positive}$$
 
 <center>
 <figure>
-<img src="/assets/post_img/study/2019-03-25-faec_detection/fig5.jpeg" alt="views">
+<img src="/assets/post_img/study/2019-03-25-face_detection/fig5.jpeg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -107,7 +107,7 @@ $$Precision=\frac{True\; Positive}{True\; Positive+False\; Positive}$$
 
 <center>
 <figure>
-<img src="/assets/post_img/study/2019-03-25-faec_detection/fig6.jpeg" alt="views">
+<img src="/assets/post_img/study/2019-03-25-face_detection/fig6.jpeg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
