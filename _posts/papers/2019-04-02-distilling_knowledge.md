@@ -43,7 +43,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig1.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig1.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -61,7 +61,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig2.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig2.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -79,7 +79,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig3.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig3.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -90,7 +90,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig4.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig4.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -100,7 +100,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig5.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig5.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -113,7 +113,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig6.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig6.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -127,7 +127,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig7.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig7.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -142,7 +142,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig8.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-21-distilling_knowledge/fig8.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -153,7 +153,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig9.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig9.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -164,7 +164,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig10.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig10.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -177,7 +177,7 @@ __여기서 logit 이란?__
   
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig11.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig11.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -191,7 +191,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig12.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig12.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -204,7 +204,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig13.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig13.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -214,7 +214,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig14.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig14.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -233,7 +233,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig15.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig15.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -250,7 +250,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig16.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig16.jpg" alt="views">
 <figcaption>Softmax function</figcaption>
 </figure>
 </center>
@@ -263,7 +263,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig17.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig17.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -281,7 +281,7 @@ __여기서 logit 이란?__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig18.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig18.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -314,7 +314,7 @@ __Loss function의 생성 과정__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig19.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig19.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -324,7 +324,7 @@ __Loss function의 생성 과정__
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig20.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig20.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
