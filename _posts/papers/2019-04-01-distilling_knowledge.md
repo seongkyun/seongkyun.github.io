@@ -289,11 +289,11 @@ __여기서 logit 이란?__
 - 이렇게 앙상블 모델에서 얻은 각 출력에 대한 확률분포 정보를 추가하여 single shallow model을 학습시키게 된다.
 
 - 위 방법을 적용시킨 classification 모델의 학습에 대해 다음의 Cross Entropy loss function을 사용한다.
-- Cross Entropy loss: $Loss\; function=-\sum_{k=1}^{|V|}q(y=k|x;\theta_{T})\times log P(y=k|x;\theta)$
+- Cross Entropy loss: $Loss\; function=-\sum_{k=1}^{\|V\|}q(y=k\|x;\theta_{T})\times log P(y=k\|x;\theta)$
   - $q$: probability of softmax with Ensemble model
-  - $P(y=k|x;\theta)$: probability of single model
+  - $P(y=k\|x;\theta)$: probability of single model
   - $k$: class index
-  - $|V|$: Total number of class
+  - $\|V\|$: Total number of class
 - 
 
 
