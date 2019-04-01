@@ -304,9 +304,9 @@ __Loss function의 생성 과정__
     - $Cost(\theta)=-\prod_{k=1}^{\|V\|}1\{y=k\}\times p(y=k\|k;\theta)$
 - 하지만 이 형태는 확률이 계속 곱해지는 형태로 결국 1보다 작은 값들이 계속 곱해질 수 밖에 없는 구조로 무조건 0에 수렴하게 된다.
   - 이를 해결하기 위해 곱해지는 부분에 log transform을 적용하여 곱하기 연산을 덧셈 연산으로 변형한다.
-- $Cost(\theta)=-\sum{k=1}^{\|V\|}1\{y=k\}\times log p(y=k\|k;\theta)$
+- $Cost(\theta)=-\sum_{k=1}^{\|V\|}1\{y=k\}\times log p(y=k\|k;\theta)$
 - 여기서 $1\{y=k\}$ 부분이 temperature가 적용된 softmax로 구한 확률값으로 대채하여 loss function을 완성한다.
-- Loss function: $Cost(\theta)=-\sum{k=1}^{\|V\|}q(y=k\|x;\theta_{T})\times log p(y=k\|k;\theta)$ (위와 동일)
+- Loss function: $Cost(\theta)=-\sum_{k=1}^{\|V\|}q(y=k\|x;\theta_{T})\times log p(y=k\|k;\theta)$ (위와 동일)
   - $q$: Probability of softmax with Ensemble model
   - $P(y=k\|x;\theta)$: Probability of single model
   - $k$: Class index
