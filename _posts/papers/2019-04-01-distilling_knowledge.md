@@ -39,7 +39,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 - 일반적인 인공신경망의 경우 파라미터 수가 많아 training data에 대해 overfitting이 쉬움.
   - 이를 해결하기 위해 앙상블 모델을 사용하게 됨
 
-### Expensive ensemble
+## Expensive ensemble
 
 <center>
 <figure>
@@ -57,7 +57,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 - 일반적인 딥러닝 모델도 저장공간이 많이 차지해서 mobile device에 적합하지 않음
   - MobileNet 과 같은 특화된 구조 말고, VGG와 같은 모델은 모델의 크기가 500MB가 넘어가게 됨
 
-### Distilling ensemble: Single model
+## Distilling ensemble: Single model
 
 <center>
 <figure>
@@ -73,7 +73,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 - 위의 두 가지 조건을 만족시켜야 하며, 이러한 single shallow model을 얻는 것이 최종 목표임
 - 이러한 여러 모델을 포함하는 앙상블 모델을 하나의 single model로 정보들을 이전하는 방식을 "distillation" 이라고 지칭
 
-#### Distillation method 1
+## Distillation method 1
 - Method from: Buciluǎ, C., Caruana, R., & Niculescu-Mizil, A. (2006, August). Model compression. In Proceedings of the 12th ACM SIGKDD international conference on Knowledge discovery and data mining (pp. 535-541). ACM.
 - 관측치가 많다면, 구지 앙상블 모델을 쓰지 않아도 일반화 성능이 좋아진다는 점에서 착안
 
@@ -136,7 +136,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 - Training dataset size가 커질수록(x축에서 우측으로 갈수록) single shallow model의 성능이 best ensemble 모델과 비슷해지는것을 확인 가능
   - 빨간 선이 best ensemble model, 파란 선이 single shallow model
   
-#### Distillation method 2
+## Distillation method 2
 - Method from: Ba, J., & Caruana, R. (2014). Do deep nets really need to be deep?. In Advances in neural information processing systems (pp. 2654-2662).
 - 두 번째 방법으로, 단순히 네트워크의 출력으로 class 정보를 주었던 앙상블의 출력에 대한 logit값을 이용하여 앙상블 모델의 data 분포를 알아보자는 접근방식
 
@@ -198,7 +198,7 @@ __여기서 logit 이란?__
 
 - 이렇게 될 경우 그냥 class 정보를 single shallow model이 training dataset만을 이용하여 단독 학습하는 경우보다 각 class의 점수를 알기 때문에(즉, 앙상블 모델이 출력하는 출력의 분포를 single shallow model이 따르게 된다) 더 많은 정보가 들어가 있게 되며, 이는 곧 class의 확률 분포를 의미하게 된다.
 
-#### Distillation method 3
+## Distillation method 3
 - Method from: Sau, B. B., & Balasubramanian, V. N. (2016). Deep Model Compression: Distilling Knowledge from Noisy Teachers. arXiv preprint arXiv:1610.09650.
 - 세 번째 방법으로, 위의 distillation method 2의 과정과 동일하지만 앙상블 모델의 logit 값에 약간의 noise 성분 $\epsilon$ 을 추가하여 single shallow model을 학습시키게 되면 더 성능이 좋아지게 된다.
 
@@ -223,7 +223,7 @@ __여기서 logit 이란?__
   - 좌측 상단의 파란 밑줄은 Error의 square값, 노란 밑줄은 logit값에 noise성분 $\epsilon$이 붙은 것을 의미
   - 좌측 하단의 파란 밑줄은 Error의 제곱값, $E_{R}$은 나머지값이며 그 우측에 설명되는 $E_{R}$, 즉 나머지값이 결국 regularizer의 역할을 하게 된다.
 
-#### Distillation method 4
+## Distillation method 4
 - Method from: Hinton, G., Vinyals, O., & Dean, J. (2015). Distilling the knowledge in a neural network. arXiv preprint arXiv:1503.02531.
 - Hinton이 제안한 방법으로 본 논문에서 다루는 방법이다. 이 방법은 위의 방법들(method 2, 3)과 다르게 softmax를 사용한다.
 - 핵심 아이디어
@@ -288,17 +288,56 @@ __여기서 logit 이란?__
 
 - 이렇게 앙상블 모델에서 얻은 각 출력에 대한 확률분포 정보를 추가하여 single shallow model을 학습시키게 된다.
 
+__Loss function의 생성 과정__
+
 - 위 방법을 적용시킨 classification 모델의 학습에 대해 다음의 Cross Entropy loss function을 사용한다.
 - Cross Entropy loss: $Loss\; function=-\sum_{k=1}^{\|V\|}q(y=k\|x;\theta_{T})\times log P(y=k\|x;\theta)$
-  - $q$: probability of softmax with Ensemble model
-  - $P(y=k\|x;\theta)$: probability of single model
-  - $k$: class index
+  - $q$: Probability of softmax with Ensemble model
+  - $P(y=k\|x;\theta)$: Probability of single model
+  - $k$: Class index
   - $\|V\|$: Total number of class
-- 
+- 논문에서는 아래의 Objective function을 maximize되도록 네트워크를 학습시킨다.
+- $Obj.(\theta)=+\prod_{k=1}^{\|V\|}1\{y=k\}\times p(y=k\|k;\theta)$
+  - $1\{y=k\}$: Indicator of true class, 추론 결과가 맞으면 1, 아니면 0을 반환한다.
+  - $p(y=k\|k;\theta)$: Predicted probability of true class(our model), true class가 주어졌을 때 추론 결과가 최대한 높은 확률로 추론하게 하는 모양
+  - 이 $Obj.(\theta)$ 함수를 음수로 만들어 loss function(cost function)을 만든다.
+    - $Cost(\theta)=-\prod_{k=1}^{\|V\|}1\{y=k\}\times p(y=k\|k;\theta)$
+- 하지만 이 형태는 확률이 계속 곱해지는 형태로 결국 1보다 작은 값들이 계속 곱해질 수 밖에 없는 구조로 무조건 0에 수렴하게 된다.
+  - 이를 해결하기 위해 곱해지는 부분에 log transform을 적용하여 곱하기 연산을 덧셈 연산으로 변형한다.
+- $Cost(\theta)=-\sum{k=1}^{\|V\|}1\{y=k\}\times log p(y=k\|k;\theta)$
+- 여기서 $1\{y=k\}$ 부분이 temperature가 적용된 softmax로 구한 확률값으로 대채하여 loss function을 완성한다.
+- Loss function: $Cost(\theta)=-\sum{k=1}^{\|V\|}q(y=k\|x;\theta_{T})\times log p(y=k\|k;\theta)$ (위와 동일)
+  - $q$: Probability of softmax with Ensemble model
+  - $P(y=k\|x;\theta)$: Probability of single model
+  - $k$: Class index
+  - $\|V\|$: Total number of class
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig19.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
 
+- 또한 성능을 높히기 위해 위에서 생성한 loss function과 일반적인 cross entropy loss function을 섞어 위의 사진처럼 사용한다.
+  - 해당 비율을 정하는 parameter는 $\alpha$ 이며, 실험적으로 논문에서는 0.5를 사용하였을 때 결과가 가장 좋았다고 한다.
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig20.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
 
+- 1번 실험 결과, 앙상블 및 DropOut이 적용된 모델에 비해 위의 distillation method 4가 적용된 모델이 비슷한 test error를 갖는 것을 알 수 있다.
+  - 1번 실험 결과에서 일반적인 학습의 경우 146개의 test error를 보이는데 반해 distillation method 4가 적용된 경우 앙상블모델의 67 test error와 비슷한 74 test error를 보이며 성능이 상당히 개선 된 것을 확인 가능하다.
+- 2번 실험 결과, 일반적인 Baseline case에 비해 distillation method 4가 적용된 모델이 앙상블모델과 거의 비슷한 정확도로 speech recognition을 수행한 것을 확인 할 수 있다.
 
+## Conclusion
+- 결국 앙상블 모델의 정보 또한 shingle shallow network로 이전이 가능하다
+- 이는 인공 data에 앙상블 모델을 이용하여 labeling을 하거나 soft target을 이용하여 가능해지며, 그 결과 성능 개선과 더불어 single shallow model을 사용하므로 연산량이 줄어들게 된다.
+
+- 논외로, 최근 논문에선 softmax로 확률분포를 구하는 distillation method 4보단 logit값으로 앙상블 모델이 추론하는 확률분포를 single shallow model로 전달하는 distillation method 2, 3의 방법을 적용한것이 결과가 더 좋았다는 논문도 존재한다.
+  - 실험적으로 distillation method 4의 T나 $\alpha$를 노가다로 계산하는것보단 method 2, 3을 사용하는것이 효율적일것으로 사료된다.
 
 
