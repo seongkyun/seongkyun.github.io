@@ -41,12 +41,12 @@ nav:
     - '/'
     # - { Categories All: '/blog/categories/' } #sample
     
+    - { others: '/blog/categories/#others' }
     - { study: '/blog/categories/#study' }
+    - { baekjoon: '/blog/categories/#baekjoon' }
     - { papers: '/blog/categories/#papers' }
     - { git: '/blog/categories/#git' }
-    - { baekjoon: '/blog/categories/#baekjoon' }
     - { data_structure: '/blog/categories/#data_structure' }
-    - { others: '/blog/categories/#others' }
     - { Tags: '/blog/tags/' }
   About:
     - '/about/'
