@@ -137,5 +137,129 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
   - 빨간 선이 best ensemble model, 파란 선이 single shallow model
   
 #### Distillation method 2
+- Method from: Ba, J., & Caruana, R. (2014). Do deep nets really need to be deep?. In Advances in neural information processing systems (pp. 2654-2662).
+- 두 번째 방법으로, 단순히 네트워크의 출력으로 class 정보를 주었던 앙상블의 출력에 대한 logit값을 이용하여 앙상블 모델의 data 분포를 알아보자는 접근방식
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig8.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- Logit은 클래스의 점수로, 이 점수를 학습 시에 같이 고려하여 class의 확률분포를 보게 됨
+
+__여기서 logit 이란?__
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig9.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- Neural net에서 input이 입력되었을 때, 이들에 대한 weighted sum을 해서 hidden layer의 점수를 계산
+- 이 weighted sum이 sigmoid나 ReLU와 같은 activation function을 지나 hidden layer 각각의 node의 점수가 계산됨
+  - Sigmoid 는 0에서 1 사이의 값을, ReLU는 음수인경우 0을, 나머지는 해당 값 그대로 출력
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig10.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 이렇게 계산된 점수를 이용해 다시 weighted sum을 하여 logit을 구하게 되고(1.39 위치의 값들) 
+- 거기에 Sigmoid와 같은 activation function을 거쳐서 나온 결과로 최종 class를 추론하게 됨
+  - 위의 사진에선 고양이의 확률이 0.8로 가장 높기때문에 고양이로 추론된다.
+- __위 사진에서 최종 추론 결과 이전에 1.39의 위치에 있는 값들을 logit이라고 한다.__
+  - 이 logit은 해당 클래스의 분포를 잘 따르면 큰 수가, 잘 따르지 못하면 작은 수(음수까지)가 나온다.
+  
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig11.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 위 그림에서
+  - 1번: 우선 네트워크에 input 값이 들어갔을 때
+  - 2번: 앙상블 네트워크에서 계산을 하여
+  - 3번: 앙상블 네트워크에서 logit 값을 구해서
+  - 4번: 이 logit 값을 Y로 대신 사용하게 된다
+- 즉, 동일한 input이 미리 학습 된 앙상블 모델과 학습되지 않은 single shallow model에 들어갔을 때, 앙상블 모델에서 생성해내는 logit 값들대로 single shallow model이 만들어내도록 single shallow model이 학습되는 것이다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig12.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 이렇게 될 경우 그냥 class 정보를 single shallow model이 training dataset만을 이용하여 단독 학습하는 경우보다 각 class의 점수를 알기 때문에(즉, 앙상블 모델이 출력하는 출력의 분포를 single shallow model이 따르게 된다) 더 많은 정보가 들어가 있게 되며, 이는 곧 class의 확률 분포를 의미하게 된다.
+
+#### Distillation method 3
+- Method from: Sau, B. B., & Balasubramanian, V. N. (2016). Deep Model Compression: Distilling Knowledge from Noisy Teachers. arXiv preprint arXiv:1610.09650.
+- 세 번째 방법으로, 위의 distillation method 2의 과정과 동일하지만 앙상블 모델의 logit 값에 약간의 noise 성분 $\epsilon$ 을 추가하여 single shallow model을 학습시키게 되면 더 성능이 좋아지게 된다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig13.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- Logit에 첨가되는 noise 성분 $\epsilon$ 이 regularizer의 역할을 해서 single shallow model의 학습 결과가 더 개선된다(정확도 향상)
+- 앙상블 모델에 logit값과 noise값을 준 다음, 그것을 다시 single shallow model이 학습하게 된다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig14.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 위 수식에서
+  - 좌측 상단의 파란 밑줄은 Error의 square값, 노란 밑줄은 logit값에 noise성분 $\epsilon$이 붙은 것을 의미
+  - 좌측 하단의 파란 밑줄은 Error의 제곱값, $E_{R}$은 나머지값이며 그 우측에 설명되는 $E_{R}$, 즉 나머지값이 결국 regularizer의 역할을 하게 된다.
+
+#### Distillation method 4
 - Method from: Hinton, G., Vinyals, O., & Dean, J. (2015). Distilling the knowledge in a neural network. arXiv preprint arXiv:1503.02531.
-- 두 번째 방법으로, training dataset의 양을 늘리지 않고 class의 확률분포 정보를 이용하여 학습을 더 잘 시키는 방법
+- Hinton이 제안한 방법으로 본 논문에서 다루는 방법이다. 이 방법은 위의 방법들(method 2, 3)과 다르게 softmax를 사용한다.
+- 핵심 아이디어
+  - 일반 training dataset으로 앙상블 모델을 학습시킨 후, 해당 dataset에 대한 결과 prediction에 대한 분포값을 얻는다.
+  - 이 과정에서 일반적인 neural network가 사용하는 softmax와는 다르게 temperature parameter(customized)를 적용하여 일반적인 softmax가 가장 높은 확률을 1, 나머지는 0으로 one-hot encoding 형식(hard target)으로 만들어내는것과는 다르게 0과 1 사이의 실수값(soft target)을 생성하도록 한다.
+  - 학습된 앙상블 모델이 출력한 soft target의 분포를 single shallow model이 갖는 것을 목표로 학습 시킨다면, 앙상블 모델이 학습한 지식을 충분히 generalize해서 전달 할 수 있게 된다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig15.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 우선 갖고있는 training dataset으로 앙상블 모델을 학습시킨 후, softmax를 이용해서 class가 해당할 확률을 구한다.
+  - 즉, 어떠한 관측치(새로운 데이터)가 들어갔을 때 앙상블을 통해서 softmax를 통한 확률값을 출력하게 된다.
+    - 위 그림에서 각 고양이, 개, 기린 사진의 크기가 각 관측치에 대한 확률을 의미한다.(크면 1에 가깝고 작으면 0에 가까움)
+  - 각 class별로 맨 아래 고양이가 많은 부분에선 고양이가 나올 확률이, 중간에선 개가 나올 확률이, 맨 위에선 기린이 나올 확률이 커지도록 single shallow model이 학습된다.
+  - 하지만 일반적인 학습과 다르게, class의 정보만을 맞추는게 아니라 앙상블 모델이 출력하는 각 data의 class 정확도 만큼 single shallow model이 학습하게 된다.
+    - 즉, 최종 정답인 label 정보 외에도 앙상블 모델이 만들어내는 예측결과의 확률 분포를 따르도록 single shallow model이 학습된다.
+  - 이 과정에서 각 확률을 구할땐 temperature 파라미터가 추가된 softmax activation function을 사용한다.
+  - 이렇게 앙상블 모델이 만들어내는 확률분포를 따르도록 single shallow model이 학습하게 되면 앙상블 모델의 정보가 single shallow model로 전달되게 된다.
+    - 앙상블 모델이 계산하는 확률값을 이용하여 single shallow model이 학습되는 것이 regularization의 역할을 하게 됨
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig16.jpg" alt="views">
+<figcaption>Softmax function</figcaption>
+</figure>
+</center>
+
+- 일반적으로, Softmax는 네트워크의 최종 output 계산시 logit 값에 적용되는 activation function으로 적용되며, 그 결과 가장 큰 logit을 갖는 node의 출력을 1과 매우 가까운 값으로, 나머지를 0에 매우 가까운 값으로 매핑하여 출력하게 된다.
+  - 또한, softmax의 특징으로 모든 추론 결과(softmax로 매핑된 각 node의 출력 값들)의 확률변수를 더하면 1이 된다. (위의 사진에서, 0.9 + 0.08 + 0.02 = 1)
+- Sigmoid 또한 logit의 값을 확률변수로 만들어주지만 sigmoid로 매핑된 각 node의 출력 값들의 합은 1이 아니기때문에 class의 확률분포로 보기 어렵다.
+- 따라서 확률분포를 이용하기 위해 모든 activation function으로 매핑된 각 node의 결과값들의 합이 1이 되는 softmax를 이용해야 하지만, 매핑된 값들의 분포가 하나만 1에 너무 가깝고 나머진 0에 너무 가까우므로 크게 의미가 있지 않다.
+- 이를 해결하기 위해 일반적인 softmax가 아닌, __Temperature parameter T__ 가 추가된 변형된 softmax를 activation function으로 사용한다.
+
+
+
