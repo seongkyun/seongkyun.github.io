@@ -261,5 +261,44 @@ __여기서 logit 이란?__
 - 따라서 확률분포를 이용하기 위해 모든 activation function으로 매핑된 각 node의 결과값들의 합이 1이 되는 softmax를 이용해야 하지만, 매핑된 값들의 분포가 하나만 1에 너무 가깝고 나머진 0에 너무 가까우므로 크게 의미가 있지 않다.
 - 이를 해결하기 위해 일반적인 softmax가 아닌, __Temperature parameter T__ 가 추가된 변형된 softmax를 activation function으로 사용한다.
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig17.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 일반적인 softmax와 다르게 temperature parameter T가 들어있으며, T값에 따라 출력의 분포가 달라지게 된다.
+  - 1번: T가 작은 경우 logit 값이 큰 값에 대해 확률값이 아주 크게(1에 매우 가깝게), 작은 값에 대해 확률값이 아주 작게(0에 매우 가깝게) 출력된다. (T가 0인경우는 일반적인 Softmax와 동일하다)
+    - T가 1번 위치에 있는 경우(T가 1일때는 일반적인 softmax임) 확률값이 큰 class가 1의 확률이 들어가 앙상블 모델이 출력하는 구체적인 확률분포를 알 수 없게된다.
+    - 이로인해 T=1인 기존의 softmax를 사용하면 앙상블 모델의 출력의 확률 분포를 구체적으로 알 수 없으며, Hinton의 논문에선 T로 2~5 사이의 값을 사용하게 된다.
+    - __적절한 T의 값은 실험적으로 알아봐야 한다.(구체적인 이유가 없음)__
+  - 2번: T가 매우 큰 경우 모든 관측치들이 같은 확률값을 갖게 된다.
+    - 즉, 3개의 class가 있을 때 모든 추론 결과가 0.33의 확률을 갖게 되므로 올바른 추론을 할 수 없게된다.
+  - 3번: 따라서 3번과 같이 적절한 T의 값을 선택해서 사용하여야 하며 이를 이용하여 class간의 분포를 알아낼 수 있게 된다.
+    - 적절한 T를 구하는것은 모든 case에 대해 T=0부터 10까지 실험을 해 봐야 한다.
+    - T가 적당하다면 오탐되는 경우에 대해(위 사진에서 우측 하단의 Small prob) 각각 확률이 작다는 추가 정보를 얻을 수 있게 된다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-01-distilling_knowledge/fig18.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 이렇게 앙상블 모델에서 얻은 각 출력에 대한 확률분포 정보를 추가하여 single shallow model을 학습시키게 된다.
+
+- 위 방법을 적용시킨 classification 모델의 학습에 대해 다음의 Cross Entropy loss function을 사용한다.
+- Cross Entropy loss: $Loss\; function=-\sum_{k=1}^{|V|}q(y=k|x;\theta_{T})\times log P(y=k|x;\theta)$
+  - $q$: probability of softmax with Ensemble model
+  - $P(y=k|x;\theta)$: probability of single model
+  - $k$: class index
+  - $|V|$: Total number of class
+- 
+
+
+
+
+
 
 
