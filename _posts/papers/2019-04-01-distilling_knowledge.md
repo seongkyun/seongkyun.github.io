@@ -33,6 +33,11 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 - 본 글에서는 distillation을 이용한 model compression에 대해 설명
 
 ## Model compression
+- Distilling ensemble model to single model을 이용
+  - 계산시간이 오래걸리는 앙상블 모델의 정보를 single model로 이전
+  - 앙상블 모델의 정보를 single model로 이전하는 방법을 distilling이라고 함
+- 일반적인 인공신경망의 경우 파라미터 수가 많아 training data에 대해 overfitting이 쉬움.
+  - 이를 해결하기 위해 앙상블 모델을 사용하게 됨
 
 <center>
 <figure>
@@ -40,3 +45,5 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 <figcaption></figcaption>
 </figure>
 </center>
+
+- 앙상블 모델이란, 위 사진처럼 Input에 대해 여러 모델들이 각각 계산을 한 후, 그 계산을 합쳐서 결과물을 내놓는 방법
