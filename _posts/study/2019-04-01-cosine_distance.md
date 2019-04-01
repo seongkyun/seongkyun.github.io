@@ -8,7 +8,7 @@ comments: true
 
 # Cosine distance
 - 참고글: https://cmry.github.io/notes/euclidean-v-cosine
----
+
 - 일반적으로 문서간 유사도 비교시 코사인 유사도(cosine similarity)를 주로 사용
 - 본 글에서 사용한 코드 및 설명은 [Euclidean vs. Cosine Distance](https://cmry.github.io/notes/euclidean-v-cosine)에서 가져왔다.
 
