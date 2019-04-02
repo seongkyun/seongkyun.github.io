@@ -114,7 +114,7 @@ for testing.
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/algorithm1.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/fig3.jpg" alt="views">
 <figcaption>Figure 3. Optimization 속도와 test 정확도 측정. 그림에선 teacher DNN과 FSP matrix를 이용한 distilled knowledge를 학습한 student DNN을 비교하였다.</figcaption>
 </figure>
 </center>
