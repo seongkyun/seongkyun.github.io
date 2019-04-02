@@ -142,7 +142,7 @@ Authors: Geoffrey Hinton, Oriol Vinyals, Jeff Dean (Google Inc)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-21-distilling_knowledge/fig8.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-distilling_knowledge/fig8.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
