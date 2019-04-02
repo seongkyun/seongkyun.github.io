@@ -126,7 +126,7 @@ for testing.
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table1.jpg" alt="views">
-<figcaption>Table 1. CIFAR-10에 대한 인식률. \* 모양은 각 네트워크가 원래의 64,000의 1/3수준인 21,000의 iteration을 수행한 결과다. Student \*은 stage 1에서 21,000 iteration으로 학습되었으며 그 결과는 net 1, 2, 3에 대해 복사된 후 stage 2에서 21,000 iteration만큼 더 학습되어 총 84k 만큼의 iteration이 수행되었다.(stage 1 21k + net 1, 2, 3 stage2 21k = 84k) ‡ 모양은 teacher network가 21k iteration로 학습된 것이며 다른 teacher net은 64k iteration으로 학습되었다. † 모양은 student network가 randomly shuffled FSP matrix를 stage 1에서 학습한 네트워크다. Student \*†의 경우 각 네트워크는 stage 1에서 21k, 2에서 21k iteration으로 학습되었다.</figcaption>
+<figcaption>Table 1. CIFAR-10에 대한 인식률. * 모양은 각 네트워크가 원래의 64,000의 1/3수준인 21,000의 iteration을 수행한 결과다. Student *은 stage 1에서 21,000 iteration으로 학습되었으며 그 결과는 net 1, 2, 3에 대해 복사된 후 stage 2에서 21,000 iteration만큼 더 학습되어 총 84k 만큼의 iteration이 수행되었다.(stage 1 21k + net 1, 2, 3 stage2 21k = 84k) ‡ 모양은 teacher network가 21k iteration로 학습된 것이며 다른 teacher net은 64k iteration으로 학습되었다. † 모양은 student network가 randomly shuffled FSP matrix를 stage 1에서 학습한 네트워크다. Student \*†의 경우 각 네트워크는 stage 1에서 21k, 2에서 21k iteration으로 학습되었다.</figcaption>
 </figure>
 </center>
 
