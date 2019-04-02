@@ -45,9 +45,15 @@ Authors: Junho Yim1 Donggyu Joo1, Jihoon Bae, Junmo Kim (KAIST)
   4. 만약 student DNN이 teacher DNN과 다른 task에 대해 학습되었더라도 제안하는 distilled knowledge는 student DNN의 성능을 향상 시킬 수 있음
 
 ## 2. Related Work
-- __Knowledge Transfer__
-- __Fast Optimization__
-- __Transfer Learning__
+### Knowledge Transfer
+- 보통 computer vision task에서는 많은 파라미터를 갖는 deep network의 성능이 좋다. 대부분 architecture의 깊이는 성능 향상을 위해 깊어진다. 딥러닝이 시초인 AlexNet[16]은 5개의 conv 레이어뿐이었지만, 근래의 GoogleNet[23]같은 경우 22개의 conv 레이어나 ResNet[8]은 152개의 conv 레이어를 갖는다.
+- 많은 파라미터를 갖는 deep network는 training이나 testing에서 무거운 연산량을 필요로 한다. 이러한 이유로 deep network들은 모바일과 같은 일반적인 computing platform에 적용이 불가능하다. 그러므로 많은 연구들이 network의 성능은 유지하면서 크기는 작게 만들려고 시도되었다. 이러한 것을 가능하게 하는 일반적인 방법은 학습된 deep network의 정보를 small network로 distilled 정보를 transfer 하는 것이다. 최근에 Hinton의 방법[11]은 dark knowledge에 기반한 model compression 방법을 설명했다. 이 방법은 small student network를 학습시키기 위해 teacher network의 soften된 최종 output 정보를 사용한다. 이러한 teaching 과정에서 small network는 어떻게 large network가 주어진 task에 대해 잘 학습했는지 압축된 형식으로 정보를 전달받게 된다. Romero 방식[20]은 final output도 사용하면서 동시에 teacher network의 중간 hidden layer의 값을 student network의 학습에 사용하였으며, 동시에 이러한 중간 layer 정보를 사용하는것이 deep하고 thin한 student network의 성능을 향상 시킬 수 있었다. Net2Net[3]도 teacher network의 parameter에 따라 student network의 parameter를 초기화(initialize)하기 위해 function-preserving transform을 적용시킨 teacher-student network system을 사용하였다.
+### Fast Optimization
+- Deep CNN은 좋은 local optima나 global optimum을 찾기 위해 비교적 시간이 많이 소요된다. 보통은 MNIST[17]나 CIFAR10[15]와 같이 작은 데이터셋은 학습시키기 쉽다. 하지만 ILSVRC[21] 데이터셋과 같은 거대한 데이터셋의 경우 big network의 경우 학습에 몇 주가 소요되기도 한다. 따라서 fast optimization은 최근 연구에서의 중요한 분야중 하나가 되었다. 주로 good initial weight를 찾거나 SGD 방법 외에 다른 기술을 사용하여 optimal point에 도달하는 몇몇 접근방식이 존재한다.
+- 초기엔 unit variance와 zero mean을 갖는 Gaussian noise initialization이 매우 많이 사용되었다. 또는 Zavier initialization[7] 등도 광범위하게 사용되었다. 하지만 이러한 간단한 initialization 방법들은 deep network를 학습시킬 때 poor한 성능을 보인다. 이로인해 [18, 22, 14]와 같은 몇몇 새로운 방법들이 수학적인 접근방식으로 이를 해결코자 했다. 좋은 initialization으로 인해 training이 적절한 starting point에서 시작 될 때 parameter들은 빠르게 global optimum에 수렴 할 수 있게 된다.
+- Optimization 알고리즘들 또한 딥러닝의 발전과 함께 많이 진화되어왔다. 관습적으로 SGD 알고리즘이 기본적으로 많이 사용되어왔다. 하지만 SGD는 다양한 saddle point에서 탈출하기 힘들다는 단점이 존재한다. 이러한 문제로 인해 [13, 27, 4]와 같은 몇몇 알고리즘들이 제안되었다. 이러한 알고리즘들은 saddle point에서 벗허나도록 도와주며 global optimum에 빠르게 도착하도록 도와준다.
+### Transfer Learning
+- Transfer learning은 어떠한 task에 대해 미리 학습된 network의 파라미터를 이용하여 새로운 task에 적용가능하도록 해 주는 간단한 기술이다. 전형적으로 feature extraction을 하는 입력단의 레이어들은 pre-trained network로부터 파라미터 변경이 되지 않는 frozen형태나 fine-tuned 형태로 복사되어지며, 반면에 상단의 classifier들(fc layer들)은 새로운 task를 위해 random하게 initialize되어 slow learning rate로 학습되어진다. Fine-tuning은 때때로 처음부터 학습시키는 경우보다 성능이 좋을 수 있으며, 이는  이미 pretrained model이 정보들을 다루는데에 대한 능력이 좋기 때문이다. 예를 들어 [19, 28, 1, 2]과 같은 논문들에서는 ILSVRC데이터셋으로 pretrained된 model을 이용해 VQA[1]나 CUV200[25]와 같은 task에 대해 fine-tuninning을 적용하여 성능을 향상 시켰다. Detection이나 segmentation과 같은 많은 다른 task들에 대해서도 이러한 ImageNet pre-trained model을 initial value로 하여 사용되어지며, 이는 ILSVRC 데이터셋이 generalization에 대해 매우 도움이 되기 때문이다. 논문에서 제안하는 approach 또한 이러한 fine-tunning 기술을 제안하는 good initialization method에 적용하였다.
 
 ## 3. Method
 ### 3.1. Proposed Distilled Knowledge
