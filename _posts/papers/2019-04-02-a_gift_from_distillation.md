@@ -1,6 +1,6 @@
 ---
 layout: post
-title: A Gift from Knowldege Distillation: Fast Optimization, Network Monimization and Tranfer Learning
+title: A Gift from Knowldege Distillation- Fast Optimization, Network Monimization and Tranfer Learning
 category: papers
 tags: [Deep learning]
 comments: true
