@@ -14,7 +14,7 @@ Authors: Junho Yim1 Donggyu Joo1, Jihoon Bae, Junmo Kim (KAIST)
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-02-knowledge_distillation/fig1.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-02-a_gift_from_distillation/fig1.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
