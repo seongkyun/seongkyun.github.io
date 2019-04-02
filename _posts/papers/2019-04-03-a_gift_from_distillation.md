@@ -66,7 +66,7 @@ Authors: Junho Yim1 Donggyu Joo1, Jihoon Bae, Junmo Kim (KAIST)
 - 사람의 경우, 선생님(teacher)은 문제에 대해 solution process를 설명하며, 학생(student)은 이러한 solution procedure의 전체적 흐름(flow)를 배우게 된다. Student DNN은 특정한 질문이 입력될 때 반드시 중간 output을 배울 필요는 없지만 어떠한 특정 유형의 질문이 주어질 때 그에 대한 해결책을 배울 수 있다. 이런 식으로 저자들은 주어지는 문제에 대한 solution process를 보이는것(demonstrating)이 중간 output을 가르치는 것 보다 더 나은 generalization을 제공한다고 믿었다.(이에 근거하여 문제해결을 제안)
 
 ### 3.2. Mathematical Expression of the Distilled Knowledge
-- Solution procedure의 flow는 두 중간 result 사이의 관계에 의해 정의된다. DNN의 경우 관계는 두 layer의 feature들 사이의 방향(direction)에 의해 수학적으로 고려 될 수 있다(considered). 저자들은 FSP matrix가 solution process의 flow를 표현하도록 설계하였다. FSP matrix $G\in {\mathds{R}}^{m\times n}$은 두 layer의 feature들에 의해 생성되어진다. 선택된 layer들중 하나에서 생성하는 feature map은 $F^{1}\in {\mathds{R}}^{h\times w\tims m}$ 을 따르며, 각각 $h$, $w$, $m$에 대해 height, width, channel의 갯수를 의미한다. 다른 선택된 레이어가 생성하는 feature map은 $F^{2}\in {\mathds{R}}^{h\times w\tims m}$ 을 따른다. 그 다음, FSP matrix $G\in {\mathds{R}}^{m\times n}$ 은 아래와 같이 계산된다.
+- Solution procedure의 flow는 두 중간 result 사이의 관계에 의해 정의된다. DNN의 경우 관계는 두 layer의 feature들 사이의 방향(direction)에 의해 수학적으로 고려 될 수 있다(considered). 저자들은 FSP matrix가 solution process의 flow를 표현하도록 설계하였다. FSP matrix $G\in {\mathbb{R}}^{m\times n}$은 두 layer의 feature들에 의해 생성되어진다. 선택된 layer들중 하나에서 생성하는 feature map은 $F^{1}\in {\mathbb{R}}^{h\times w\times m}$ 을 따르며, 각각 $h$, $w$, $m$에 대해 height, width, channel의 갯수를 의미한다. 다른 선택된 레이어가 생성하는 feature map은 $F^{2}\in {\mathbb{R}}^{h\times w\times m}$ 을 따른다. 그 다음, FSP matrix $G\in {\mathbb{R}}^{m\times n}$ 은 아래와 같이 계산된다.
 
 $$G_{i,j}(x;W)=\sum_{s=1}^{h}\sum_{t=1}^{w}\frac{F_{s, t, i}^{1}(x;W)\times F_{s, t, j}^{2}(x;W)}{h\times w}$$,  (1)
 
@@ -87,6 +87,15 @@ $$L_{FSP}(W_{t}, W_{s})=\frac{1}{N}\sum_{x}\sum_{i=1}^{n}\lambda_{i}\times \para
 - 각각 $\lambda_{i}$와 $N$ 은 각각 loss term의 weight와 data point의 개수를 의미한다. 논문에선 전체 loss term이 모두 중요하다고 가정했다. 그러므로 모든 실험에서 동일한 $\lambda_{i}$ 값을 사용했다.
 
 ### 3.4. Learning Procedure
+- 논문에서 제안하는 transfer method는 teacher network에서 생성된 distilled knowledge를 사용한다. 본 논문에서 teacher network가 무엇인지 확실히 설명하기 위해 다음의 두 가지 조건을 정의한다. 우선, teacher network는 어떠한 dataset에 의해 미리 학습되어야 한다. 이 데이터셋은 student network가 학습에 사용할 데이터셋과 동일하던 다르던 상관없다. Transfer learning의 경우, teacher network는 student network와 다른 데이터셋을 이용하여야 한다. 두 번째로, teacher network는 student network보다 더 깊거나 얕거나 상관 없다. 하지만 논문에선 teacher network가 student network와 동일한 깊이를 갖거나 혹은 더 깊은 모델이 되도록 하였다.
+- Learning procedure는 training과정에서 두 개의 stage로 나뉜다. 우선, teacher network의 FSP matrix와 student network의 FSP matrix가 서로 같도록 만들어주는 loss function인 $L_{FSP}$를 최소화 시킨다. 첫 번째 stage를 거친 student network는 이제 두 번째 stage의 main task에 대한 loss를 이용하여 학습되어진다. 본 연구에선 제안하는 방법의 효용성을 검증하기 위해 classification task를 사용하였으므로, softmax cross entropy loss로 정의되는 $L_{ori}$를 main task loss로 사용한다. 학습 procedure는 아래의 Algorithm 1 에 설명되어있다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/fig3.jpg" alt="views">
+<figcaption>Algorithm 1. Transfer the distilled knowledge</figcaption>
+</figure>
+</center>
 
 ## 4. Experiment
 ### 4.1. Fast optimization
