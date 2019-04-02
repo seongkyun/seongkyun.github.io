@@ -92,7 +92,7 @@ $$L_{FSP}(W_{t}, W_{s})=\frac{1}{N}\sum_{x}\sum_{i=1}^{n}\lambda_{i}\times \para
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/fig3.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/algorithm1.jpg" alt="views">
 <figcaption>Algorithm 1. Transfer the distilled knowledge</figcaption>
 </figure>
 </center>
@@ -103,7 +103,39 @@ $$L_{FSP}(W_{t}, W_{s})=\frac{1}{N}\sum_{x}\sum_{i=1}^{n}\lambda_{i}\times \para
 - 모든 실험에 있어서 제안하는 모델을 존재하는 knowledge transfer model인 FitNet[20]과의 성능을 비교하였다. FitNet의 첫 번째 stage에서는 35,000회의 iterations 동안 hint 및 guided layer가 각 DNN의 중간 레이어로 설정되어 두 레이어의 출력 간 L2 loss을 최소하하는 방식으로 hint-based traning을 구현했다. Learning rate는 1e-4부터 시작했다. 다음으로 25,000회 iteration 이후 1e-5로 변경된다. 공평한 인식률의 accuracy 비교를 위해 FitNet의 두 번째 stage에서는 동일한 iteration동안 동일한 learning rate가 적용되었다. 이 stage에서 sfotening factor인 tau는 3으로 설정되었으며, KD loss function의 lambda값은 4에서 1로 선형적으로 감소한다.
 
 ### 4.1. Fast optimization
+- 최근 DNN들은 성능을 높히기 위해 점점 깊어지므로 학습에 며칠이 걸린다[26, 8]. 게다가 DNN이 학습에 오래걸려도 많은 논문들에선 single DNN의 성능향상을 위해 앙상블 모델을 사용하기도 한다[23]. 이러한 경우 n개의 DNN을 이용한 앙상블 모델을 사용하게 된다면 n배만큼 학습 시간이 오래 소요된다. 이러한 이유들로 인해 빠른 optimization 기술들이 최근에 주요하게 대두되고있다. 
+- 우선 teacher DNN을 normal training procedure에 따라 학습시켜 준비한다. Teacher DNN은 section 3.4와 같이 student network를 학습시키기 위해 사용되어진다. 논문에선 하나의 teacher network를 이용하여 여러 student network를 만든다. 제안하는 빠른 optimization의 최종 목표는 일반적인 학습 과정보다 적은 학습시간동안 teacher network의 성능과 유사한 student network의 앙상블 모델을 학습시키는 것이다.
+
 #### 4.1.1 CIFAR-10
+- The CIFAR-10 dataset [15] contains 50 000 training images with 5000 images per class and 10 000 test images with 1000 images per class. The CIFAR-10 dataset comprises 32 × 32 pixel RGB images with 10 classes. However, we padded 4 pixels on each side to make the image size 40×40 pixels. Randomly cropped 32 × 32 pixel images were used for training, and the original 32×32 pixel images were used
+for testing.
+- 실험에선 26개 레이어를 가진 residual network를 teacher DNN으로 사용하였으며 CIFAR-10에 대해 92% 정확도를 보인다[8]. 또한 동일한 구조를 student DNN으로 사용했다. 실험에 대해 teacher network는 learning rate는 0.1부터 0.01, 0.001까지 32,000과 48,000 iteration에서 각각 변경되었으며 64,000 iteration에서 0이된다. 또한 0.0001의 weight decay를 적용했고, momentum 0.9의 MSRA initialization [9]과 BN[12]를 적용했다.
+- Student network는 teacher와 동일한 구조를 가지며 알고리즘 1에서처럼 teacher network가 stage 1에서 초기 wiehgt 용도로 사용되었다. Learning rate는 0.001, 0.0001, 0.00001로 각각 11,000, 16,000, 21,000 iteration에서 decaying 되었다. Weight decaying을 0.0001로, momentum은 0.9로 적용했다. 다음으로 student DNN을 일반적인 절차를 따라 stage 1의 끝에서 전해진 wegith들을 기초로 하여 학습시켰다. 참고로 논문에선 여러 student network를 stage 2에서 학습시켰으며 동일한 stage 1에서 학습되어진 weight를 initial weight로 하여 학습시켰다. Stage 1에서 학습된 student net의 weight가 initial weight로 하여 많은 student network들에 복사되므로 stage 1은 많은 student network들을 초기화하는데에 효율적인 방법이다. 모든 student net에 동일한 initial weight를 공유하는데에 대한 한 가지 단점으로는 student net이 각각 독립적으로 initialization 되는 경우에 비해 비교적 각 네트워크가 더 상호 연관 될 수 있다는 점이다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/algorithm1.jpg" alt="views">
+<figcaption>Figure 3. Optimization 속도와 test 정확도 측정. 그림에선 teacher DNN과 FSP matrix를 이용한 distilled knowledge를 학습한 student DNN을 비교하였다.</figcaption>
+</figure>
+</center>
+
+- Figure 3은 test accuracy와 전체 시간에 대한 traning loss에 대해 나타낸다. student net이 teacher net에 비해 더 빠르게 optimization되는것을 확인 할 수 있다. Student net은 teacher net에 비해 약 3배 빠르게 saturation region에 들어가게 된다. 실험에선 teacher net에 naive initialization 방법이 아닌 고성능의 MSRA initialization technique를 사용하였기 때문에 FSP matrix가 좋은 distilled knowledge를 제공하여 student network의 wieght initialize에 도움이 되었다.
+- 실험에선 빠른 최적화를 검증하기 위해 stage 2에서 student net를 원래 iteration 수보다 1/3수준만큼만 반복시켰다. In stage 2, we used learning rates of 0.1, 0.01, and 0.001 until 11 000, 16 000, and 21 000 iterations, which are less than one-third the original number of iterations. Table 1의 실험 결과에서 확인 해 볼때 원래 제안하는 방법을 적용해 iteration의 1/3수준만 수행한것도 학습에 충분했다는것을 확인 가능했다. 비록 student net의 iteration이 적더라도 제안하는 방법은 teacher net 뿐만 아니라 FitNet의 성능까지 능가할 수 있었다.
+- 또한 FitNet 방법을 사용하여 3개의 중간 레이어에 3개의 loss을 적용하는 방법과 중간 레이어에 1개의 loss를 적용하는 방법에 대한 실험을 수행했다. Table 1에서 볼 수 있는 1 loss의 성능이 3 loss보다 좋았다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table1.jpg" alt="views">
+<figcaption>Table 1. CIFAR-10에 대한 인식률. \* 모양은 각 네트워크가 원래의 64,000의 1/3수준인 21,000의 iteration을 수행한 결과다. Student \*은 stage 1에서 21,000 iteration으로 학습되었으며 그 결과는 net 1, 2, 3에 대해 복사된 후 stage 2에서 21,000 iteration만큼 더 학습되어 총 84k 만큼의 iteration이 수행되었다.(stage 1 21k + net 1, 2, 3 stage2 21k = 84k) ‡ 모양은 teacher network가 21k iteration로 학습된 것이며 다른 teacher net은 64k iteration으로 학습되었다. † 모양은 student network가 randomly shuffled FSP matrix를 stage 1에서 학습한 네트워크다. Student \*†의 경우 각 네트워크는 stage 1에서 21k, 2에서 21k iteration으로 학습되었다.</figcaption>
+</figure>
+</center>
+
+- 제안하는 방법은 전체 네트워크를 몇 모듈로 분해 가능하게 하며, 각 모듈의 동작들은 모두 FSP matrix에 의해 capture되게 된다. 만약 student의 module의 FSP matrix가 teacher net의 matrix와 유사한 경우 student net의 module이 teacher net에서 상응하는 해당 모듈과 유사하게 작동함을 의미한다. 또한 각 모듈은 다른 모듈이 완전히 학습되어지지 않더라도 모듈 자체의 입력과 출력 간의 상관관계로부터 해당 모듈을 독립적으로 학습 시킬 수 있다. 반대로 입력과 출력 사이의 관계를 고려하지 않고 모듈의 출력만 matching시켜 학습된 three-loss FitNet의 상위 모듈의 경우 해당 모듈에 대한 입력이 의미를 갖을 수 있도록 student network의 하위 모듈이 충분이 훈련될 때 까지 학습의 효율성이 떨어지게 된다. 이는 one-loss FitNet이 three-loss 방법보다 성능이 좋은지에 대한 이유를 설명한다. Three-loss FitNet의 경우 network에 4개의 모듈이 존재한다. 2, 3번째 모듈은 중간 결과로 학습시키기 어렵다. 또한 FSP는 FitNet보다 덜 제한적이다. 만약 student net와 teacher net이 동일한 중간 feature map을 갖는다면 그 둘은 동일한 FSP matrix를 갖게 된다. 하지만 그 반대는 사실이 아니며, 즉 동일한 FSP matrix가 주어지더라도 feature map은 서로 다를 수 있게된다.
+- 각 teacher net과 student net이 동일한 구조를 갖기때문에 한 네트워크의 정보를 다른 네트워크로 weight를 그대로 copy함으로써 전달이 가능하게 된다. 논문에선 weight copy와 knowlege transfer와의 성능을 비교했다. 이를 위해 저자는 3개의 teacher net의 복사본에 대해 추가로 21k iteration으로 학습시켰으며 이는 단일 teacher net에서 wieght를 복사한 후 거기서 학습을 시작하는것과 동일한 과정이다(?). Table 1에서 확인 가능하듯이 이 결과는 student \*보다 좋지 못한 성능을 가졌다. Table 1에서 Teacher ‡를 보면, 각각의 성능이 original teacher의 성능보다 약간 나앗지만 poor한 앙상블 모델 성능을 나타냈다. 따라서 FSP는 weight를 그대로 복사하는 것 보다 덜 제한적이며 더 나은 diversity(다양성) 및 앙상블 성능을 나타낸다.
+- 게다가 iteration을 적게 수행한 student net 앙상블 모델이 teacher net 앙상블 모델과 유사한 성능을 보였지만 FitNet은 그렇지 못했다. 비록 student net의 앙상블 성능이 teacher net 앙상블 모델과 가까웠지만, 전자(student 앙상블)의 성능 향상(92.14→93.26)이 후자(teacher 앙상블)의 성능 향상(91.75→93.48)에 비해 낮았다. 이는 student net이 initial weights를 공유하는것과 더 밀접한 상관관계가 존재하기 때문이다.
+- 논문에선 동일한 single teacher net을 사용하여 덜 관련된 student net을 학습시키는 매우 간단하지만 효과적인 방법을 개발했다. 이 아이디어는 본질적으로 같지만 분명히 다른 여러개의 FSP matrix를 생성할 수 있다는 것이다. Student net에 같은 FSP matrix를 공유하는 대신에 서로 다른 FSP matrix를 사용하게 되면 각 student network간의 상관관계를 줄일 수 있게된다. FSP matrix는 두개의 선택된 layer의 feature들로부터 생성되어진다. 참고로 기본적으로 동일한 방법으로 작동하는 동등한(equivalent) teacher net을 얻기 위해 teacher net에서의 feature channel을 바꿀 수 있다. 즉, FSP 행렬의 행 또는 열은 distilled knowledge의 전송에 영향을 미치지 않고 섞일 수 있게 된다. 행 및 열 shuffling에 의해 얻어진 다른 FSP matrix은 stage 1에서 다른 initial weight를 갖는 다수의 student net를 생성하는데에 사용되어 질 수 있다. 이렇게 하면 stage 2 이후 student net의 상관관계가 낮아지고 성능이 향상된 앙상블 모델을 얻을 수 있게 된다. Table 1에서 확인 가능하듯이 iteration 횟수가 적을지라도 무작위로 shuffling된 FSP 행렬을 사용하는 student net의 앙상블은 teacher net의 앙상블보다 성능이 좋다.
+- Iteration 횟수 대신 모델 학습 시간의 관점에서, original model은 16s/100iter의 속도로 학습된 반면 제안하는 모델은 stage 1에서 35s/100iter의 속도로 학습되었다. 따라서 총 학습 시간 면에선 original 방법으로 3개의 teacher DNN을 학습시키는데 8.6시간이 걸렸고, 제안된 방법으로 3개의 student DNN을 학습 시키는데 4.84시간이 소요되었다. 후자(제안하는 방법을 적용)가 1.78배 빠르다. 하지만 보다 효율적으로 네트워크를 학습시켜서(예: 매번 FSP matrix를 계산(took 19s/100iter)하는 대신 FSP matrix를 저장하여 사용하는 방법) student \*과 student \*†는 각각 2.18배, 1.39배 더 빠르게 네트워크의 학습이 가능했다.
+
 #### 4.1.2 CIFAR-100
 ### 4.2. Performance improvement for the small DNN
 #### 4.2.1 CIFAR-10
@@ -112,3 +144,32 @@ $$L_{FSP}(W_{t}, W_{s})=\frac{1}{N}\sum_{x}\sum_{i=1}^{n}\lambda_{i}\times \para
 
 ## Conclusion
 - 본 논문에서는 DNN으로부터 distilled knowledge를 생성하는 새로운 접근방식을 제안했다. Distilled knowledge를 논문에서 제안하는 FSP matrix로 계산 된 solving procedure의 흐름(flow)으로 결정함으로써 제안하는 방법의 성능이 여타 SOTA knowledge transfer method의 성능을 능가하였다. 논문에서는 3가지 중요한 측면에서 제안하는 방법의 효율성을 검증하였다. 제안하는 방법은 DNN을 더 빠르게 optimize시키며(빠른 학습), 더 높은 level의 성능을 만들어 내게 한다. 게다가 제안하는 방법은 transfer learning task에도 적용 가능하다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table2.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table3.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table4.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table5.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
