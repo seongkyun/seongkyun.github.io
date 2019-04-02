@@ -98,6 +98,10 @@ $$L_{FSP}(W_{t}, W_{s})=\frac{1}{N}\sum_{x}\sum_{i=1}^{n}\lambda_{i}\times \para
 </center>
 
 ## 4. Experiment
+- 논문에선 제안하는 방법의 효용성을 검증하기위해 3개의 실험을 수행했다. 모든 실험 세팅에 대해 deep residual network[8]를 base architecture로 사용했다. 흥미롭게도 deep resitudal network는 shortcut connection이 존재하기 때문에 앙상블 구조를 만들 수 있다[24]. 게다가 sortcut connection은 더 깊은 네트워크의 학습을 가능하게 해준다. 이러한 두 이유로 인해 많은 연구에서 residual network를 다양한 task에 대해 적용한다. Figure 2는 실험에서 사용하는 deep residual network의 base 구조를 보여준다. 네트워크엔 feature map을 같은 공간 크기로 유지하기위해 zero padding을 적용하는 몇 구간이 존재한다. 예를들어 figure 2의 deep residual network는 3가지 부분으로 나뉘어있다. 비록 3개의 구간중 어디에서 FSP matrix를 만들기 위해 두 개의 레이어를 선택하느냐에 있어서 별다른 제약은 없지만, 논문에선 첫 번째와 마지막 section의 레이어를 사용하였다. 또한 FSP matrix는 같은 공간 크기를 갖는 두 레이어의 feature들에 의해 생성되므로 실험에서는 만약 두 feature의 크기가 공간 다른 경우 같은 사이즈를 만들기 위해  max pooling 레이어를 사용하였다.
+- 논문에선 제안하는 knowledge transfer technique의 효용성 검증을 위해 3개의 대표적인 task에 대해 실험했다. 실험에선 solution procedure의 흐름을 학습하기 위해 student network가 task에 대해 일반적인 모델보다 더 빠르게 학습되어진다는 것에 대해 section 4.1에서 다룬다. 또한 teacher network가 생성해낸 FSP matrix가 student network가 단독학습된 모델의 성능을 앞지르게 하는 것에 대해 section 4.2에서 다룬다. 앞의 실험에 대해 teacher network와 student network가 같은 task에 대해 같은 데이터셋으로 학습된 것을 사용하였다. Section 4.3에서는 이러한 idea들에 대해 transfer learning task에 적용한 것에 대해 다룬다.
+- 모든 실험에 있어서 제안하는 모델을 존재하는 knowledge transfer model인 FitNet[20]과의 성능을 비교하였다. FitNet의 첫 번째 stage에서는 35,000회의 iterations 동안 hint 및 guided layer가 각 DNN의 중간 레이어로 설정되어 두 레이어의 출력 간 L2 loss을 최소하하는 방식으로 hint-based traning을 구현했다. Learning rate는 1e-4부터 시작했다. 다음으로 25,000회 iteration 이후 1e-5로 변경된다. 공평한 인식률의 accuracy 비교를 위해 FitNet의 두 번째 stage에서는 동일한 iteration동안 동일한 learning rate가 적용되었다. 이 stage에서 sfotening factor인 tau는 3으로 설정되었으며, KD loss function의 lambda값은 4에서 1로 선형적으로 감소한다.
+
 ### 4.1. Fast optimization
 #### 4.1.1 CIFAR-10
 #### 4.1.2 CIFAR-100
