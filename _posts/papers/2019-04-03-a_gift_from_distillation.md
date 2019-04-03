@@ -137,6 +137,19 @@ for testing.
 - Iteration 횟수 대신 모델 학습 시간의 관점에서, original model은 16s/100iter의 속도로 학습된 반면 제안하는 모델은 stage 1에서 35s/100iter의 속도로 학습되었다. 따라서 총 학습 시간 면에선 original 방법으로 3개의 teacher DNN을 학습시키는데 8.6시간이 걸렸고, 제안된 방법으로 3개의 student DNN을 학습 시키는데 4.84시간이 소요되었다. 후자(제안하는 방법을 적용)가 1.78배 빠르다. 하지만 보다 효율적으로 네트워크를 학습시켜서(예: 매번 FSP matrix를 계산(took 19s/100iter)하는 대신 FSP matrix를 저장하여 사용하는 방법) student \*과 student \*†는 각각 2.18배, 1.39배 더 빠르게 네트워크의 학습이 가능했다.
 
 #### 4.1.2 CIFAR-100
+- The CIFAR-100 dataset uses 50 000 training images with 500 images per class and 10 000 test images with 100 images per class. The CIFAR-100 dataset contains 32 × 32 pixel RGB images with 100 classes. 전체 100 클래스에 대해 한 클래스당 이미지가 적으므로 32개 레이어를 갖는 residual network를 사용하였으며 section 4.1.1에서 묘사된 모델에 비해 4배의 채널 수를 갖는데.
+- 실험에선 다양한 실험 조건을 만들기 위해 CIFAR-10과 같은 augmentation 방법들을 사용하지 않았다. Teacher와 student network는 섹션 4.1.1과 같은 동일한 파라미터들을 사용하였다. The only difference was that we used learning rates of 0.001, 0.0001, and 0.00001 until 16 000, 24 000, and 32 000 iterations, respectively, in stage 1.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table2.jpg" alt="views">
+<figcaption>Table 2. CIFAR-100 데이터셋에 대한 인식률, *모양은 네트워크가 64k iteration으로 학습된 원래 경우의 1/3만큼만 iteration을 수행한 경우를 의미한다.</figcaption>
+</figure>
+</center>
+
+- Table 2는 서로 다른 세팅에서의 인식률을 보여준다. 표에서 오른쪽에서 두 번째 열(column)은 세 개 DNN의 앙상블 모델의 실험결과를 보인다. 평균 64.15%의 정확도를 갖는 32개 레이어로 구성된 residual network와 평균 61.32%의 정확도를 갖는 동일한 네트워크구조에 1/3만큼의 iteration로 학습된 모델의 네트워크 정확도를 볼 때, iteration의 횟수는 성능 향상을 위한 중요한 지표임을 알 수 있다. 하지만 비록 student network가 training에 더 적은 iteration 횟수를 사용하였더라도 teacher network로부터 생성된 disdilled knowldege를 사용한 student network의 성능은 original teacher network와 비슷한 것을 알 수 있다.
+- 논문에선 제안하는 방법과 FitNet간의 성능을 비교하였다. Table 2에서 FitNet의 방법이 적용된 student network가 더 적은 iteration으로 teacher network의 성능을 앞섰다. 하지만 세 네트워크의 앙상블 모델의 실험 결과를 볼 때 적은 iteration을 사용한 teacher network(Teacher\* Ensemble)와 FitNet이 적용된 student network(FitNet\* Ensemble)가 비슷한 정확도(67.2, 67.6)를 보였다. 즉, 큰 성능의 차이를 발견하지 못했다. 이는 table 2에서 성능과 iteration 횟수의 관점에서 제안하는 방법이 존재하는 FitNet 방법보다 훨씬 효율적임을 증명한다.
+
 ### 4.2. Performance improvement for the small DNN
 #### 4.2.1 CIFAR-10
 #### 4.2.2 CIFAR-100
@@ -145,12 +158,7 @@ for testing.
 ## Conclusion
 - 본 논문에서는 DNN으로부터 distilled knowledge를 생성하는 새로운 접근방식을 제안했다. Distilled knowledge를 논문에서 제안하는 FSP matrix로 계산 된 solving procedure의 흐름(flow)으로 결정함으로써 제안하는 방법의 성능이 여타 SOTA knowledge transfer method의 성능을 능가하였다. 논문에서는 3가지 중요한 측면에서 제안하는 방법의 효율성을 검증하였다. 제안하는 방법은 DNN을 더 빠르게 optimize시키며(빠른 학습), 더 높은 level의 성능을 만들어 내게 한다. 게다가 제안하는 방법은 transfer learning task에도 적용 가능하다.
 
-<center>
-<figure>
-<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table2.jpg" alt="views">
-<figcaption>Table 2. CIFAR-100 데이터셋에 대한 인식률, *모양은 네트워크가 64k iteration으로 학습된 원래 경우의 1/3만큼만 iteration을 수행한 경우를 의미한다.</figcaption>
-</figure>
-</center>
+
 
 <center>
 <figure>
