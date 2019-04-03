@@ -151,14 +151,12 @@ for testing.
 - 논문에선 제안하는 방법과 FitNet간의 성능을 비교하였다. Table 2에서 FitNet의 방법이 적용된 student network가 더 적은 iteration으로 teacher network의 성능을 앞섰다. 하지만 세 네트워크의 앙상블 모델의 실험 결과를 볼 때 적은 iteration을 사용한 teacher network(Teacher\* Ensemble)와 FitNet이 적용된 student network(FitNet\* Ensemble)가 비슷한 정확도(67.2, 67.6)를 보였다. 즉, 큰 성능의 차이를 발견하지 못했다. 이는 table 2에서 성능과 iteration 횟수의 관점에서 제안하는 방법이 존재하는 FitNet 방법보다 훨씬 효율적임을 증명한다.
 
 ### 4.2. Performance improvement for the small DNN
+- 최근 많은 연구들이 많은 파라미터 수를 사용하는 deep neural network를 모델의 성능향상을 위해 사용해왔다. 예를 들어 [10]에서는 레이어가 1000개가 넘는 residual network를 사용했다. Wide-resnet[26]에선 네트워크의 width를 늘렸다. 하지만 이로인해 연산량이 늘어 고성능의 system이 필요해진다. 게다가 모델 학습을 위한 많은 iteration 횟수가 필요하다. 따라서 작은 DNN의 성능 향상을 위한 방법에 대한 연구는 매우 중요하다.
+- 논문에선 제안하는 방법이 다른 크기의 DNN에 대해 적용 가능한지 검증하는 실험을 수행했다. 제안하는 방법의 목표는 작은 student network의 성능을 deep teacher network의 distilled knowledge를 이용하여 향상시키는 것이다. 다시한번 강조하자면 small network는 shallow network이며 적은 weight를 갖는다. Figure 2에서 보여지듯이 teacher가 student 모델보다 더 깊다. Student net은 teacher DNN에서 residual module의 갯수를 줄여 구성되어있다. 따라서 student DNN의 파라미터 개수가 teacher DNN의 파라미터 개수보다 더 적다.
+- 학습 과정은 section 4.1에 묘사된것과 동일하다. Student DNN과 teacher DNN이 같은 channel 갯수를 가지므로 계산되는 FSP matrix의 크기 또한 동일하다. Student DNN과 teacher DNN에서 계산되는 FSP matrix간의 거리를 최소화함으로써 student net에 대해 좋은 initial weight값을 얻을 수 있었다. 그리고 student net에 대해 그 initial weight를 기본으로 main task(classification)에 대한 학습을 진행했다.
+
 #### 4.2.1 CIFAR-10
-#### 4.2.2 CIFAR-100
-### Transfer Learning
-
-## Conclusion
-- 본 논문에서는 DNN으로부터 distilled knowledge를 생성하는 새로운 접근방식을 제안했다. Distilled knowledge를 논문에서 제안하는 FSP matrix로 계산 된 solving procedure의 흐름(flow)으로 결정함으로써 제안하는 방법의 성능이 여타 SOTA knowledge transfer method의 성능을 능가하였다. 논문에서는 3가지 중요한 측면에서 제안하는 방법의 효율성을 검증하였다. 제안하는 방법은 DNN을 더 빠르게 optimize시키며(빠른 학습), 더 높은 level의 성능을 만들어 내게 한다. 게다가 제안하는 방법은 transfer learning task에도 적용 가능하다.
-
-
+- 실험에선 teacher DNN으로 26레이어 residual net을, student DNN으로 8 레이어 residual net을 사용하였다. 파라미터 세팅과 학습과정은 section 4.1.1과 동일하나 stage 2에서의 training iteration은 다르다. Student DNN은 teacher DNN과 동일한 iteration만큼 학습된다.
 
 <center>
 <figure>
@@ -167,12 +165,41 @@ for testing.
 </figure>
 </center>
 
+- 공평한 비교를 위해 end-to-end로 학습된 student DNN을 학습시켜 준비했다. Table 3에서 확인 가능하듯이 일반적으로 학습시킨 student DNN의 성능보다 논문에서 제안하는 distilled knowledge를 전달받아 학습한 모델의 성능이 더 좋다. 이는 teacher DNN에서 만들어진 distilled knowledge가 shallow student DNN에게 유용한 정보임을 의미한다. 논문에선 제안하는 방법이 기존의 방법보다 더 유용하다고 결론지었다.
+
+#### 4.2.2 CIFAR-100
+- 실험에선 CIFAR-100 데이터셋에 대하여도 네트워크 minimization ability를 증명하였다. Section 4.1.2와 비슷한 조건에서 teacher net과 student net으로 각각 32레이어, 14레이어의 residual network 구조를 사용했다. 이번 section에서의 모든 실험은 64k iteration을 사용하였다.
+
 <center>
 <figure>
 <img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table4.jpg" alt="views">
 <figcaption>Table 4. CIFAR-100 데이터셋에 대한 인식률. 14 layer residual DNN을 student DNN으로, 32layer를 teacher DNN으로 사용했다.</figcaption>
 </figure>
 </center>
+
+- Table 4는 서로 다른 세팅에서의 인식률을 보여준다. 실험에선 augmentation방법들을 적용하지 않았으므로 teacher DNN은 64%의 정확도를 보였다. 게다가 일반적인 방법으로 학습된 student DNN의 정확도는 58.65%에 그쳤다. 놀랍게도 제안하는 방법을 적용한 결과 student DNN의 성능이 teacher DNN의 성능과 매우 근접하도록 향상되었다. FitNet과 같이 현존하는 knowledge distillation method같은 경우도 성능 향상을 보였다. 하지만 제안하는 방법과 FitNet의 방법을 비교할 때, 제안하는 knowledge distillation 방법의 성능 향상이 더 큰것을 명확하게 확인 가능했다.
+
+### Transfer Learning
+- 본 섹션에선 제안하는 방법을 적용 할 수 있는 응용(application)에 대해 설명한다. Teacher DNN과 student DNN은 동일한 task에 대해 학습될 수 있을 뿐만 아니라 다른 task에 대해서도 학습 가능하다. 이를 증명하기 위해 제안하는 방법을 transfer learning task에 대해 적용시켜봤다. Transfer learning은 유용한 feature를 만들기에 너무 작은 dataset만 사용 가능한 경우 폭넓게 사용되어왔다. 이런 경우 대부분 엄청 큰 ImageNet 데이터셋으로 미리 학습 된 DNN을 사용한다. 하지만 대부분 pretrained DNN을 사용하는 경우 네트워크 구조가 매우 커 많은 weight가 저장된다. 이는 곧 small dataset에 대한 성능 향상을 위해 고사양 device가 필요함을 의미한다. 그러므로 만약 distilled knowledge가 small DNN으로 전달될 수 있게 된다면 이는 곧 이러한 문제의 효율적인 답안이 될 수 있다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-03-a_gift_from_distillation/table5.jpg" alt="views">
+<figcaption>Table 5. CUB200에 대한 인식률. 20 layer residual DNN을 student DNN으로, 34 layer를 teacher DNN으로 사용했다.</figcaption>
+</figure>
+</center>
+
+- 우선 ImageNet dataset으로 학습 된 34 레이어 residual DNN[8]을 준비했다. 작은 image 갯수를 갖는 task를 위하여 CUB200-2011 dataset[25]를 사용했다. CUB200-2011 데이터셋은 11,788개 이미지와 200개의 bird subordinate를 갖는다. 이러한 적은 image per class로 인해 이 데이터셋만으로 학습시켜 좋은 성능을 갖는 네트워크를 만들기는 어렵다. Table 5에서, 비교적 깊은 34 레이어 residual DNN을 사용하더라도 해당 데이터셋으로만 처음부터 학습 시킨다면 모델의 성능은 매우 좋지 못하다는것을 확인 가능하다. 
+- 
+
+## Conclusion
+- 본 논문에서는 DNN으로부터 distilled knowledge를 생성하는 새로운 접근방식을 제안했다. Distilled knowledge를 논문에서 제안하는 FSP matrix로 계산 된 solving procedure의 흐름(flow)으로 결정함으로써 제안하는 방법의 성능이 여타 SOTA knowledge transfer method의 성능을 능가하였다. 논문에서는 3가지 중요한 측면에서 제안하는 방법의 효율성을 검증하였다. 제안하는 방법은 DNN을 더 빠르게 optimize시키며(빠른 학습), 더 높은 level의 성능을 만들어 내게 한다. 게다가 제안하는 방법은 transfer learning task에도 적용 가능하다.
+
+
+
+
+
+
 
 <center>
 <figure>
