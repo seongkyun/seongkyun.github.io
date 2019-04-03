@@ -190,16 +190,7 @@ for testing.
 </center>
 
 - 우선 ImageNet dataset으로 학습 된 34 레이어 residual DNN[8]을 준비했다. 작은 image 갯수를 갖는 task를 위하여 CUB200-2011 dataset[25]를 사용했다. CUB200-2011 데이터셋은 11,788개 이미지와 200개의 bird subordinate를 갖는다. 이러한 적은 image per class로 인해 이 데이터셋만으로 학습시켜 좋은 성능을 갖는 네트워크를 만들기는 어렵다. Table 5에서, 비교적 깊은 34 레이어 residual DNN을 사용하더라도 해당 데이터셋으로만 처음부터 학습 시킨다면 모델의 성능은 매우 좋지 못하다는것을 확인 가능하다. 
-- 
-
-## Conclusion
-- 본 논문에서는 DNN으로부터 distilled knowledge를 생성하는 새로운 접근방식을 제안했다. Distilled knowledge를 논문에서 제안하는 FSP matrix로 계산 된 solving procedure의 흐름(flow)으로 결정함으로써 제안하는 방법의 성능이 여타 SOTA knowledge transfer method의 성능을 능가하였다. 논문에서는 3가지 중요한 측면에서 제안하는 방법의 효율성을 검증하였다. 제안하는 방법은 DNN을 더 빠르게 optimize시키며(빠른 학습), 더 높은 level의 성능을 만들어 내게 한다. 게다가 제안하는 방법은 transfer learning task에도 적용 가능하다.
-
-
-
-
-
-
+- Shallow DNN에 대해 20 레이어 residual DNN 구조를 사용했다. 34 layer residual DNN은 동일한 부분에서 동일한 공간 크기의 feature들을 만들어내는 4개 파트로 구성되어 있다. 4개의 파트는 각각 3, 4, 6, 3개의 residual module로 구성되어있다. 20 layer residual DNN으로 구성된 student DNN은 각 4개 파트에 대해 2, 2, 3, 2 개의 residual module로 구성되어있다. For all settings, we used learning rates of 0.1, 0.01, and 0.001 up to 10 000, 20 000, and 30 000 iterations. 보통 fine tunning은 작은 learning rate를 사용한다. 하지만 learning rate가 0.1에서 시작했을때가 0.001일때보다 성능이 좋았으므로 위의 설정대로 실험을 진행했다.
 
 <center>
 <figure>
@@ -208,3 +199,7 @@ for testing.
 </figure>
 </center>
 
+- 논문에서 제안하는 방법이 teacher DNN의 FSP matrix를 student DNN으로 전달하기 때문에 stage 1에서 0.1, 0.01, 0.001의 learning rate를 11k, 16k, 21k iteration에서 각각 사용하였다. 이 stage에서 각 DNN의 part에서 FSP matrix를 추출했다. Tabel 5에서 볼 수 있듯이 제안하는 방법을 이용하여 fine tunning 해서 student DNN이 teacher DNN에 근접한 높은 수준의 성능이 되도록 하였다. Student DNN이 teacher DNN보다 약 1.7배 shallow한 점을 고려한다면 제안하는 방법이 teacher와 student의 task가 다르더라도 knowledge를 전달함에 있어서 매우 효율적인 방법이라는 것을 알 수 있다.
+
+## Conclusion
+- 본 논문에서는 DNN으로부터 distilled knowledge를 생성하는 새로운 접근방식을 제안했다. Distilled knowledge를 논문에서 제안하는 FSP matrix로 계산 된 solving procedure의 흐름(flow)으로 결정함으로써 제안하는 방법의 성능이 여타 SOTA knowledge transfer method의 성능을 능가하였다. 논문에서는 3가지 중요한 측면에서 제안하는 방법의 효율성을 검증하였다. 제안하는 방법은 DNN을 더 빠르게 optimize시키며(빠른 학습), 더 높은 level의 성능을 만들어 내게 한다. 게다가 제안하는 방법은 transfer learning task에도 적용 가능하다.
