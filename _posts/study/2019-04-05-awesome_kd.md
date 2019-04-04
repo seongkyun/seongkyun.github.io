@@ -9,6 +9,11 @@ comments: true
 # Awesome Knowledge Distillation
 - 참고글: https://github.com/dkozlov/awesome-knowledge-distillation
 
+### Web pages to study
+- https://blog.lunit.io/2018/03/22/distilling-the-knowledge-in-a-neural-network-nips-2014-workshop/
+- http://seoulai.com/presentations/knowledge-distillation.pdf
+- https://medium.com/neural-machines/knowledge-distillation-dc241d7c2322
+
 - 2019년 1월 기준
 
 ### Papers
