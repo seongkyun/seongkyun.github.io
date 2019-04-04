@@ -26,6 +26,48 @@ Authors: Ying Zhang, Tao Xiang, Timothy M. Hospedales, Huchuan Lu
   - (3) Cohort에서 large network가 mutual learning을 사용한 방법이 단독학습한것보다 성능이 더 좋다.
   - 마지막으로 논문에선 하나의 effective한 네트워크를 얻는데 초점을 맞추지만 전체 cohort를 매우 효과적인 앙상블 모델로도 사용할 수 있다.
 
+### Related Work
+- Distillation based 모델압축방법은 한참옛날에 [3]에서 제안되었지만 이게 왜 동작하는지 직관적으로 설명하는 [7](추가적인 supervision과 높은 entropy soft targets로 인한 regularization으로 인해)로 인해 요즘 다시 재고되고 있다. 처음엔 성능 좋거나 앙상블로 구성된 teacher에 의해 근사화된 함수를 단일 신경망 student net으로 distillation하는 것이 일반적인 적용방법이었다[3, 7]. 하지만 나중엔 학습이 쉬운 큰 성능좋은 네트워크를 distillation하여 작지만 학습이 어려운 네트워크로 적용시켜 teacher의 성능을 능가하게까지 만들었다[19, FitNet]. 최근에는 [15]와 SVM+[22]와 같은 information learning theory를 이용하여 distillation이 더 systematically하게 teacher에서 선별된 정보를 student로 전달한다. 저자는 teacher와 함께 dispensing하고 student들의 앙상블이 서로 distillation하여 서로를 가르치도록 하였다.
+- Other related ideas include Dual Learning [5] where two cross-lingual translation models teach each other interactively. But this only applies in this special translation problems where an unconditional within-language model is available to be used to evaluate the quality of the predictions, and ultimately provides the supervision that drives the learning process. In contrast, our mutual learning approach applies to general classification problems. While conventional wisdom about ensembles prioritises diversity [12], our mutual learning approach reduces diversity in the sense that all students become somewhat more similar by learning to mimic each other. However, our goal is not necessarily to produce a diverse ensemble, but to enable networks to find robust solutions that generalise well to testing data, which would otherwise be hard to find through conventional supervised learning.
+
+## 2. Deep Mutual Learning
+- Figure 1은 두 네트워크를 이용한 DML 적용방법에 대해 설명한다.
+
+### 2.1 Formulation
+- 자세한 수식적인것은 논문에서..
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/fig1.jpg" alt="views">
+<figcaption>Figure 1. DML scheme. 각 네트워크는 supervised larning loss로 학습되어지며 KLD-based mimcry loss가 각 peer의 probability estimation을 match하도록 한다.</figcaption>
+</figure>
+</center>
+
+- 대략적으로, Cross entropy loss를 이용하여 각 네트워크의 prediction인 $p_{1}$ 과 $p_{2}$을 계산한다.
+- 각 모델 $\Theta_{1}$의 testing에서 성능을 높히기 위해 다른 peer 네트워크인 $\Theta_{2}$을 이용한다. $\Theta_{2}$는 posterior probability인 $p_{2}$의 형식으로 training experience를 제공한다. 각 네트워크의 prediction인 $p_{1}$ 과 $p_{2}$의 match를 계산하기 위해 Kullback Leibler Divergence (KLD)를 사용한다.
+- 이 과정에서 각 네트워크는 training instance에 대하여 정답인 true label에 대해 학습하면서도 peer가 추론한 probability도 학습하게 된다.
+
+### 2.2 Optimization
+- Optimization summury는 아래의 그림에서 설명된다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/algorithm1.jpg" alt="views">
+<figcaption>Algorithm 1. Deep Mutual Learning</figcaption>
+</figure>
+</center>
+
+### Extenstion to Larger Student Cohorts
+- 자세한 수식은 논문에서..
+- 제안하는 DML을 통해 2개보다 더 많은 student를 cohort로 만들 수 있다.
+  - Network를 위의 $\Theta_{1}$과 $\Theta_{2}$에서 총 K개까지 늘리면 된다.(K는 자연수)
+- 2개를 초과하는 network의 optimization 또한 Algorithm 1의 연장선상이다. 
+- 두개를 초과하는 네트워크에 대해 모든 K-1개의 네트워크들을 하나의 teacher로 만들면 되며, prediction은 다른 네트워크의 prediction들의 평균값을 취하여 $p_{avg}$ 형태로 전달하여 KLD를 계산한다.
+- Section 3.6에서 single ensemble teacher나 DML_e를 사용하는 DML stratege는 위의 K-1 teacher를 사용하는 DML보다 성능이 떨어진다. 그 이유는 teacher ensemble을 teacher의 posterior probabilities를 true class에 대해 더 peak값을 갖도록 하는 model average step(위에서 prediction의 평균 취하는 과정)에서 모든 다른 class들에 대해 posterior entropy를 감소시키기 때문이다.
+
+## 3. Experiment
+
+
 ## Conclusion
 - 논문에선 DNN을 집단(cohort)으로 만들어 peer와 mutual distillation 을 통해 DNN의 성능을 향상시키는 간단하지만 general하게 적용 가능한 방법을 제안하였다. 이 방법을 이용해 static(단독학습, pre-trained) teacher로부터 distilled된 네트워크보다 성능이 더 좋은 compact network를 얻을 수 있었다. Deep mutual learning(DML)을 활용하는 한가지 예로 compact하고 빠른 효율적인 네트워크를 얻을 수 있다. 또한 논문에선 이 방식을 이용해 크고 powerful한 네트워크의 성능도 향상시킬 수 있었으며, 논문에서 제안하는 방식을 따라 학습된 network cohort(네트워크 그룹)은 더 성능 향상을 위한 앙상블 모델로 사용될 수 있다. 
 
