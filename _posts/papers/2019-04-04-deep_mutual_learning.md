@@ -57,7 +57,7 @@ Authors: Ying Zhang, Tao Xiang, Timothy M. Hospedales, Huchuan Lu
 </figure>
 </center>
 
-### Extenstion to Larger Student Cohorts
+### 2.3 Extenstion to Larger Student Cohorts
 - 자세한 수식은 논문에서..
 - 제안하는 DML을 통해 2개보다 더 많은 student를 cohort로 만들 수 있다.
   - Network를 위의 $\Theta_{1}$과 $\Theta_{2}$에서 총 K개까지 늘리면 된다.(K는 자연수)
@@ -67,6 +67,68 @@ Authors: Ying Zhang, Tao Xiang, Timothy M. Hospedales, Huchuan Lu
 
 ## 3. Experiment
 
+### 3.1 Datasets and Settings
+#### Datasets
+- Two datasets are used in our experiments. The CIFAR-100 [11] dataset consists of 32×32 color images drawn from 100 classes, which are split into 50,000 train and 10,000 test images. The Top-1 classification accuracy is reported. The Market-1501 [27] dataset is widely used in the person re-identification problem which aims to associate people across different non-overlapping camera views. It contains 32,668 images of 1,501 identities captured from six camera views, with 751 identities for training and 750 identities for testing. As per state of the art approaches to this problem [28], we train the network for 751-way classification and use the resulting feature of the last pooling layer as a representation for nearest neighbour matching at testing. This is a more challenging dataset than CIFAR-100 because the task is instance recognition thus more fine-grained, and the dataset is smaller with more classes. For evaluation, the standard Cumulative Matching Characteristic (CMC) Rank-k accuracy and mean average precision (mAP) metrics [27] are used.
+
+#### Implementation Details
+- We implement all networks and training procedures in TensorFlow [1] and conduct all experiments on an NVIDIA GeForce GTX 1080 GPU. For CIFAR-100, we follow the experimental settings of [25]. Specifically, we use SGD with Nesterov momentum and set the initial learning rate to 0.1, momentum to 0.9 and mini-batch size to 64. The learning rate dropped by 0.1 every 60 epochs and we train for 200 epochs. The data augmentation includes horizontal flips and random crops from image padded by 4 pixels on each side, filling missing pixels with reflections of original image. For Market-1501, we use Adam optimiser [10], with learning rate lr = 0.0002, β1 = 0.5, β2 = 0.999 and a mini-batch size of 16. We train all the models for 100,000 iterations. We also report results with and without pre-training on ImageNet.
+
+#### Model Size
+- The networks used in our experiments includes compact networks of typical student size: Resnet-32 [6] and MobileNet [8]; as well as large networks of typical teacher size: InceptionV1 [21] and Wide ResNet WRN-28-10 [25]. Table 1 compares the number of parameters of all the networks on CIFAR-100.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/table1.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+### 3.2 Results on CIFAR-100
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/table2.jpg" alt="views">
+<figcaption>Table 2. CIFAR-100에 대한 top-1 accuracy. DML-Independent는 DML로 학습된 네트워크와 단독으로 학습된 네트워크간의 정확도 차이다.</figcaption>
+</figure>
+</center>
+
+- Table 2는 다양한 구조를 사용하는 two-network DML cohort에 대한 CIFAR-100의 Top-1 accuracy다. 표에서 다음의 observation들을 확인 가능하다.
+  - (1) 모든 서로다른 네트워크는 ResNet-32, MobileNet, WRN-28-10중 하나며 그 조합들은 "DML-Independent" 열(column)에서 양수값을 나타내고, 이는 독립적으로 학습했을때에 비해 그만큼의 성능 향상이 있었음을 의미한다.
+  - (2) 작은 용량을 갖는 ResNet-32나 MobileNet의 경우 DML에서 더 많은 이점 얻을 수 있었다.
+  - (3) 비록 WRN-28-10이 MobileNet이나 ResNet-32보다 훨씬 큰 모델일지라도 더 작은 peer(MobileNet이나 ResNet32)와 같이 학습했을 때에도 여전히 성능히 향상되는것을 확인 할 수 있다.
+  - (4) WRN-28-10과 같이 큰 네트워크 cohort를 학습시키는것은 단독 학습시키는것에 비해서 여전히 이점이 존재한다.
+  - 따라서 model distillation과 같은 기존의 방법과 반대로 큰 pre-trained teacher가 성능향상에 필수요소가 아니게 되며, 다수의 큰 네트워크들도 제안하는 distillation-like 과정을 통하여 성능이 향상된다.
+  
+### 3.3 Results on Market-1501
+- Person re-identification task로 자세한 내용은 논문에서 확인..
+
+### 3.4 Comparison with Distillation
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/table4.jpg" alt="views">
+<figcaption>Table 4. CIFAR-100과 Market-1501에 대한 distillation 방법과 정확도 비교</figcaption>
+</figure>
+</center>
+
+- 논문의 방법은 model distillation과 관련이 있기때문에 [7]과 같은 Distillation 방법과의 성능비교를 했다. Table 4는 student net(Net2)에 fixed posterior target을 제공하는 pre-trained teacher net(Net1)으로 구성된 model distillation과 DML 방식과 결과를 비교했다. 기대했던대로 성능 좋은 pre-trained teacher로부터 온 일반적인 distillation 방식은 student net이 단독학습하는것에 비해 더 나은 성능을 보여줬다(Table 4에서 1 distills 2 와 Net2 Independent의 비교). 하지만 실험결과를 보면 pre-trained teacher net이 필요가 없음을 알 수 있다. 표에서 확인 가능하듯이 "1 distills 2"와 "DML Net 2"의 결과를 비교해보면 두 네트워크를 DML 방식을 사용하여 학습시킨것이 distillation 방식에 비해 성능향상이 더 뚜렷했다. 이는 mutual learning 과정에서 teacher 역할을 하는 네트워크가 pre-trained되지 않은 student와의 상호작용을 통해 서로 학습함으로써 pre-trained 네트워크를 사용하는 방식에 비해 더 나은 결과를 보여준다는것을 의미한다. Finally, we note that on Market1501 training two compact MobileNets together provides a similar boost over independent learning compared to mutual learning with InceptionV1 and MobileNet: Peer teaching of small networks can be highly effective. In contrast, using the same network as teacher in model distillation actually makes the student worse than independent learning (the last row 1 distills 2 (45.16) vs. Net 2 Independent (46.07)).
+
+### 3.5 DML with Larger Student Cohorts
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/fig2.jpg" alt="views">
+<figcaption>Figure 2. Cohort의 네트워크 수에 따른 Market-1501 데이터셋의 mAP 비교</figcaption>
+</figure>
+</center>
+
+- 앞의 모든 연구는 2 student로 구성된 cohort를 이용하여 실험되었다. 이번 실험에선 student의 수에 따른 DML 성능에 대한 비교를 했다. Figure 2(a)는 MobileNets 구조를 사용하는 student에 대해 cohort size(student 수)가 증가함에 따른 Market-1501 데이터셋에 대한 DML training 실험결과를 보여준다. Figure 2(a)에서는 DML이 적용된 cohort의 network 수가 증가함에 따른 average single network의 mAP 성능이 향상되는것을 단독학습 된 경우와 비교하여 확인 할 수 있다. 이는 cohort의 peer의 수가 많아져 모델들이 같이 학슴함에 따라 student들의 generalization 능력이 강화된다는 것을 증명한다. From the standard deviations we can also see that the results get more and more stable with increasing number of networks in DML.
+  - 실험에서 사용하는 Independent 학습모델의 네트워크 수는 어떻게 저렇게 되는지 논문에서 정확히 정의되어있지 않음...앙상블 모델은 아닌듯함.
+- 일반적으로 여러 네트워크를 학습시키는 기술은 그 네트워크들을 앙상블로 만들어 combined prediction을 만들도록 하는것이다. Figure 2(b)에서는 (a)와 동일한 구조를 갖는 네트워크에 대해 각 모델의 average prediction을 사용하는 대신 앙상블 모델(모든 멤버 의 concat된 feature 기반의 matching)을 사용하여 prediction했다. 실험 결과 앙상블 prediction이 예상대로 individual network의 성능을 넘어섰다(Fig 2.(b) vs (a)). 게다가 앙상블 prediction은 여러 네트워크를 cohort로 학습시킴으로써 더 나은 성능을 얻을 수 있었다(Fig. 2(b) DML ensemble vs. Independent ensemble). 앙상블 모델의 성능을 향상시키는 DML의 효과(Fig 2)를 볼 때 이 방법이 성능향상을 위한 일반적 방법인 앙상블 모델에 대해 최소한의 비용추가만 갖고도 성능을 향상시키는 general한 유용한 방법임을 실증한다.
+
+### 3.6 How and Why does DML Work?
+ 
 
 ## Conclusion
 - 논문에선 DNN을 집단(cohort)으로 만들어 peer와 mutual distillation 을 통해 DNN의 성능을 향상시키는 간단하지만 general하게 적용 가능한 방법을 제안하였다. 이 방법을 이용해 static(단독학습, pre-trained) teacher로부터 distilled된 네트워크보다 성능이 더 좋은 compact network를 얻을 수 있었다. Deep mutual learning(DML)을 활용하는 한가지 예로 compact하고 빠른 효율적인 네트워크를 얻을 수 있다. 또한 논문에선 이 방식을 이용해 크고 powerful한 네트워크의 성능도 향상시킬 수 있었으며, 논문에서 제안하는 방식을 따라 학습된 network cohort(네트워크 그룹)은 더 성능 향상을 위한 앙상블 모델로 사용될 수 있다. 
