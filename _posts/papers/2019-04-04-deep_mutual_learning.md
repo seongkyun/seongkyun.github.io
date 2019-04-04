@@ -128,14 +128,35 @@ Authors: Ying Zhang, Tao Xiang, Timothy M. Hospedales, Huchuan Lu
 - 일반적으로 여러 네트워크를 학습시키는 기술은 그 네트워크들을 앙상블로 만들어 combined prediction을 만들도록 하는것이다. Figure 2(b)에서는 (a)와 동일한 구조를 갖는 네트워크에 대해 각 모델의 average prediction을 사용하는 대신 앙상블 모델(모든 멤버 의 concat된 feature 기반의 matching)을 사용하여 prediction했다. 실험 결과 앙상블 prediction이 예상대로 individual network의 성능을 넘어섰다(Fig 2.(b) vs (a)). 게다가 앙상블 prediction은 여러 네트워크를 cohort로 학습시킴으로써 더 나은 성능을 얻을 수 있었다(Fig. 2(b) DML ensemble vs. Independent ensemble). 앙상블 모델의 성능을 향상시키는 DML의 효과(Fig 2)를 볼 때 이 방법이 성능향상을 위한 일반적 방법인 앙상블 모델에 대해 최소한의 비용추가만 갖고도 성능을 향상시키는 general한 유용한 방법임을 실증한다.
 
 ### 3.6 How and Why does DML Work?
- 
+- 이 절에선 DML이 왜 효과가 있는지에 대해 설명한다. __[4, 26, 9]같은 논문에선 "Why Deep Nets Generalize"__ 라는 주제를 다루는데, 이는 다음과 같은 insight를 준다. While there are often many solutions (deep network parameter settings) that generate zero train error, some of these generalise better than others due to being in wide valleys rather than narrow crevices [4, 9] – so that small perturbations do not change the prediction efficacy drastically; and that deep networks are better than might be expected at finding these good solutions [26], but that the tendency towards finding robust minima can be enhanced by biasing deep nets towards solutions with higher posterior entropy [4, 17].
 
-## Conclusion
-- 논문에선 DNN을 집단(cohort)으로 만들어 peer와 mutual distillation 을 통해 DNN의 성능을 향상시키는 간단하지만 general하게 적용 가능한 방법을 제안하였다. 이 방법을 이용해 static(단독학습, pre-trained) teacher로부터 distilled된 네트워크보다 성능이 더 좋은 compact network를 얻을 수 있었다. Deep mutual learning(DML)을 활용하는 한가지 예로 compact하고 빠른 효율적인 네트워크를 얻을 수 있다. 또한 논문에선 이 방식을 이용해 크고 powerful한 네트워크의 성능도 향상시킬 수 있었으며, 논문에서 제안하는 방식을 따라 학습된 network cohort(네트워크 그룹)은 더 성능 향상을 위한 앙상블 모델로 사용될 수 있다. 
+#### Better Quality Solutions with More Robust Minima
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/fig1.jpg" alt="views">
-<figcaption></figcaption>
+<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/fig3.jpg" alt="views">
+<figcaption>Figure 3. Analysis on why DML works</figcaption>
 </figure>
 </center>
+
+- 위의 insight로 인해 몇몇의 DML process에 대한 관측을 수행했다. 우선 논문의 적용에 대해 네트워크가 dratining data에 perfectly하게 맞춘다(training accuracy가 100%가 되고 classification loss가 Fig 3(a)처럼 낮아짐). 하지만 앞에서 언급한것처럼 DML은 test data에 대해 더 잘 작동한다. 따라서 traning loss에서 더 deep한 minima를 찾도록 하는것이 아니라 DML가 test set에 대해 더 generalize를 잘하는 wider하고 robust한 minima를 찾도록 도와준다는 것이다. [4, 9]에서 감명받아 MobileNet을 이용해 Market-1501에 대해 발견된 minima의 robusteness를 test하는 간단한 실험을 했다. DML과 단독학습한 모델의 경우 각 모델의 파라미터에 대해 variable standard deviation $\rho$의 independent Gaussian noise를 추가하기 전과 후의 각 모델에 대한 training loss를 비교한다. We see that the depths of the two minima were the same (Fig. 3(a)), but after adding this perturbation the training loss of the independent model jumps up while the loss of the DML model increases much less. 이는 DML 모델이 더 넓은 minima를 찾음을 의미하며 이는 곧 generalization 성능이 좋다는것을 의미한다[4, 17].
+
+#### How a Better Minima is Found
+- 어떻게 DML이 이러한 더 나은 minima를 찾도록 도와주나? When asking each network to match its peers probability estimates, mismatches where a given network predicts zero and its teacher/peer predicts non-zero are heavily penalised. Therefore the overall effect of
+DML is that, where each network independently would put a small mass on a small set of secondary probabilities, all networks in the DML tend to aggregate their prediction of secondary probabilities, and both (i) put more mass on the secondary probabilities altogether, and (ii) place non-zero mass on more distinct secondary probabilities. 이러한 효과를 Figure 3.(c)에서 ResNet-32 on CIFAR-100 trained by DML과 independently trained ResNet-32간에 top-5 highest ranked classes의 probability들을 비교하여 설명해놨다. For each training sample, the top 5 classes are ranked according to the posterior probabilities produced by the model (Class 1 being the true class and Class 2 the second most probable class, so on and so forth).  Here we can see that the assignment of mass to probabilities below the Top-1 decays much quicker for Independent than DML learning. This can be quantified by the entropy values averaged over all training samples of the DML trained model and the independently trained model being 1.7099 and 0.2602 respectively. Thus our method has connection to entropy regularisation-based approaches [4, 17] to finding wide minima, but by mutual probability matching on ‘reasonable’ alternatives, rather than a blind high-entropy preference.
+
+#### DML with Ensemble Teacher
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-04-deep_mutual_learning/fig4.jpg" alt="views">
+<figcaption>Figure 4. Market-1501 데이터셋과 5개의 MobileNets를 이용하여 각 peer student가 teacher로서 DML이 적용된 모델과 peer student 앙승블이 teacher로써 DML이 적용된 (DML_e) 실험결과의 비교</figcaption>
+</figure>
+</center>
+
+- In our DML strategy, each student is taught by all other students in the cohort individually, regardless how many students are in the cohort (Eq. (10)). In Sec. 2.3, an alternative DML strategy is discussed, by which each student is asked to match the predictions of the
+ensemble of all other students in the cohort (Eq. (11)). One might reasonably expect this approach to be better. As the ensemble prediction is better than individual predictions, it should provide a cleaner and stronger teaching signal – more like conventional distillation. In practice the results of ensemble rather than peer teaching are worse (see Fig. 4 (a)). By analysing the teaching signal of the ensemble in comparison to peer teaching, the ensemble target is much more sharply peaked on the true label than the peer targets, resulting in larger prediction entropy value for DML than DML_e (see Fig. 4 (b)). Thus while the noise-averaging property of ensembling is effective for making a correct prediction, it is actually detrimental to providing a teaching signal where the secondary class
+probabilities are the salient cue in the signal and having high-entropy posterior leads to more robust solutions to model training.
+
+## Conclusion
+- 논문에선 DNN을 집단(cohort)으로 만들어 peer와 mutual distillation 을 통해 DNN의 성능을 향상시키는 간단하지만 general하게 적용 가능한 방법을 제안하였다. 이 방법을 이용해 static(단독학습, pre-trained) teacher로부터 distilled된 네트워크보다 성능이 더 좋은 compact network를 얻을 수 있었다. Deep mutual learning(DML)을 활용하는 한가지 예로 compact하고 빠른 효율적인 네트워크를 얻을 수 있다. 또한 논문에선 이 방식을 이용해 크고 powerful한 네트워크의 성능도 향상시킬 수 있었으며, 논문에서 제안하는 방식을 따라 학습된 network cohort(네트워크 그룹)은 더 성능 향상을 위한 앙상블 모델로 사용될 수 있다. 
