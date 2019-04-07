@@ -6,7 +6,7 @@ tags: [Deep learning]
 comments: true
 ---
 
-# FitNets- Hints for Thin Deep Nets
+# Learning Efficient Object Detection Models with Knowledge Distillation
 
 Original paper: https://papers.nips.cc/paper/6676-learning-efficient-object-detection-models-with-knowledge-distillation.pdf
 
