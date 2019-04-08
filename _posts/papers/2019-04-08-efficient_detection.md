@@ -36,6 +36,14 @@ Authors: Guobin Chen, Wongun Choi, Xiang Yu, Tony Han, Manmohan Chandraker
 network (RCN) that returns the detection score as well as a spatial adjustment vector for each object proposal. 각 RCN과 RPN 모두 1)의 출력을 사용하며, RCN은 RPN의 출력을 입력으로 사용한다. 정확한 객체검출을 위해 앞의 세 요소에 대해 표현력 strong한 모델을 학습하는것이 중요하다.
 
 ### 3.1 Overall Structure
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-08-efficient_detection/fig1.jpg" alt="views">
+<figcaption>Figure 1</figcaption>
+</figure>
+</center>
+
 ### 3.2 Knowledge Distillation for Classification with Imbalanced Classes
 ### 3.3 Knowledge Distillation for Regression with Teacher Bounds
 ### 3.4 Hint Learning with Feature Adaptation
@@ -47,7 +55,50 @@ network (RCN) that returns the detection score as well as a spatial adjustment v
 - We evaluate our method on several commonly used public detection datasets, namely, KITTI [12], PASCAL VOC 2007 [11], MS COCO [6] and ImageNet DET benchmark (ILSVRC 2014) [35]. Among them, KITTI and PASCAL are relatively small datasets that contain less object categories and labeled images, whereas MS COCO and ILSVRC 2014 are large scale datasets. KITTI와 ILSVRC 2014 데이터셋은 test set의 ground-truth annotation을 제공하지 않으므로 [39]와 [24]의 tranining/validation을 사용했다. For all the datasets, we follow the PASCAL VOC convention to evaluate various models by reporting mean average precision (mAP) at IoU = 0.5 . For MS COCO dataset, besides the PASCAL VOC metric, we also report its own metric, which evaluates mAP averaged for IoU 2 [0.5 : 0.05 : 0.95] (denoted as mAP[.5, .95]).
 
 ### Models
-- Models The teacher and student models defined in our experiments are standard CNN architectures, which consist of regular convolutional layers, fully connected layers, ReLU, dropout layers and softmax layers. We choose several popular CNN architectures as our teacher/student models, namely, AlexNet [27], AlexNet with Tucker Decomposition [26], VGG16 [37] and VGGM [4]. We use two different settings for the student and teacher pairs. In the first set of experiments, we use a smaller network (that is, less parameters) as the student and use a larger one for the teacher (for example, AlexNet as student and VGG16 as teacher). In the second set of experiments, we use smaller input image size for the student model and larger input image size for the teacher, while keeping the network architecture the same.
+- 일반적인 구조인 AlexNet[27], AlexNet with Tucker Decomposition[26], VGG16[37], VGGM[4]를 teacher/student model의 CNN 구조로 사용했다. 각 student와 teacher 쌍에 대해 두개의 다른 settings를 적용했다. 첫 번째 실험 set에서 작은 네트워크(less parameters)를 student로, 큰 모델을 teacher로 사용하였다(예를 들어 AlexNet을 student로, VGG16을 teacher로 사용). 두 번째 실험 set에서는 네트워크의 구조를 유지하면서 작은 크기의 영상을 student model로 넣고, 큰 사진을 teacher model의 input으로 넣었다.
+
+### 4.1 Overall Performance
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-08-efficient_detection/table1.jpg" alt="views">
+<figcaption>Table 1. 4개 데이터셋에 대한 서로다른 teacher model에 대란 student model의 mAP 비교. Teacher의 - 는 baseline 방식으로 학습되어 distillation을 사용하지 않은 경우를 의미한다. 2번째 column은 각각 parameter의 수와 연산시간이다(per image, on GPU, student의 정보로 추정...).</figcaption>
+</figure>
+</center>
+
+- Table 1은 다른 teacher model의 구조와 student model의 구조에 대한 mAP를 실험결과에 따라 비교한 결과이다. Teacher model을 사용하지 않는 실험의 경우 가장 나은 정확도가 나은 결과를 실어놓았다. 파라미터 수가 많은 크고 깊은 모델의 성능이 작고 shallow한 모델에 비해 성능이 좋았지만 속도는 작은 모델이 큰것보다 더 빨랐다.
+- Teacher와 student architecture의 차이에 불구하고 모든 dataset에 대해 distillation과 hint learning이 적용된 모델의 성닝이 더 향상되었다. Student model에 fixed scale(number of parameters)을 사용한 경우 자체적으로 from scratch training이나 fine-tunning은 최선의 선택이 아니다. 더 성능 좋은 teacher로 모델을 학습시킬 경우 student의 성능은 더 향상된다. 즉, 더 deep한 teacher가 전달해주는 정보(knowledge)가 student에겐 더 informative한 정보가 된다. 참고로 VGG16기반의 Tucker model은 alexnet보다 5배가량 모델 크기가 작지만 PASCAL datset에 대해 훨씬 높은 정확도의 향상이 있었다. 이는 CNN 기반 object detector가 매우 over-parameterized 되었음을 의미한다(효율이 낮음). 반대로 데이터셋의 크기가 큰 경우 복잡한모델의 성능을 뛰어넘는 결과를 만들기 더 어려웠다. 이는 큰 크기의 데이터셋을 위해선 용량(capacity)이 큰 모델이 적합함을 의미한다. 일반적으로 효율 측정에 있어서 KITTI dataset에 대해 VGG 16 teacher에서 AlexNet student로 3배 더 빠르다(영어로, Typically, when evaluating efficiency, we get 3 times faster from VGG16 as teacher to AlexNet as student on KITTI dataset. 문장이 엉터리다.). 자세한 정보는 supplementary material에서 확인바란다.
+
+<figure>
+<img src="/assets/post_img/papers/2019-04-08-efficient_detection/table2.jpg" alt="views">
+<figcaption>Table 2. PASCAL VOC의 고해상도 teacher model(688 pixel로 학습)과 저해상도 student model(334 pixel로 학습)의 결과 비교. mAP와 속도(CPU와 GPU)를 각 모델에 대해 측정했다. 저해상도 모델의 속도가 해당하는 고해상도 모델에 비해 2배가량 빨랐다. 하지만 제안하는 distillation 방법을 사용했을 때 정확도의 하락은 거의 없었다.</figcaption>
+</figure>
+</center>
+
+- 또한 [38]과 유사하게 또다른 student-teacher mode에 대해 연구했다. Teacher와 student가 완전히 동일한 구조를 유지하면서 student에겐 down-scaled image를 입력으로, teacher는 고해상도 이미지를 입력으로 줬다. 최근 연구[1]에서 입력 영상의 해상도가 object detection 성능에 큰 영향을 끼친다고 한다. 반면 downsampling된 이미지는 quadratically(2차적으로)하게 conv 연산량을 줄이고 속도를 향상시켰다. Table 2에서 PASCAL VOC dataset의 input size를 반으로 줄이고 student net에 넣었고, teacher에는 original 해상도 영상을 넣었을 때, teacher와 비교하여 student의 정확도는 거의 유지됨과 동시에 2배는 빠르게 동작하였다.
+
+### 4.2 Speed-Accuracy Trade off in Compressed Models
+
+<figure>
+<img src="/assets/post_img/papers/2019-04-08-efficient_detection/table3.jpg" alt="views">
+<figcaption>Table 3. PASCAL에 대한 압축된 AlexNet의 성능. Ground truth를 이용한 fine-tuned 모델과 제안하는 방법이 모두 적용된 모델의 성능을 비교했다. FLOPS의 비율에 따른 실험 결과다.</figcaption>
+</figure>
+</center>
+
+- It is feasible to select CNN models from a wide range of candidates to strike a balance between speed and accuracy. However, off-the-shelf CNN models still may not meet one’s computational requirements. Designing new models is one option. But it often requires significant labor towards design and training(연산량 조절을 위해 새 모델을 설계해야 하지만 노동력이 많이 든다는 뜻). 학습된모델은 특정한 task를 위해서만 학습되었으므로 속도와 정확도의 trade-off를 고려하여 조절하는것은 또 다른 일이 되며 새 모델을 학습시키는것도 일이다. 이로 인해 distillation은 또 다른 attractive option이 될 수 있다
+- Object detection의 knowledge distillation 적용을 위한 speed-accuracy trade off를 이해하기 위해 Tucker decomposition이 적용된 AlexNet의  compression ratio(the ranks of weight matrices)를 변화시켜가며 실험했다. CNN의 FLOPS를 이용하여 compression ratio를 측정했다. Table 3은 압축된 크기가 원본의 20%가 되는 경우처럼 네트워크가 너무 많이 압축될 때 정확도가 57.2에서 30.3으로 급격하게 떨어지는것을 확인 할 수 있었다(table 2와 3 같이 확인필요). 하지만 제안하는 distillation framework가 적용되지 않은 squeezed network의 정확도는 37.5% 압축에 대해 finetune의 54.7%에 불과했다. 반면에 제안하는 방법을 적용한 경우 VGG16과 같은 deep teacher와 함께 정확도를 59.4%까지 향상시켰으며, 이는 압축되지 않은 AlexNet 모델의 57.2%보다 좋은 결과이다.
+
+### 4.3 Ablation Study
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-08-efficient_detection/table4.jpg" alt="views">
+<figcaption>Table 4. 제안하는 방법의 component 비교로, regression을 위한 bounded L2(L2-B, sec3.3)와 L2로 정의되는 전통적인 방법을 이용하는 classification을 위한 weighted cross entropy(CLS-W, sec3.2), 그리고 cross entropy(CLS)의 비교다. Adapataion layer(Hints-A and Hints)가 없는 hint larening도 비교된다. 모든 비교실험은 VGG16을 teacher, Tucher를 student로 하여 PASCAL와 KITTI dataset에 대해 진행되엇다.</figcaption>
+</figure>
+</center>
+
+- Table 4에서 보여지듯, 제안하는 novel loss의 효과를 확인하기 위해 서로다른 distillation과 hint learning에 대한 비교실험을 수행했다. VGG16을 teacher로, Tucker를 student model로 모든 실험에서 통일했다. 다른 선택지들은 유사한 trend를 반영했다. Faster-RCNN에서 proposal classification과 bounding box regression은 두 main task이다. 일반적으로 classification은 cross entropy loss로 구성되며 Table 4에서 CLS로 정의되며 bounding box regression은 L2 loss로 regularized되며 L2로 Table 4에 나타난다.
+- 읽어야함..
 
 
 ## Conclusion
