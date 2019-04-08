@@ -25,13 +25,23 @@ Authors: Guobin Chen, Wongun Choi, Xiang Yu, Tony Han, Manmohan Chandraker
   - Public benchmark를 이용하여 제안하는 모델을 평가한다. 모든 benchmark에 대해 성능이 모두 향상되었다. 각 제안하는 방법에 대해 모두 성능이 향상되었다(section 4.1 - 4.3).
   - 논문에서 제안하는 framework에 대해 generalization과 under-fitting problem에 관련된 insight를 제안한다.
 
-### 2. Related Works
+## 2. Related Works
 - __CNNs for Detection.__ Deformable Part Model (DPM) [14] was the dominant detection framework before the widespread use of Convolutional Neural Networks (CNNs). Following the success of CNNs in image classification [27], Girshick et al. proposed RCNN [24] that uses CNN features to replace handcrafted ones. Subsequently, many CNN based object detection methods have been proposed, such as Spatial Pyramid Pooling (SPP) [19], Fast R-CNN [13], Faster-RCNN [32] and R-FCN [29], that unify various steps in object detection into an end-to-end multi-category framework.
 - __Model Compression.__ CNNs are expensive in terms of computation and memory. Very deep networks with many convolutional layers are preferred for accuracy, while shallower networks are also widely used where efficiency is important. Model compression in deep networks is a viable approach to speed up runtime while preserving accuracy. Denil et al. [9]은 인공신경망이 때때로 과하게 parameterized 되므로 중복되는 parameter들에 대해 제거가 가능한 것을 증명한다. Subsequently, various methods [5, 7, 10, 15, 17, 30] have been proposed to accelerate the fully connected layer. Several methods based on low-rank decomposition of the convolutional kernel tensor [10, 23, 28] are also proposed to speed up convolutional layers. To compress the whole network, Zhang et al. [41, 42] present an algorithm using asymmetric decomposition and additional fine-tuning. 유사하게 Kim et al.[26]은 one-shot whole network compression을 제안하였으며, 정확도의 큰 하락 없이 1.8배의 속도가 향상되었다. 실험에서는 [26]에서 제안한 방법을 사용했다(_Compression of Deep Convolutional Neural Networks for Fast and Low Power Mobile Applications_). Besides, a pruning based approach has been proposed [18] but it is challenging to achieve runtime speed-up with a conventional GPU implementation. Additionally, both weights and input activations can be the quantized( [18]) and binarized ( [21, 31]) to lower the computationally expensive.
 - __Knowledge Distillation.__ Knowledge distillation is another approach to retain accuracy with model compression. Bucila et al. [3] propose an algorithm to train a single neural network by mimicking the output of an ensemble of models. Ba and Caruana [2] adopt the idea of [3] to compress deep networks into shallower but wider ones, where the compressed model mimics the ‘logits’. Hinton et al. [20] propose knowledge distillation as a more general case of [3], which applies the prediction of the teacher model as a ‘soft label’, further proposing temperature cross entropy loss instead of L2 loss. Romero et al. [34] introduce a two-stage strategy to train deep networks. In their method, the teacher’s middle layer provides ‘hint’ to guide the training of the student model.
 - Other researchers [16, 38] explore distillation for transferring knowledge between different domains, such as high-quality and low-quality images, or RGB and depth images. 본 논문의 연구방향과 비슷하게 Shen et al.[36]에선 distillation과 hint framework에 대한 compact object detection model의 학습의 영향에 대하여 연구를 했다. 하지만 앞의 방법은 pedestrian(보행자) object detection task에 대하여만 진행된 연구이므로, 이는 multi-category object detection에는 general하게 적용하지 못한다. [36]과는 다르게 제안하는 방법은 multi-category object detection에 적용 가능하다. 게다가 [36]은 외부 region proposal 방법을 사용하지만 논문의 방법은 distillation과 hint learning이 최근의 end-to-end object detection framework의 region proposal과 classification 모두에 적용 가능함을 보인다.
 
+## 3. Method
+- 본 논문에선 Faster-RCNN[32]를 meth-architecture로 사용했다. Faster-RCNN is composed of three modules: 1) A shared feature extraction through convolutional layers, 2) a region proposal network (RPN) that generates object proposals, and 3) a classification and regression
+network (RCN) that returns the detection score as well as a spatial adjustment vector for each object proposal. 각 RCN과 RPN 모두 1)의 출력을 사용하며, RCN은 RPN의 출력을 입력으로 사용한다. 정확한 객체검출을 위해 앞의 세 요소에 대해 표현력 strong한 모델을 학습하는것이 중요하다.
 
+### 3.1 Overall Structure
+### 3.2 Knowledge Distillation for Classification with Imbalanced Classes
+### 3.3 Knowledge Distillation for Regression with Teacher Bounds
+### 3.4 Hint Learning with Feature Adaptation
+
+## 4. Experiment
+- In this section, we first introduce teacher and student CNN models and datasets that are used in the experiments. 다양한 데이터셋에 대한 전체 결과는 section 4.1에서 보여진다. Section 4.2에선 제안하는 방법을 더 작은 네트워크와 lower quality input을 이용한 실험결과를 보여준다.
 
 
 
