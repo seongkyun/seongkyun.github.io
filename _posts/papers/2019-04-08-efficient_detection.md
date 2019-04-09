@@ -75,7 +75,7 @@ network (RCN) that returns the detection score as well as a spatial adjustment v
 </figure>
 </center>
 
-- 또한 [38]과 유사하게 또다른 student-teacher mode에 대해 연구했다. Teacher와 student가 완전히 동일한 구조를 유지하면서 student에겐 down-scaled image를 입력으로, teacher는 고해상도 이미지를 입력으로 줬다. 최근 연구[1]에서 입력 영상의 해상도가 object detection 성능에 큰 영향을 끼친다고 한다. 반면 downsampling된 이미지는 quadratically(2차적으로)하게 conv 연산량을 줄이고 속도를 향상시켰다. Table 2에서 PASCAL VOC dataset의 input size를 반으로 줄이고 student net에 넣었고, teacher에는 original 해상도 영상을 넣었을 때, teacher와 비교하여 student의 정확도는 거의 유지됨과 동시에 2배는 빠르게 동작하였다.
+- 또한 [38]과 유사하게 또다른 student-teacher mode에 대해 연구했다. Teacher와 student가 완전히 동일한 구조를 유지하면서 student에겐 down-scaled image를 입력으로, teacher는 고해상도 이미지를 입력으로 줬다. 최근 연구[1]에서 입력 영상의 해상도가 object detection 성능에 큰 영향을 끼친다고 한다. 반면 downsampling된 이미지는 quadratically(2차적으로)하게 conv 연산량을 줄이고 속도를 향상시켰다. Table 2에서 PASCAL VOC dataset의 input size를 반으로 줄이고 student net에 넣었고, teacher에는 original 해상도 영상을 넣었을 때, teacher와 비교하여 student의 정확도는 거의 유지됨과 동시에 2배는 빠르게 동작하였다.(이상적으로 convolutional layer의 연산은 4배 빠르나 loading overhead와 다른 layer에서의 관련없는 연산들때문에 2배의 속도 향상에 그치게 됨)
 
 ### 4.2 Speed-Accuracy Trade off in Compressed Models
 
@@ -98,8 +98,25 @@ network (RCN) that returns the detection score as well as a spatial adjustment v
 </center>
 
 - Table 4에서 보여지듯, 제안하는 novel loss의 효과를 확인하기 위해 서로다른 distillation과 hint learning에 대한 비교실험을 수행했다. VGG16을 teacher로, Tucker를 student model로 모든 실험에서 통일했다. 다른 선택지들은 유사한 trend를 반영했다. Faster-RCNN에서 proposal classification과 bounding box regression은 두 main task이다. 일반적으로 classification은 cross entropy loss로 구성되며 Table 4에서 CLS로 정의되며 bounding box regression은 L2 loss로 regularized되며 L2로 Table 4에 나타난다.
-- 읽어야함..
+- Objective function에 의해 적은 확률값을 갖는 클래스가 무시되어지는것을 막기 위해 high temperature를 갖는 soft label, 즉 weighted cross entropy loss가 section 3.2에서 proposal classification task를 위해 제안되었다. Table 4에선 section 3.2의 (3)에서 제안된 weighted cross entropy loss(CLS-W)를 standard cross entropy loss(CLS)와 비교하며 PASCAL과 KITTI dataset 모두에서 약간의 성능 향상을 확인할 수 있다.
+- Bounding box regression에 대해서, 단순하게 student가 teacher의 출력을 따라하도록 하는것은 labeling noise에 의해 악영향을 미치게 된다. 이를 개선하기 위해 section 3.3의 (4)를 제안하였으며 이는 teacher의 예측이 student를 guide하도록 boundary로써작용한다. 이러한 방법으로 인해 Table 4의 L2-B에서 L2의 방법에 비해 1.3%이상의 정확도 향상이 있었다. 참고로 1%의 object detection 정확도 향상은 매우 큰것이며, 특히 많은 영상을 포함하는 large-scale dataset에서는 더 그렇다.
 
+### 4.4 Discussion
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-08-efficient_detection/table5.jpg" alt="views">
+<figcaption>Table 5. Tucker와 VGG16쌍의 다른 데이터셋들에 대한 distillation과 hint learning의 성능</figcaption>
+</figure>
+</center>
+
+- 이 단원에선 distillation과 hint learning에 대한 insight에 대해 다룬다. Table 5는 PASCAL과 COCO dataset의 trainval과 testing set에 대하여 VGG16의 정보로부터 학습된 Tucker model의 정확도를 비교한다. 일반적으로 distillation은 student의 generalization capability를 향상시키며 hint learning은 training과 testing 정확도 모두 향상하도록 도와준다.
+
+#### Distillation improves generalization
+- [20]에서 다뤄진 image classification과 비슷하게 object detection task의 label간의 구조적인 relationship도 존재한다. 예를 들어서 'Car'는 'Person'보다 'Truck' 클래스와 비슷한 시각적 특징을 공유한다. 이러한 구조적 정보는 ground truth annotation에 포함되어있지 않다. 따라서 high capacity를 갖는 teacher로부터 학습된 relational information을 student로 주입하는것은 detection model의 일반화 능력을 향상시키는데 도움이 될 것이다. Table 5에서는 distillation을 적용한 결과 모두 testing accuracy 성능이 향상 된 것을 확인할 수 있다.
+
+#### Hint helps both learning and generalization
+- 
 
 ## Conclusion
 - 논문에선 knowledge distillation을 이용한 compact하고 빠른 CNN based object detector의 학습 framework를 제안했다. 매우 복잡한 teacher detector를 guide로 하여 효율적인 student model을 학습시켰다. Knowledge distillation, hint framework와 제안하는 loss function을 이용하였을 때 다양한 실험 setup에 대하여 모두 성능이 향상되었다. 특히 제안하는 framework로 학습된 compact model은 PASCAL VOC 데이터셋에 대한 teacher model의 정확도와 매우 비슷한 수준으로 훨씬 빠르게 동작하였다. 논문의 실험을 통해 object detector의 학습에 under-fitting 문제가 있음을 확인했으며, 이는 해당 연구분야에서 더 연구 가능한 insight를 준다.
