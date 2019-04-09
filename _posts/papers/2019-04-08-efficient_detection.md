@@ -116,7 +116,9 @@ network (RCN) that returns the detection score as well as a spatial adjustment v
 - [20]에서 다뤄진 image classification과 비슷하게 object detection task의 label간의 구조적인 relationship도 존재한다. 예를 들어서 'Car'는 'Person'보다 'Truck' 클래스와 비슷한 시각적 특징을 공유한다. 이러한 구조적 정보는 ground truth annotation에 포함되어있지 않다. 따라서 high capacity를 갖는 teacher로부터 학습된 relational information을 student로 주입하는것은 detection model의 일반화 능력을 향상시키는데 도움이 될 것이다. Table 5에서는 distillation을 적용한 결과 모두 testing accuracy 성능이 향상 된 것을 확인할 수 있다.
 
 #### Hint helps both learning and generalization
-- 
+- CNN based object detection task에서 under-fitting은 흔한 문제점이다. 간단한 분류와는 다르게 정확도가 많이 낮다. 이는 학습 알고리즘이 saddle point(minima)를 찾는데에 문제가 있는것으로 판단된다[8]. 반대로 hint는 intermediate layer에서의 guidance를 직접적으로 사용하여 이러한 문제를 피할 수 있다. 따라서 hint learning을 사용하여 학습된 모델은 training과 testing에서 모두 정확도가 향상된다.
+
+- 마지막으로 distillation과 hint learning을 조합하는 경우 training과 test 정확도 모두 기존의 방법에 비해 크게 향상되었다. Table 5는 실험적으로 PASCAL과 MS-COCO에 대해 제안하는 방법이 효과가 있음을 보여준다. 제안하는 방법이 또한 face similar generalization이나 under-fitting problem에도 적용 가능 할 것이라 생각된다.
 
 ## Conclusion
 - 논문에선 knowledge distillation을 이용한 compact하고 빠른 CNN based object detector의 학습 framework를 제안했다. 매우 복잡한 teacher detector를 guide로 하여 효율적인 student model을 학습시켰다. Knowledge distillation, hint framework와 제안하는 loss function을 이용하였을 때 다양한 실험 setup에 대하여 모두 성능이 향상되었다. 특히 제안하는 framework로 학습된 compact model은 PASCAL VOC 데이터셋에 대한 teacher model의 정확도와 매우 비슷한 수준으로 훨씬 빠르게 동작하였다. 논문의 실험을 통해 object detector의 학습에 under-fitting 문제가 있음을 확인했으며, 이는 해당 연구분야에서 더 연구 가능한 insight를 준다.
