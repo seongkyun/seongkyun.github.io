@@ -48,14 +48,40 @@ network (RCN) that returns the detection score as well as a spatial adjustment v
 
 $$L_{RCN}=\frac{1}{N}\sum_{i}L_{cls}^{RCN}+\lambda\frac{1}{N}\sum_{i}L_{reg}^{RCN}$$
 $$L_{RPN}=\frac{1}{M}\sum_{i}L_{cls}^{RPN}+\lambda\frac{1}{M}\sum_{i}L_{reg}^{RPN}$$
-$$L=L_{RPN}+L_{RCN}+\gamma L_{Hint}$$       (1)
+$$L=L_{RPN}+L_{RCN}+\gamma L_{Hint}\;\;\;\;$$ (1)
 
 - N은 RCN, M은 RPN의 batch size이다. $L_{cls}$ 는 ground truth를 이용한 hard softmax loss와 (2)의 soft knowledge distillation loss[20]의 조합으로 구성되어있다.$L_{reg}$ 는 smoothed L1 loss[13] 과 논문에서 제안하는 (2)의 teacher bounded L2 regression loss로 구성된 bounding box regression loss이다. 마지막으로 $L_{hint}$ 는 teacher의 feature response를 student가 닮도록 하는 hint based loss function이며 (6)에 설명되어있다.
 
 ### 3.2 Knowledge Distillation for Classification with Imbalanced Classes
-- 
+- 분류기 모델의 학습을 위해 knowledge distillation이 제안되어 사용되었다. 만약 $\{x_{i}, y_{i}\},\; i=1, 2, ..., n$ (where $x_{i}\in \mathfrak{J}$, $\mathfrak{J}$ 는 input image, $y_{i}\in \mathfrak{Y}$, $\mathfrak{Y}$는 해당하는 class label) 이라는 datasset이 있다고 해보자. $t$는 teacher model이며 $P_{t}=softmax(\frac{Z_{t}}{T})$는 teacher의 prediction, $Z_{t}$는 final score ouput이라고 하자. $T$는 temperature parameter(일반적으로 1로 설정)이다. 유사하게 $P_{s}=softmax(\frac{Z_{s}}{T})$는 student 네트워크 $s$의 prediction이다. Student network $s$는 아래의 loss function을 optimize하도록 학습된다.
+
+$$L_{cls}=\mu L_{hard}(P_{s}, y)+(1-y)L_{soft}(P_{s},P_{t})\;\;\;\;$$ (2)
+- $L_{hard}$는 Faster-RCNN의 ground truth label을 사용하는 hard loss이며 $L_{soft}$는 teacher의 prediction을 사용하는 soft loss, $\mu$는 hard와 soft loss의 balancing을 위한 파라미터이다. 보통은 deep 네트워크가 성능이 좋다. Soft label은 teacher에 의해 찾아진 다양한 클래스간의 관계에 대한 정보가 포함되어있다. Soft label을 이용한 학습에서 student network는 이러한 hidden정보들을 전달받게된다.
+- [20]에서 각 hard와 soft loss들은 cross entropy loss이다. 하지만 간단한 classification 문제와는 다르게 detection task는 심각한 서로다른 카테고리간의 imbalance를 고려해야하며, 이는 background로 분류되어야 하는 카테고리가 너무 많음을 의미하게된다. 분류기 모델의경우 발생가능한 오류는 foreground(detection 안의 bounding box쳐진 안 내용의) 오분류 뿐이다. 하지만 detection task는 background와 의미있는 foreground의 오분류는 매우 주요하며 foreground의 오분류는 매우 드물다. 이를 조절하기 위해 class-weighted cross entropy를 distillation loss로써 적용하였다. 식은 아래와 같다.
+
+$$L_{soft}(P_{s}, P_{t})=-\sum w_{c}P_{t}log P_{s}\;\;\;\;$$ (3)
+
+- weight parameter인 $w_c$에 대해 논문에선 background class에 대해 큰 weight를 사용하였으며 다른 class들은 비교적 작은 weight를 사용했다. 예를 들어 PASCAL dataset에 대해 background class에 대해 $w_{0}=1.5$를, 다른 foreground class들에는 $w_{i}=1$을 사용했다.
+- $P_{t}$가 hard label과 매우 유사할 때 (하나의 class만 1에 매우 가깝고 나머지들은 0에 매우 가까운 경우) temperature parameter $T$는 softmax output을 soften하게 만들게 하기 위해 사용된다. 큰 temperature parameter를 사용할 경우 네트워크는 더 soft한 결과를 최종단에서 출력하게 되며 이를통해 거의 0에 가까운 softmax를 거친 결과가 cost function에서 무시되지 않도록 해준다. 이는 MNIST classification같이 매우 간단한 task에 적절하다. 하지만 prediction error가 이미 높은 어려운 문제같은 경우 큰 temperature parameter의 사용은 학습에 좋지않은 noise가 더 많이 생기게 한다. 따라서 작은 $T$가 [20]에선 큰 데이터셋에 대한 실험에 사용되었다. object detection과 같이 더 어려운 문제의 경우 distillation loss의 temperature parameter를 사용하지 않는것이($T=1$) 실제 가장 잘 작동한다는것을 알 수 있었다.(보충자료 참조)
+
 ### 3.3 Knowledge Distillation for Regression with Teacher Bounds
+- Classification layer에서 대부분의 CNN detector들[26, 29, 32, 33]은 input proposal의 size와 location을 조절하기 위해 사용한다. 때때로 좋은 regression 모델을 학습하는것이 object detector의 정확도를 보장하는데에 중요하다. Discrete category들의 distillation과 다르게 teacher의 regression output은 unbounded real valued regression output으로 인해 student model에게 매우 잘못된 guidance를 제공할 수 있다. 게다가 teacher는 ground truth와 모순되는 방향으로 regression direction 정보를 줄 수도 있다. 따라서 target(student)에서 teacher의 regression output을 그대로 사용하기보다는 student가 잘 학습하도록 upper bound로써 사용하도록 설정하였다. Student의 regression vector는 일반적으로 GT label과 가능하면 최대한 가깝도록 되어야하지만 특정 margin을 갖는 teacher의 추론보다 정확하게 된다면 student는 추가적인 loss없이 자신의 추론결과로만 학습하게 된다.(student의 추론이 teacher보다 정확하면 teacher에 의한 loss값 반영 없이 자체결과로만 학습) 논문에선 이를 _teacher bounded regression loss_ 라 하며 $L_{b}$로 정의하고 아래와 같이 정의한다. $L_{b}$ 는 regression loss $L_{reg}$에서 사용된다.
+
+$$L_{b}(R_{s}, R_{t}, y)=\begin{cases} \parallel R_{s}-y \parallel_{2}^{2}, & \mbox{if }\parallel R_{s}-y\parallel_{2}^{2}+m>\parallel R_{t}-y\parallel_{2}^{2} \\0, & \mbox{otherwise}\end{cases}$$
+$$L_{reg}=L_{sL1}(R_{s},y_{reg})+\mathcal{V}L_{b}(R_{s}, R_{t}, y_{reg}) \;\;\;\;$$(4)
+
+- 수식에서 $m$은 margin, $y_{reg}$는 regression ground truth label, $R_{s}$는 student network의 regression output, $R_{t}$는 teacher network의 prediction, $\mathcal{V}$는 weight parameter(실험에선 0.5로 설정)다. $L_{sL1}$은 [13]의 smooth L1 loss이다. Teacher bounded regression loss $L_{b}$는 student의 error가 teacher의것보다 클 때 network를 penalize한다(loss가 증가함을 의미). $L_{b}$에서 L2 loss를 사용하지만 L1이나 smoothed L1과 같은 다른 regression loss도 $L_{b}$와 결합 가능하다. 이렇게 조합된 loss는 student가 teacher와 가깝거나 혹은 더 나은 regression을 만들도록 하며 만약 teacher의 성능에 도달할경우 student를 너무 많이 push하지 않게한다.
+
 ### 3.4 Hint Learning with Feature Adaptation
+- Distillation의 경우 final output만을 이용해 정보를 전달한다. [34]에서는 teacher의 중간 representation을 사용하는것이 학습과정에서 _hint_ 로서 작용해 student의 성능이 더 좋아진다고 한다. 그들은 feature vector V와 Z에 대해 L2 distance를 사용했다.
+
+$$L_{Hint}(V, Z)=\parallel V-Z\parallel_{2}^{2}\;\;\;\;$$ (5)
+
+- 수식에서 Z는 hint로 사용할 teacher의 중간 레이어에서의 feature, V는 student에서 guided될 레이어의 출력 feature를 의미한다. 또한 L1 loss를 사용하여 평가한다.
+
+$$L_{Hint}(V, Z)=\parallel V-Z\parallel_{1}\;\;\;\;$$ (6)
+
+- Hint learning을 적용할 때 사용될 student와 teacher의 뉴런 수, 즉 channels, width, height가 동일해야 한다. Hint와 guided layer의 채널 수를 맞추기 위해 출력 크기가 hint layer와 동일한 adaptation layer를 guided layer 뒤에 추가하였다. Adaptation layer는 student가 만들어낸 feature가 teacher와 동일하도록 하는 뉴런 수를 갖는 레이어다. 두 hint와 guided layer라 fully connected layer일 경우 adaptation layer도 fully connected layer가 된다. Hint와 guided layer가 convolutional layer일 경우 1x1 convolution을 사용하여 메모리 소모를 줄였다. 흥미롭게도 hint와 guided layer의 채널 수가 같더라도 adaptation layer를 적용하는것이 효율적인 knowledge transferring에 중요한것을 확인했다(section 4.3). 또한 adaptation layer는 hint와 guided layer의 feature 형식이 다른 경우에도 적용하여 matching 시킬 수 있다. Hint나 guided layer가 convolutional이고 hint와 guided layer의 해상도(크기)가 다른 경우 (VGG16과 AlexNet 비교같이) [16]의 padding trick을 이용하여 출력의 수를 맞추었다.
 
 ## 4. Experiment
 - In this section, we first introduce teacher and student CNN models and datasets that are used in the experiments. 다양한 데이터셋에 대한 전체 결과는 section 4.1에서 보여진다. Section 4.2에선 제안하는 방법을 더 작은 네트워크와 lower quality input을 이용한 실험결과를 보여준다. Section 4.3에서는 classification/regression, distillation 및 hint learning의 세 가지 component에 대한 albation study를 설명한다. Distillation, hint learning에 대해서 얻어진 insight는 section 4.4에서 다뤄진다. Details에 대해선 supplementary materials에서 설명된다.
