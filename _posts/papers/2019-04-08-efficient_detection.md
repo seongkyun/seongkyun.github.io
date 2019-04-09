@@ -44,7 +44,16 @@ network (RCN) that returns the detection score as well as a spatial adjustment v
 </figure>
 </center>
 
+- 논문에서 제안하는 세 가지 component를 이용해 high capacity를 갖는 teacher의 정보를 이용해 효율적인 student 객체검출기를 학습시켰다. Figure 1에선 전체적인 framework를 확인할 수 있다. 우선 hint based learning[34] (section 3.4)에선 teacher net의 feature를 닮도록 student net의 feature가 만들어지게한다. 다음으로 knowledge distillation framework [3, 20]을 이용해 RPN과 RCN classification module을 학습시킨다. Object detection의 severe category imbalance문제 해결을 위해 distillation framework에 weighted cross entropy loss를 적용했다. 마지막으로 teacher의 regression output을 student가 upper bound로 사용하게끔 transfer 했으며 만약 student의 regression output이 teacher의 것보다 더 낫다면 추가적인 loss는 적용되지 않는다. 전체적인 학습에서의 objective는 아래와 같다.
+
+$$L_{RCN}=\frac{1}{N}\sum_{i}L_{cls}^{RCN}+\lambda\frac{1}{N}\sum_{i}L_{reg}^{RCN}$$
+$$L_{RPN}=\frac{1}{M}\sum_{i}L_{cls}^{RPN}+\lambda\frac{1}{M}\sum_{i}L_{reg}^{RPN}$$
+$$L=L_{RPN}+L_{RCN}+\gamma L_{Hint}$$       (1)
+
+- N은 RCN, M은 RPN의 batch size이다. $L_{cls}$ 는 ground truth를 이용한 hard softmax loss와 (2)의 soft knowledge distillation loss[20]의 조합으로 구성되어있다.$L_{reg}$ 는 smoothed L1 loss[13] 과 논문에서 제안하는 (2)의 teacher bounded L2 regression loss로 구성된 bounding box regression loss이다. 마지막으로 $L_{hint}$ 는 teacher의 feature response를 student가 닮도록 하는 hint based loss function이며 (6)에 설명되어있다.
+
 ### 3.2 Knowledge Distillation for Classification with Imbalanced Classes
+- 
 ### 3.3 Knowledge Distillation for Regression with Teacher Bounds
 ### 3.4 Hint Learning with Feature Adaptation
 
