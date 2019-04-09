@@ -104,6 +104,7 @@ $$L_{Hint}(V, Z)=\parallel V-Z\parallel_{1}\;\;\;\;$$ (6)
 - Table 1은 다른 teacher model의 구조와 student model의 구조에 대한 mAP를 실험결과에 따라 비교한 결과이다. Teacher model을 사용하지 않는 실험의 경우 가장 나은 정확도가 나은 결과를 실어놓았다. 파라미터 수가 많은 크고 깊은 모델의 성능이 작고 shallow한 모델에 비해 성능이 좋았지만 속도는 작은 모델이 큰것보다 더 빨랐다.
 - Teacher와 student architecture의 차이에 불구하고 모든 dataset에 대해 distillation과 hint learning이 적용된 모델의 성닝이 더 향상되었다. Student model에 fixed scale(number of parameters)을 사용한 경우 자체적으로 from scratch training이나 fine-tunning은 최선의 선택이 아니다. 더 성능 좋은 teacher로 모델을 학습시킬 경우 student의 성능은 더 향상된다. 즉, 더 deep한 teacher가 전달해주는 정보(knowledge)가 student에겐 더 informative한 정보가 된다. 참고로 VGG16기반의 Tucker model은 alexnet보다 5배가량 모델 크기가 작지만 PASCAL datset에 대해 훨씬 높은 정확도의 향상이 있었다. 이는 CNN 기반 object detector가 매우 over-parameterized 되었음을 의미한다(효율이 낮음). 반대로 데이터셋의 크기가 큰 경우 복잡한모델의 성능을 뛰어넘는 결과를 만들기 더 어려웠다. 이는 큰 크기의 데이터셋을 위해선 용량(capacity)이 큰 모델이 적합함을 의미한다. 일반적으로 효율 측정에 있어서 KITTI dataset에 대해 VGG 16 teacher에서 AlexNet student로 3배 더 빠르다(영어로, Typically, when evaluating efficiency, we get 3 times faster from VGG16 as teacher to AlexNet as student on KITTI dataset. 문장이 엉터리다.). 자세한 정보는 supplementary material에서 확인바란다.
 
+<center>
 <figure>
 <img src="/assets/post_img/papers/2019-04-08-efficient_detection/table2.jpg" alt="views">
 <figcaption>Table 2. PASCAL VOC의 고해상도 teacher model(688 pixel로 학습)과 저해상도 student model(334 pixel로 학습)의 결과 비교. mAP와 속도(CPU와 GPU)를 각 모델에 대해 측정했다. 저해상도 모델의 속도가 해당하는 고해상도 모델에 비해 2배가량 빨랐다. 하지만 제안하는 distillation 방법을 사용했을 때 정확도의 하락은 거의 없었다.</figcaption>
@@ -114,6 +115,7 @@ $$L_{Hint}(V, Z)=\parallel V-Z\parallel_{1}\;\;\;\;$$ (6)
 
 ### 4.2 Speed-Accuracy Trade off in Compressed Models
 
+<center>
 <figure>
 <img src="/assets/post_img/papers/2019-04-08-efficient_detection/table3.jpg" alt="views">
 <figcaption>Table 3. PASCAL에 대한 압축된 AlexNet의 성능. Ground truth를 이용한 fine-tuned 모델과 제안하는 방법이 모두 적용된 모델의 성능을 비교했다. FLOPS의 비율에 따른 실험 결과다.</figcaption>
@@ -157,10 +159,3 @@ $$L_{Hint}(V, Z)=\parallel V-Z\parallel_{1}\;\;\;\;$$ (6)
 
 ## Conclusion
 - 논문에선 knowledge distillation을 이용한 compact하고 빠른 CNN based object detector의 학습 framework를 제안했다. 매우 복잡한 teacher detector를 guide로 하여 효율적인 student model을 학습시켰다. Knowledge distillation, hint framework와 제안하는 loss function을 이용하였을 때 다양한 실험 setup에 대하여 모두 성능이 향상되었다. 특히 제안하는 framework로 학습된 compact model은 PASCAL VOC 데이터셋에 대한 teacher model의 정확도와 매우 비슷한 수준으로 훨씬 빠르게 동작하였다. 논문의 실험을 통해 object detector의 학습에 under-fitting 문제가 있음을 확인했으며, 이는 해당 연구분야에서 더 연구 가능한 insight를 준다.
-
-<center>
-<figure>
-<img src="/assets/post_img/papers/2019-04-08-efficient_detection/fig1.jpg" alt="views">
-<figcaption>Figure</figcaption>
-</figure>
-</center>
