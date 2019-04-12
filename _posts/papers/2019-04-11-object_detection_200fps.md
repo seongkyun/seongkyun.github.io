@@ -100,6 +100,31 @@ $$L_{final}=f_{bb}^{Comb}(b_{i}^{gt}, \hat{b_{i}}, b_{i}^{T}, \hat{o_{i}^{T}})+f
 </center>
 
 ## 4. Effectiveness of data
+- 마지막으로 학습 데이터가 많다면 얼마나 성능이 좋아지는지에 대해 연구했다.
+
+### Labeled data
+- [37, 22]에선 더 많은 레이블링된 데이터를 통해 모델의 성능이 향상된다는것을 보였다. 하지만 초기연구는 모델의 용량을 제한하지않고 실험을 수행햇다. 본 연구에선 간단한 모델로 모델의 용량을 제한하고 평가해서 학습데이터가 많아질 경우 정확도가 좋아지는지를 확인했다.
+
+### Unlabeled data
+- 레이블링된 데이터에는 한계가 있으므로 unlabeled 데이터와 distillation loss를 조합하여 네트워크를 학습시켰다. 제안하는 방법의 main idea는 사용가능한 soft label와 ground truth label을 이용하여 모델을 학습시키는것이다. 하지만 ground truth 레이블이 사용 불가한 경우 teacher에서의 soft label만 사용되어진다. 실제 논문에선 ground truth가 없을 경우 loss의 teacher part만 propagation하고 그렇지 않다면 식 (2)~(4)에 설명된 loss combination을 propagation한다. Objective function은 soft label과 ground truth로 균등히 조합되어 있기때문에 network를 학습시킴에 있어서 labeled data와 unlabeled data를 모두 사용 가능하게 된다. 
+
+## 5. Experiments on Object detection
+- 실험은 PASCAL VOC 2007 dataset[6]을 이용하였으며 20개 클래스에 16K training image가 존재한다.
+
+### 5.1 Implementation Details
+- 평가에 darknet framework[24]를 사용했다. ImageNet[30]에 대해 학습된 Tiny-Darknet classifier가 parameter initialization으로 되었다. Pre-trained network의 마지막 두 레이어를 제거한 후 추가 conv layer들을 마지막에 달았다. Detection에 있어서 네트워크는 SGD로 최적화되고 initial learning rate는 $10^{-3}$으로 120 epoch까지, $10^{-4}$로 다음 20epoch, 마지막으로 $10^{-5}$로 20epoch를 학습시켰다. Momentum 0.9와 0.0005 weight decay를 적용했다. Batch size는 모두 32로 동일하다. 입력 이미지의 크기는 416x416이다. Network distillation 실험에선 $\lambda_{D=1$이고 이는 동일한 weight로 distillation과 detection loss가 적용되어진것을 의미한다. 하지만 loss에서 distillation part가 objectness로 곱해지므로 final distillation part weight는 항상 detection loss보다 적게 된다. 
+
+### 5.2 Architecture
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/table 1.jpg" alt="views">
+<figcaption>Table 1. 여러 layer를 병합한 수 detector의 정확도</figcaption>
+</figure>
+</center>
+
+- 본 섹션에선 서로다른 모델 구조 configuration에 대한 실험결과를 다룬다. 우선 base architecture에서 feature map merging으로 인한 효과를 측정했다. 다양한 레이어 merging 조합은 table 1에서 보여진다. 더 많은 레이어에서 feature map들이 같이 병합될 경우 정확도는 점점 더 좋아졌다. 또다른 중요한점으로, 네트워크 초기 레이어의 feature map을 합치는것보다 뒤쪽 레이어의 feature map을 병합하는것이 더 성능향상에 도움이 된다. Table 1의 레이어 출력 combination 결과에서 중간에 살짝 정확도가 떨어지는 경우가 있는데 이는 초기 레이어가 기초적인 정보만을 담을 수 있기 때문이다. Table 1에서 conv 11 column은 네트워크의 구조를 깊게 하기 위해 마지막에 추가된 1x1 conv layer다. 이러한 레이어로 인해 0.5mAP의 상승이 있었고 이러한 1x1 conv layer로 인해 연산량 측면에서 효율적으로 네트워크의 깊이를 증가시킬 수 있었다.
+- 
 
 ## Conclusion
 - 논문에선 효율적이고 빠른 object detector를 제안했다. 객체검출모델의 speed performance의 trade-off를 조절하기위해 네트워크의 구조, loss function, training data의 역할에 대해 연구했다. 네트워크의 설계에는 이전에 수행되었던 연구들을 이용하여 계산복잡도를 적게 유지하기 위해 몇 가지의 간단한 idea들을 확인하고, 이 아이디어들의 방법을 활용하여 light-weight network를 개발했다. 네트워크 학습 과정에서 FM-NMS와 objectness scaled loss와 같이 carefully하게 설계된 components와 더불어 disitillation이 powerful한 idea임을 보였고, 이를 통해 light-weight single stage object detector의 성능이 향상되었다. 마지막으로 distillation loss를 기반으로 unlabeled data의 traning에 대한 연구를 수행했다. 논문의 실험에선 제안하는 design principle이 적용된 모델이 SOTA object detector들보다 훨씬 빠르게 동작하며 동시에 resonable한 성능을 얻을 수 있다는것을 보였다. 
