@@ -118,13 +118,57 @@ $$L_{final}=f_{bb}^{Comb}(b_{i}^{gt}, \hat{b_{i}}, b_{i}^{T}, \hat{o_{i}^{T}})+f
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/table 1.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/table1.jpg" alt="views">
 <figcaption>Table 1. 여러 layer를 병합한 수 detector의 정확도</figcaption>
 </figure>
 </center>
 
 - 본 섹션에선 서로다른 모델 구조 configuration에 대한 실험결과를 다룬다. 우선 base architecture에서 feature map merging으로 인한 효과를 측정했다. 다양한 레이어 merging 조합은 table 1에서 보여진다. 더 많은 레이어에서 feature map들이 같이 병합될 경우 정확도는 점점 더 좋아졌다. 또다른 중요한점으로, 네트워크 초기 레이어의 feature map을 합치는것보다 뒤쪽 레이어의 feature map을 병합하는것이 더 성능향상에 도움이 된다. Table 1의 레이어 출력 combination 결과에서 중간에 살짝 정확도가 떨어지는 경우가 있는데 이는 초기 레이어가 기초적인 정보만을 담을 수 있기 때문이다. Table 1에서 conv 11 column은 네트워크의 구조를 깊게 하기 위해 마지막에 추가된 1x1 conv layer다. 이러한 레이어로 인해 0.5mAP의 상승이 있었고 이러한 1x1 conv layer로 인해 연산량 측면에서 효율적으로 네트워크의 깊이를 증가시킬 수 있었다.
-- 
+- 또한 두 개의 다른 방법을 이용한 feature map merging에 대해서도 실험비교결과를 보였다. 대부분의 이전 연구[22, 17]에서 사용한 maxpooling과 달리 feature stacking은 덜 흔한 방법이다[26]. 실험으로 feature stacking이 max pooling보다 더 나은 성능을 보인다는것을 확인했다. 더 나은 정확도를 위해 모든 merging combination에서 feature stacking을 사용했다.
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/table2.jpg" alt="views">
+<figcaption>Table 2. 구조적 변화에 따른 속도 비교</figcaption>
+</figure>
+</center>
+
+- Table 2에선 baseline detector의 다양한 변화에 따른 속도 차이를 보여준다. 속도는 GTX 1080 8GB GPU와 16GB CPU memory환경에서 측정되었다. 더 좋은 GPU를 쓰면 속도는 더 빨라진다.  For the baseline Tiny-Yolo, we are able to achieve the speed of more than 200 FPS, as claimed by the original authors, using parallel processing and batch implementation of the original Darknet library. 모든 속도측정은 4952장의 Pscal VOC 2007 test image에 대한 평균시간이며, 파일 쓰기와 detection 시간을 모두 포함한 시간이다. 실험 결과에서 merging operation은 detector의 속도를 감소시키지만 feature map을 많게 해 준다. Combined feature maps layer의 convolutional operation은 detector의 속도를 줄인다. 따라서 feature map의 수를 줄이는것이 속도 향상에 큰 도움이 된다. 1024개의 feature map을 512rofh wnfdladmfhTj 200FPS 이상의 속도를 달성 할 수 있었다. 마니막으로 1x1 conv layer를 구조의 끝에 추가하여 연산량의 증가를 최소화했다. 이러한 간단한 구조적인 modifications로 인해 popular한 architecture에 비해 더 빠른 속도로 동작한다.
+
+### 5.3 Distillation with labeled data
+- 우선 teacher와 student 네트워크에 대해 설명한다. 학습에 Yolo based teacher의 soft label을 사용한다. 전달되는 soft label을 이용하여 학습되므로 student와 teacher의 input image resolution은 같아야 한다. 따라서 Darknet-19 base Yolo-v2를 teacher model로 사용했다. 연산량이 적어 매우 빠른 제안하는 F-Yolo를 student로 사용했다.  실험에선 더 많은 labelled data가 성능 향상에 도움이 되는지를 Pascal과 COCO dataset의 조합으로 확인했다. Pascal에선 2007, 2012 training/validation set을, COCO에선 Pascal에서 클래스가 존재하는 카테고리의 training image를 사용했다. 65K개의 추가 이미지를 COCO에서 얻을 수 있었다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/table3.jpg" alt="views">
+<figcaption>Table 3. Pascal VOC 2007 dataset을 이용한 다양한 distillation stragy간의 성능비교. 결과는 두 teacher network와 두 labelled training data에 대한 실험이다. (Pascal VOC와 combination of Pasccal VOC and COCO)</figcaption>
+</figure>
+</center>
+
+- Distillation traning에서의 teacher network의 효과를 연구하기 위해 teacher model을 두 개의 다른 데이터셋으로 학습시켰으며, 하나는 Pascal data와 다른 하나는 Pascal 과 COCO dataset의 combination된 set으로 학습을 시켰다. Baseline teacher 모델은 Table 3에서 보여진다. Yolo-v2를 COCO로 학습시킨 모델의 경우 성능이 3.5mAP가 좋아졌다. 이 과정을 통해 더 정확한 teacher model의 효과를 확인 할 수 있었다.
+- 첫 번째 실험에서 제안하는 방법의 효과를 정의하기위한 다양한 방법들을 실험하고 비교했다. 이를 통해 single stage detector에 대한 다음의 두 가지 innovation을 제안한다. __Objectness scaling and FM-NMS__. Distillation을 FM-NMS와 objectness scaling step 없이 수행했다. 실험 결과는 table 3에서 확인가능하다. Distillation이 적용된 student network의 성능은 FM-NMS가 적용되지 않은 경우 성능이 baseline보다 더 떨어지게되는것을 확인할 수 있었다. 두 teacher network에 대해 네트워크 성능의 큰 하락이 확인 가능하다. 실험 결과를 통해 single stage detector에서 FM-NMS가 distillation이 동작하도록 하는 중요한 요소입을 확인했다. Objectness scaling 없이 진행된 실험에서 또한 약간의 성능이 하락하였다.
+- COCO의 추가 레이블링된 데이터셋을 이용한 실험의 경우 유사한 trend를 보이며, 따라서 FM-NMS과 object scaling이 중요함을 확인했다. 그리고 더 많은 학습 데이터를 이용해 full distillation 방법을 적용햇을 때 성능이 가장 많이 향상되었다. COCO training dataset을 사용한 full distillation 방법은 2.7mAP의 증가가 있었다. 학습 데이터셋이 클수록 더 많은 soft label이 이용 가능해지며, 이를 통해 더 많은 object like section의 정보가 이용이 가능해진다.
+- 또한 baseline detector의 성능이 더 많은 traning dataset을 이용할 때 더 좋아진다는것을 확인했다. 이는 제안하는 light-weight 모델이 더 많은 traninig sample이 있을 때 충분한 용량을 갖는다는 것을 의미한다. Distillation loss와 추가 학습 데이터를 통해 제안하는 detector는 200FPS가 넘는 속도로 67mAP를 달성했다.
+- 놀랍게도, 고정된 student에 있어서 teacher detector는 학습에 주요하게 동작하지 않았다. COCO teacher가 VOC와 COCO data의 조합으로 학습된 teacher보다 성능이 떨어졌다. 이는 teacher의 성능 차이가 크지 않기 때문에 teacher quality의 영향력을 평가하는게 어렵다고 판단된다.(¡ 4mAP)
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/table4.jpg" alt="views">
+<figcaption>Table 4. VOC-07 dataset에 대한 몇몇 detector간의 성능 비교</figcaption>
+</figure>
+</center>
+
+- 각 PASCAL VOC 2007 test set에 대한 각 클래스별 정확도를 table 4에서 확인 가능하다. 제안하는 F-Yolo(구조변경만 적용된 모델)의 성능과 D-Yolo(구조 변화와 distillation loss의 적용)의 성능은 original Yolo와 Yolo-v2와 비교되어있다. 흥미롭게도 bottle이나 bird와 같이 작은 객체의 경우 distillation loss와 많은 training data가 적용된 경우 정확도가 10AP정도 향상되었다. Tiny-Yolo와 제안하는 방식의 성능비교는 Figure 5에서 그림으로 보여진다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/fig5.jpg" alt="views">
+<figcaption>Figure 5. Teacher network(Yolo-v2)와 제안하는 방법, Tiny-Yolo간의 실험결과 example.</figcaption>
+</figure>
+</center>
+
+### 5.4 Unlabeled data
+
+  
 ## Conclusion
 - 논문에선 효율적이고 빠른 object detector를 제안했다. 객체검출모델의 speed performance의 trade-off를 조절하기위해 네트워크의 구조, loss function, training data의 역할에 대해 연구했다. 네트워크의 설계에는 이전에 수행되었던 연구들을 이용하여 계산복잡도를 적게 유지하기 위해 몇 가지의 간단한 idea들을 확인하고, 이 아이디어들의 방법을 활용하여 light-weight network를 개발했다. 네트워크 학습 과정에서 FM-NMS와 objectness scaled loss와 같이 carefully하게 설계된 components와 더불어 disitillation이 powerful한 idea임을 보였고, 이를 통해 light-weight single stage object detector의 성능이 향상되었다. 마지막으로 distillation loss를 기반으로 unlabeled data의 traning에 대한 연구를 수행했다. 논문의 실험에선 제안하는 design principle이 적용된 모델이 SOTA object detector들보다 훨씬 빠르게 동작하며 동시에 resonable한 성능을 얻을 수 있다는것을 보였다. 
