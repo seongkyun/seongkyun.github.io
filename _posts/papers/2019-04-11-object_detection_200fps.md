@@ -61,7 +61,45 @@ $$L_{Yolo}=f_{obj}(o_{i}^{gt},\hat{o_{i}})+f_{cl}(p_{i}^{gt},\hat{p_{i}})+f_{bb}
 - 각각 $\hat{o_{i}}, \hat{p_{i}}, \hat{b_{i}}$는 student의 objectnessm class probability, boundinb box coordinates이며 $o_{i}^{gt}, p_{i}^{gt}, b_{i}^{gt}$는 ground truth value들이다. The objectness is defined as IOU between prediction and ground truth, class probabilities are the conditional probability of a class given there is an object, the box coordinates are predicted relative to the image size and loss functions are simple $L_{1}$ or $L_{2}$ functions see [25, 26] for details.
 - Distillation을 적용하기 위해 teacher network의 마지막 레이어의 출력을 가져와서 ground truth $o_{i}^{gt}, p_{i}^{gt}, b_{i}^{gt}$값을 대체하면 된다. Loss는 teacher network의 activation을 student network로 전파하게 된다. 하지만 single stage detector의 dense sampling으로 인해 이러한 간단한 방식의 application은 distillation을 효율적이지 못하게 만든다. 이에 대한 해결 방안은 아래에서 논해질것이며 이를통해 간단히 single stage detector에 distillation을 적용할 수 있게된다.
 
-### 3.1 
+### 3.1 Objectness scaled Distillation
+- RCNN 계열에 distillation을 적용한 연구[20, 3] 에선 정보 전달을 위해 teacher의 마지막 출력만을 사용하여 student로 정보를 넘겼다. Yolo에도 이와 유사하게 적용하려고 했지만 single stage detector이기도 하고 prediction이 객체위치와 클래스를 한번에 추론하도록 하는 dense set of candidate를 이용하여 추론되기 때문에 어렵다. Yolo teacher는 image의 background region에도 많은 bounding box를 추론한다. 그 동안에 이러한 필요없는 background box들은 candidate의 objectness값으로 인해 무시되어진다. 하지만 standard distillation approach는 이러한 background detection 또한 student로 학습에 필요한 정보로써 넘어간다. 이는 bounding box training $f_{bb}()$에 영향을 주고, 이로인해 student network가 background영역에 teacher에 의해 잘못 추론된 결과를 학습하게 된다. RCNN based 객체탐지기들의 경우 비교적 적은 region proposal을 예측하도록하는 region proposal network를 사용하여 이러한 문제를 피해갔다. Background 지역의 잘못된 teacher의 prediction을 학습하는것을 피하기 위해 distillation loss를 objectness scaled function으로써 공식화했다. __기본 아이디어는 bounding box coordinate와 class probability를 teacher prediction의 objectness value가 높을때만 학습하도록 하는것이다.__ 함수의 objectness part는 objectness scaling이 필요하지 않는데, 이는 noisy candidate의 objectness value가 낮기 때문이다. Objectness part는 다음과 같이 정의된다.
+
+$$f_{obj}^{Comb}(o_{i}^{gt}, \hat{o_{i}}, o_{i}^{T})=f_{obj}(o_{i}^{gt}, \hat{o_{i}})+\lambda_{D}\cdot f_{obj}(o_{i}^{T},\hat{o_{i}})\qquad\mbox{(2)}\\f_{obj}(o_{i}^{gt}, \hat{o_{i}})\mbox{: Detection loss, }\;\lambda_{D}\cdot f_{obj}(o_{i}^{T},\hat{o_{i}})\mbox{: Distillation loss}$$
+
+- Student network의 objectness scaled classification function은 다음과 같이 정의된다.
+
+$$f_{cl}^{Comb}(p_{i}^{gt}, \hat{p_{i}}, p_{i}^{T}, \hat{o_{i}^{T}})=f_{cl}(p_{i}^{gt}, \hat{p_{i}})+\hat{o_{i}^{T}}\cdot\lambda_{D}\cdot f_{cl}(p_{i}^{T},\hat{p_{i}})\qquad\mbox{(3)}$$
+
+- 위 함수의 첫 번째 부분은 original detection function이며 두 번째 파트는 objectness scaled distillation part다. 비슷하게 student network의 bounding box coordinate도 objectness를 사용하며 scale되어있다.
+
+$$f_{bb}^{Comb}(b_{i}^{gt}, \hat{b_{i}}, b_{i}^{T}, \hat{o_{i}^{T}})=f_{bb}(b_{i}^{gt}, \hat{b_{i}})+\hat{o_{i}^{T}}\cdot\lambda_{D}\cdot f_{bb}(b_{i}^{T},\hat{b_{i}})\qquad\mbox{(4)}$$
+
+- 표현력 좋은 teacher network는 background에 해당하는 대다수의 candidate에게 매우 작은 objectness value를 할당한다. Objectness based scaling은 single stage detector에서 distillation을 위한 filter역할을 하며, background cell에 매우 낮은 weight를 할당하게된다. Object같은 foreground 영역은 teacher network에서 높은 objectness값을 갖게되며, formulated distillation loss는 이러한 영역의 teacher knowledge를 이용하게 된다. Loss function은 원래와 같지만 distillation을 위해 ground truth 대신 teacher output만을 추가한 형태가 된다. 모델 학습을 위한 loss function은 아래와 같다.
+
+$$L_{final}=f_{bb}^{Comb}(b_{i}^{gt}, \hat{b_{i}}, b_{i}^{T}, \hat{o_{i}^{T}})+f_{cl}^{Comb}(p_{i}^{gt}, \hat{p_{i}}, p_{i}^{T}, \hat{o_{i}^{T}})+f_{obj}^{Comb}(o_{i}^{gt}, \hat{o_{i}}, o_{i}^{T})\qquad\mbox{(5)}$$
+
+- 이는 classification을 위한 detection과 distillation loss, bounding box regresssion, objectness를 고려한 식이다. 이 식은 모든 anchor box들과 마지막 conv feature map에서의 모든 cell location을 이용하여 최소화 되어지도록 학습되어진다.
+
+### 3.2 Feature Map-NMS
+- Another challenge that we face comes from the inherent design of the single stage object detector. 모델은 하나의 cell에 대해 single anchor에서 하나의 박스만 추론하도록 학습되어지지만 실제로는 몇몇의 cell과 anchor box들에 의해 같은 객체에 대해 수 많은 박스를 추론하게 된다. 따라서 NMS가 object detecor 구조에서의 필수 후처리 과정이 된다. 하지만 NMS step은 end-to-end network 구조에서 맨 마지막에 붙으며 highly overlapping 추론결과는 detector의 last conv layer에서 표현되어진다. 이러한 추론결과가 teacher에서 student로 전달되어진다면 이는 쓸모없는 정보의 전달이 되는것이다. 따라서 teacher network가 highly overlapping detections에 대한 information loss을 전달하므로 위에서 설명된 distillation loss로 인해 모델의 전체적 성능이 떨어지게 된다. Higly overlapping detection의 feature map은 결국 같은 object class와 dimension에 대한 large gradient를 propagation하게되어 network가 over-fitting되게 만든다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/fig3.jpg" alt="views">
+<figcaption>Figure 3. Distillatio approach의 전체적인 구조. Distillation loss는 labelled와 unlabelled data에 모두 쓰인다. FM-NMS가 teacher network의 마지막 레이어의 feature map들에 적용되어지며 이를통해 overlapping candidates를 막는다.</figcaption>
+</figure>
+</center>
+
+- 이러한 overlapping detections에서 발생하는 문제를 해결하기 위해 Feature Map-NMS(FM-NMS)를 제안한다. FM-NMS의 기본 idea는, 만약 같은 클래스에 상응하는 KxK cell 지역에 multiple candidate가 존재한다면 그것들은 image에서 같은 하나의 객체일 확률이 높다. 따라서 가장 높은 objectness 값을 선택해 단 하나의 candidate를 선택한다. 실제로 last layer feature maps에서 class probability에 해당하는 activation을 확인하고, activation이 동일한 class에 해당하는 0으로 설정한다. Figure 3에 idea가 설명되어있으며, detection form으로 teacher network의 soft label들이 보여진다. Teacher net의 last layer가 개 주변에 여러 box들을 추론한다. 동일 지역의 겹치는 추론을 피하기 위해 가장 높은 objectness 값을 선택한다. 겹치는 candidate중 가장 강한 candidate가 student network로 전달된다. 두 cell에 대한 idea의 예시가 figure 4에 나와있다. 실험에선 3x3 인접 cell에 대해서만 적용되었다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/fig4.jpg" alt="views">
+<figcaption>Figure 4. Teacher network는 마지막 layer에서 bounding box와 coordinates, class 확률을 동시에 추론한다. 사진 속 column에서 파랑과 초록부분은 각각 N detection에 해당하며, N은 anchor box의 갯수를 의미한다. 인접한 column들은 때때로 같은 class label을 갖는 highly overlapping bounding box들을 만들어낸다. 제안하는 FM-NMS는 인접 cell에서 가장 strong한 candidate만 남긴다. 이렇게 남아진 candidate만이 soft label 형태로 student network에 전달되게 된다.</figcaption>
+</figure>
+</center>
+
+## 4. Effectiveness of data
 
 ## Conclusion
 - 논문에선 효율적이고 빠른 object detector를 제안했다. 객체검출모델의 speed performance의 trade-off를 조절하기위해 네트워크의 구조, loss function, training data의 역할에 대해 연구했다. 네트워크의 설계에는 이전에 수행되었던 연구들을 이용하여 계산복잡도를 적게 유지하기 위해 몇 가지의 간단한 idea들을 확인하고, 이 아이디어들의 방법을 활용하여 light-weight network를 개발했다. 네트워크 학습 과정에서 FM-NMS와 objectness scaled loss와 같이 carefully하게 설계된 components와 더불어 disitillation이 powerful한 idea임을 보였고, 이를 통해 light-weight single stage object detector의 성능이 향상되었다. 마지막으로 distillation loss를 기반으로 unlabeled data의 traning에 대한 연구를 수행했다. 논문의 실험에선 제안하는 design principle이 적용된 모델이 SOTA object detector들보다 훨씬 빠르게 동작하며 동시에 resonable한 성능을 얻을 수 있다는것을 보였다. 
