@@ -169,6 +169,24 @@ $$L_{final}=f_{bb}^{Comb}(b_{i}^{gt}, \hat{b_{i}}, b_{i}^{T}, \hat{o_{i}^{T}})+f
 
 ### 5.4 Unlabeled data
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/table5.jpg" alt="views">
+<figcaption>Table 5. Pascal 2007에 대해 unlabelled data를 사용했을 때의 모델 정확도 비교</figcaption>
+</figure>
+</center>
+
+- 앞에서 COCO와 VOC를 섞은 데이터셋을 이용한 실험에선 F-Yolo가 더 많은 학습 데이터에 대해 학습이 가능한 충분한 용량이 있음을 밝혔다. 이번 section에선 제안하는 모델이 얼마나 많은 unlabeled data를 통해 학습이 가능한가를 확인한다. 이번 실험에선 traning set에서 unlabelled data를 늘려가며 정확도를 측정한다. 레이블링 데이터는 VOC에서만 사용하고 레이블이 없는 데이터는 COCO에서 사용한다. 레이블링/언레이블링 된 영상들은 함께 조합되어 학습에 사용되며, 레이블이 없는 이미지의 경우 teacher만 통과해서 추론된 soft-label 을 넘기도록 학습되어진다. 네트워크는 각 16K, 32K, 48K, 65K개의 unlabelled data를 이용하여 학습되어지도록 하며 그에대한 student network의 영향을 파악한다. 실험결과는 table 5에서 보여진다. 추가 data가 있을 경우 baseline detector의 성능이 3~4mAP정도 크게 증가하는것을 알 수 있다. 더 많은 unlabelled data가 있을 경우 성능은 더 향상 될 것이다.
+- It is interesting to compare the change in the performance with unlabeled data and COCO labeled data separately to understand the importance of annotation in the training. 레이블이 있는 COCO 데이터셋을 확용하여 제안하는 모델을 학습시켰을 때 64.2mAP가 측정되었으며(Table 3 student baseline) Yolo-v2를 teacher로 하여 unlabeled COCO 영상들을 사용했을 때 62.3mAP를 달성했다. 이는 비록 annotation이 중요하긴 하지만 정확한 teacher network가 간단하게 추가된 unlabeled training data를 이용하게 함으로써 더 큰 성능의 향상이 가능했음을 보여준다. 
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-11-object_detection_200fps/table6.jpg" alt="views">
+<figcaption>Table 6. 제안하는 single stage distilled detector(yolo)와 Faster-RCNN distilled detector의 PASCAL VOC 2007 test set에 대한 실험 결과 비교</figcaption>
+</figure>
+</center>
+
+- 마지막으로 제안하는 distillation 방법을 경쟁하는 방법인 [3]과의 실험 결과를 비교했다. 비교대상 방법은 Fater-RCNN에 대한 distillation 방법이며, 제안하는 방법은 single stage용, 비교대상 방법은 two stage용이다. 실험 결과는 table 6에서 보여진다. 성능은 다음의 architecture에 대해 비교된다. Alexnet[19], Tuckernet [18], VGG-M [32]이며 이는 VGG-16[32]로부터 distillation된 정보를 이용한다. 제안하는 distilled network는 RCNN detector에 비해 엄청 빠르다. 파라미터 수 관점에서도 제안하는 방법과 Tucker 방법이 비교 가능하지만, Faster-RCNN based detector에 비해 엄청 빠르다. 이러한 방법들에 대해 속도 향상은 single stage detector의 효율적인 설계와 속도에 최적화 된 기본 네트워크 구조 및 훈련에 사용되는 추가적인 데이터 때문이다. 실험결과는 이러한 변화로 인해 9mAP이상의 정확도 향상과 더불어 더 빠르게 동작하는것을 보여준다.
   
 ## Conclusion
 - 논문에선 효율적이고 빠른 object detector를 제안했다. 객체검출모델의 speed performance의 trade-off를 조절하기위해 네트워크의 구조, loss function, training data의 역할에 대해 연구했다. 네트워크의 설계에는 이전에 수행되었던 연구들을 이용하여 계산복잡도를 적게 유지하기 위해 몇 가지의 간단한 idea들을 확인하고, 이 아이디어들의 방법을 활용하여 light-weight network를 개발했다. 네트워크 학습 과정에서 FM-NMS와 objectness scaled loss와 같이 carefully하게 설계된 components와 더불어 disitillation이 powerful한 idea임을 보였고, 이를 통해 light-weight single stage object detector의 성능이 향상되었다. 마지막으로 distillation loss를 기반으로 unlabeled data의 traning에 대한 연구를 수행했다. 논문의 실험에선 제안하는 design principle이 적용된 모델이 SOTA object detector들보다 훨씬 빠르게 동작하며 동시에 resonable한 성능을 얻을 수 있다는것을 보였다. 
