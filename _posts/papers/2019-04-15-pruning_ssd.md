@@ -48,12 +48,49 @@ Authors: Pravendra Singh, Manikandan R, Neeraj Matiyali, Vinay P. Namboodiri (II
 </figure>
 </center>
 
-## Conclusion
-- 본 논문에선 Multi-layer pruning 방법을 제안했다. 주요 아이디어는 training loss function을 수정해서 첫 번째 procedure로 sparsity(희소성)를 유도하는것이다. 두 번째로, sparsity inducing loss function이 0에 수렴하도록 학습되어진 모델의 filter를 pruning한다. 이로인해 classifier와 detector가 구조적으로 크기가 줄어들면서 정확도가 약간 감소하지만 retraining을 통해 그 정확도를 recover할 수 있게된다. 이로인해 SSD 객채탐지모델을 이용하여 SOTA의 압축률을 달성했다. 더 나아가 visiual recognition task와 다른 관련된 loss를 이용하여 filter를 pruning하는것에 대해 연구할 예정이다.
+## 4. Experiment
+- 논문에선 실험에 다양한 데이터셋과 detection, classification에 대해 다뤗지만 본 글에선 PASCAL VOC object detection에 대해서만 살펴본다.
+
+### 4.1 Pruning of SSD on PASCAL VOC
+- Previous work[37]에선 base network만 pruning했지만, 본 논문에선 SSD 전체를 pruning한다. 하지만 구조가 복잡해 한번에 pruning하면 정확도가 많이 떨어지므로 multiple phase로 수행한다. 실험엔 VGG16 based SSD를 썼으며, SSD512에 대해 conv1 1 - conv4 3, conv4 3 - conv7, conv7- conv8 2, conv8 2 - conv12 2의 4개 phase로 pruning했다. 또한 localization과 classification layer들도 포함했다. SSD 300도 동일하게 4개의 phase로 나뉘었다.
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-04-15-pruning_ssd/fig1.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-15-pruning_ssd/fig2.jpg" alt="views">
+<figcaption>Figure 2. Phase 1에서 L1 regularization의 유무에 따른 conv3_3과 conv4_3의 weight distribution. </figcaption>
+</figure>
+</center>
+
+- Figure 2에선 L1 regularization의 효과를 보여준다. 적용하면 weight가 더 모이게 된다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-15-pruning_ssd/fig3.jpg" alt="views">
+<figcaption>Figure 3. PASCAL VOC에 대한 제안하는 sparsity induction방법을 적용하기 전(파랑)과 후(주황)의 non-zero parameter의 갯수들. 각 phase별로 확인 가능</figcaption>
+</figure>
+</center>
+
+- Thresholding 후 Figure 3에서 non-zero parameter가 확연히 줄어든걸 확인 할 수 있다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-15-pruning_ssd/table1.jpg" alt="views">
+<img src="/assets/post_img/papers/2019-04-15-pruning_ssd/table3.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
+
+- 각 실험결과는 위의 표에서 확인 가능하며, SSD300-prunded-3det등의 모델명에서 det은 해당 번째 detection layer까지 pruning을 진행하였단 뜻이다. 전체 SSD 모델을 봤을 때, feature extractor에서 만들어진 feature map이 뒤쪽 detection layer로 전달되어 detection 결과를 추론한다. 여기서 기본적으로 모델은 7종류의 feature map을 받게 되며, 해당 feature map을 출력하는 layer까지 pruning을 진행했다는 것을 의미하게 된다. 표 1을 보면 이해가 빠르다.
+- 실험 결과 전제척으로 정확도는 많이 떨어지지 않으면서도 모델 사이즈는 엄청나게 줄어들게 되는것을 확인 가능하다.
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-04-15-pruning_ssd/table5.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- Table 5를 보면, 각 detection layer가 어디까지 pruning 되었느냐에 따라 정확도와 파라미터 수, 모델 사이즈에 대한 영향력을 확인 할 수 있다.
+
+## Conclusion
+- 본 논문에선 Multi-layer pruning 방법을 제안했다. 주요 아이디어는 training loss function을 수정해서 첫 번째 procedure로 sparsity(희소성)를 유도하는것이다. 두 번째로, sparsity inducing loss function이 0에 수렴하도록 학습되어진 모델의 filter를 pruning한다. 이로인해 classifier와 detector가 구조적으로 크기가 줄어들면서 정확도가 약간 감소하지만 retraining을 통해 그 정확도를 recover할 수 있게된다. 이로인해 SSD 객채탐지모델을 이용하여 SOTA의 압축률을 달성했다. 더 나아가 visiual recognition task와 다른 관련된 loss를 이용하여 filter를 pruning하는것에 대해 연구할 예정이다.
