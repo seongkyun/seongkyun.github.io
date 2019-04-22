@@ -58,7 +58,7 @@ Authors: Rakesh Mehta, Cemalettin Ozturk
 
 $$L_{Yolo}=f_{obj}(o_{i}^{gt},\hat{o_{i}})+f_{cl}(p_{i}^{gt},\hat{p_{i}})+f_{bb}(b_{i}^{gt},\hat{b_{i}})\qquad\mbox{(1)}$$
 
-- 각각 $\hat{o_{i}}, \hat{p_{i}}, \hat{b_{i}}$는 student의 objectnessm class probability, boundinb box coordinates이며 $o_{i}^{gt}, p_{i}^{gt}, b_{i}^{gt}$는 ground truth value들이다. The objectness is defined as IOU between prediction and ground truth, class probabilities are the conditional probability of a class given there is an object, the box coordinates are predicted relative to the image size and loss functions are simple $L_{1}$ or $L_{2}$ functions see [25, 26] for details.
+- 각각 $\hat{o_{i}}, \hat{p_{i}}, \hat{b_{i}}$는 student의 objectnessm class probability, boundinb box coordinates이며 $o_{i}^{gt}, p_{i}^{gt}, b_{i}^{gt}$는 ground truth value들이다. Objectness는 예측결과와 ground truth사이의 IOU에 의해 결정되며, class 확률은 객채가 존재하는 경우의 class의 조건부 확률이고, box 좌표는 image size와 $L_{1}$ 나 $L_{2}$같은 loss function에 관계되어 있다. [25, 26] for details.
 - Distillation을 적용하기 위해 teacher network의 마지막 레이어의 출력을 가져와서 ground truth $o_{i}^{gt}, p_{i}^{gt}, b_{i}^{gt}$값을 대체하면 된다. Loss는 teacher network의 activation을 student network로 전파하게 된다. 하지만 single stage detector의 dense sampling으로 인해 이러한 간단한 방식의 application은 distillation을 효율적이지 못하게 만든다. 이에 대한 해결 방안은 아래에서 논해질것이며 이를통해 간단히 single stage detector에 distillation을 적용할 수 있게된다.
 
 ### 3.1 Objectness scaled Distillation
