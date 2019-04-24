@@ -15,7 +15,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/study/2019-04-18-l1_l2/fig1.gif" alt="views">
+<img src="/assets/post_img/study/2019-04-24-ssds_architecture/mobilenet-ssd.jpg" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
