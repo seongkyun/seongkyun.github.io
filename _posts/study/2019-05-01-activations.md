@@ -11,6 +11,7 @@ comments: true
 - 참고 글
   - http://nmhkahn.github.io/NN
   - https://towardsdatascience.com/activation-functions-b63185778794
+  - https://ratsgo.github.io/deep%20learning/2017/04/22/NNtricks/
 
 ## Sigmoid
 
@@ -105,6 +106,86 @@ def relu(z):
  return z * (z > 0)
 ```
 
+## Leaky ReLU / PReLU
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-05-01-activations/leaky_relu.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+### Leaky ReLU
+- Leaky ReLU는 dying ReLU 현상을 해결하기 위해 제시된 함수
+- ReLI는 $x<0$에서 모든 값이 0이지만, Leaky ReLU는 작은 기울기를 부여함
+
+$$f(x)=max(0.01x, x)$$
+
+- 이 때 기울기는 0.01과 같은 매우 작은 값을 사용함
+- 몇몇 경우에 대해 leaky ReLU를 적용하여 성능이 향상이 일어났다고 하지만 항상 성능이 향상되는것은 아님
+
+```python
+import numpy as np
+
+def leaky_relu(z):
+ return np.maximum(0.01 * z, z)
+```
+
+### PReLU
+
+$$f(x)=max(\alpha x, x)$$
+
+- Leaky ReLU와 비슷하나, PReLU는 $\alpha$ 파라미터를 추가하여 $x<0$ 에서의 기울기를 학습시킬 수 있게 함
+
+## ELU
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-05-01-activations/elu.png" alt="views">
+<figcaption>ELU, LReLU(Leaky Relu), ReLU 비교</figcaption>
+</figure>
+</center>
+
+- Exponential Linear Units의 준말
+- ELU는 [Clevert et al., 2015](https://arxiv.org/abs/1511.07289) 에 의해 나온 비교적 최신 방법
+
+$$f(x)=\begin{cases} x & \mbox{if } x>0 \\\alpha(e^{x}-1) & \mbox{if } x\leq 0\end{cases}$$
+
+- ReLU-like 함수들과의 비교 그림과 공식 그림을 보면 알겠지만 ELU는 ReLU의 threshold를 -1로 낮춘 함수를 $e^{x}$를 이용하여 근사화한 모양
+  - ReLU를 y축에서 -1로 이동 후 $e^{x}$로 근사화하여 0 근처에서 항상 미분 가능한 꼴이 됨
+- ELU의 특징은 다음과 같음
+  - ReLU의 장점을 모두 포함
+  - Dyine ReLU 문제 해결
+  - 출력값이 거의 zero-centered함
+  - ReLU, Leaky ReLU와 달리 exp()에 대한 미분값을 계산해야 하는 비용이 발생
+
+## Maxout
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-05-01-activations/maxout.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- ReLU와 Leaky ReLU를 일반화 한 꼴
+
+$$f(x)=max(w_{1}^{T}x+b_{1}, w_{2}^{T}x+b_{2})$$
+
+- 식에서 볼 수 있듯 ReLU와 Leaky ReLU는 이 함수의 부분집합으로 표현 가능
+  - 얘를 들어 ReLU는 $w_{N}, b_{N}=0,\;\mbox{when } N > 1$이 0인 경우
+- Maxout은 ReLU가 갖는 장점을 모두 가지면서도 dying ReLU 문제를 해결함
+- 하지만 ReLU와 다르게 한 뉴련에 대한 파라미터가 2배이므로 전체 파라미터가 증가하는 단점이 존재
+
+## Conclusion
+- 여러 activation들에 대해 선택에 대한 결론은 아래와 같음
+  - 가장 먼저 ReLU를 사용한다.
+    - 다양한 ReLU인 Leaky ReLU, ELU, Maxout등이 있지만 가장 많이 사용되는 activation은 ReLU임
+  - 다음으로 Leaky ReLU, Maxout, ELU를 시도
+    - 성능이 좋아 질 수 있는 가능성이 있음
+  - Tanh를 사용해도 되지만 성능이 개선될 확률이 적음
+  - Sigmoid는 피한다.
+    - RNN에서 사용하는 경우도 있으나 이는 다른 이유때문에 
 
 
 
