@@ -10,8 +10,9 @@ comments: true
 
 - 참고 글
   - http://nmhkahn.github.io/NN
+  - https://towardsdatascience.com/activation-functions-b63185778794
 
-### Sigmoid
+## Sigmoid
 
 <center>
 <figure>
@@ -33,7 +34,77 @@ $$\sigma (x)=\frac{1}{1+e^{-x}}$$
     - 위 식에 $w$에 대해 편미분하면 $\frac{\partial a}{\partial w}=x$가 성립
   - 결론적으로 아래의 수식이 성립하게 됨
     - $\frac{\partial L}{\partial w}=\frac{\partial L}{\partial a}* x$
-  - 파라미터의 gradient는 입력값에 의해 영향을 받으며, 만약 입력값이 모두 양수일 경우 파라미터의 모든 부호는 같게 됨
+  - 결국 파라미터의 gradient($\frac{\partial L}{\partial w}$)는 입력값(x)에 의해 영향을 받으며, 만약 입력값이 모두 양수일 경우 파라미터의 모든 부호는 같게 됨
   - 이럴 경우 gradient descent 시 정확한 방향으로 가지 못하고 지그재그로 발산하는 문제가 발생할 수 있음
   - Sigmoid를 거친 출력값은 다음 레이어의 입력값이 되기에 함수값이 not-centered 특성을 가진 sigmoid는 성능에 좋지 않은 영향을 끼치게 됨
+  - 쉽게 말해서, sigmoid 이후의 출력은 항상 0과 1 사이의 양수값을 가지므로 gradient descent 과정에 있어서 packpropagation 동안 weight의 gradient는 항상 뉴런의 츌력에 따라 양수 혹은 음수만 발생하게 됨. 이로 인해 optimization이 힘들게 이상한 방향으로 gradient update가 일어나게 됨.
   
+```python
+import numpy as np
+
+def sigmoid(z):
+ return 1 / (1 + np.exp(-z))
+```
+
+## Tanh
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-05-01-activations/tanh.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- Tanh 함수는 함수값을 [-1, 1]로 제한시킴
+- 값을 saturate 시킨다는 점에서 sigmoid와 비슷하나 zero-centered 모양임
+- 따라서 tanh 비선형함수는 sigmoid보다 많이 사용됨
+- Tanh는 다음과 같이 sigmoid 함수($\simga (x)$)를 이용해 아래와같이 표현 가능
+  - $tanh(x)=2\sigma (2x)-1$
+
+```python
+import numpy as np
+
+def tanh(z):
+ return np.tanh(z)
+```
+
+## ReLU
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-05-01-activations/relu.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- ReLU는 Rectified Linear Unit의 약자로 가장 많이 사용되는 activation.
+- 함수는 $f(x)=max(0,x)$ 꼴로 표현 가능하며, 이는 $x>0$ 이면 기울기가 1인 직선, 그 외에는 0을 출력함.
+- 특징은 다음과 같음
+  - Sigmoid나 tanh와 비교했을 때 SGD의 optimization 속도가 매우 빠름
+    - 이는 함수가 saturated하지않고  linear하기 때문
+  - Sigmoid와 tanh는 exponential에 의해 미분을 계산하는데 비용이 크지만, ReLU는 별다른 비용이 들지 않음
+    - 미분값이 0 아니면 1
+  - ReLU의 큰 단점으로는, 네트워크를 학습시킬 때 뉴런들이 죽는(die) 경우가 많이 발생
+    - $x<0$ 일 때 기울기가 0이므로 만약 입력값이 0보다 작게 될 경우 뉴런이 죽어버릴 수 있으며 더 이상 값의 업데이트가 수행되지 않게 됨
+  - Tanh와 달리 zero-centered하지 않음
+  
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-05-01-activations/relu_alexplot.jpg" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 위 그림은 AlexNet 논문에서 ReLU와 tanh 함수의 traning error rate를 비교한 것임.
+  - ReLU를 적용함으로써 6배의 성능 향상이 발생
+
+```python
+import numpy as np
+
+def relu(z):
+ return z * (z > 0)
+```
+
+
+
+
