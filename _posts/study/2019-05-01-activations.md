@@ -47,6 +47,14 @@ def sigmoid(z):
  return 1 / (1 + np.exp(-z))
 ```
 
+- __Pytorch implementation__
+
+```python
+>>> m = nn.Sigmoid()
+>>> input = torch.randn(2)
+>>> output = m(input)
+```
+
 ## Tanh
 
 <center>
@@ -67,6 +75,14 @@ import numpy as np
 
 def tanh(z):
  return np.tanh(z)
+```
+
+- __Pytorch implementation__
+
+```python
+>>> m = nn.Tanh()
+>>> input = torch.randn(2)
+>>> output = m(input)
 ```
 
 ## ReLU
@@ -106,6 +122,14 @@ def relu(z):
  return z * (z > 0)
 ```
 
+- __Pytorch implementation__
+
+```python
+>>> m = nn.ReLU()
+>>> input = torch.randn(2)
+>>> output = m(input)
+```
+
 ## Leaky ReLU / PReLU
 
 <center>
@@ -131,11 +155,27 @@ def leaky_relu(z):
  return np.maximum(0.01 * z, z)
 ```
 
+- __Pytorch implementation__
+
+```python
+>>> m = nn.LeakyReLU(0.1)
+>>> input = torch.randn(2)
+>>> output = m(input)
+```
+
 ### PReLU
 
 $$f(x)=max(\alpha x, x)$$
 
 - Leaky ReLU와 비슷하나, PReLU는 $\alpha$ 파라미터를 추가하여 $x<0$ 에서의 기울기를 학습시킬 수 있게 함
+
+- __Pytorch implementation__
+
+```python
+>>> m = nn.PReLU()
+>>> input = torch.randn(2)
+>>> output = m(input)
+```
 
 ## ELU
 
@@ -159,6 +199,26 @@ $$f(x)=\begin{cases} x & \mbox{if } x>0 \\\alpha(e^{x}-1) & \mbox{if } x\leq 0\e
   - 출력값이 거의 zero-centered함
   - ReLU, Leaky ReLU와 달리 exp()에 대한 미분값을 계산해야 하는 비용이 발생
 
+- __Pytorch implementation__
+  - $ELU(x)=max(0,x)+min(0,\alpha ∗(e^{x}−1))$
+  
+```python
+>>> m = nn.ELU()
+>>> input = torch.randn(2)
+>>> output = m(input)
+```
+
+- ELU와 비슷한 꼴로 CELU가 존재
+  - $CELU(x)=max(0,x)+min(0,\alpha ∗(e^{\frac{x}{\alpha}}−1))$
+
+- __Pytorch implementation__
+
+```python
+>>> m = nn.CELU()
+>>> input = torch.randn(2)
+>>> output = m(input)
+```
+
 ## Maxout
 
 <center>
@@ -176,6 +236,45 @@ $$f(x)=max(w_{1}^{T}x+b_{1}, w_{2}^{T}x+b_{2})$$
   - 얘를 들어 ReLU는 $w_{N}, b_{N}=0,\;\mbox{when } N > 1$이 0인 경우
 - Maxout은 ReLU가 갖는 장점을 모두 가지면서도 dying ReLU 문제를 해결함
 - 하지만 ReLU와 다르게 한 뉴련에 대한 파라미터가 2배이므로 전체 파라미터가 증가하는 단점이 존재
+
+- __Pytorch implementation__
+  - Code from https://github.com/Usama113/Maxout-PyTorch/blob/master/Maxout.ipynb
+
+```python
+import torch
+from torch.autograd import Variable
+import torch.nn as nn
+from torch.autograd import Function
+
+class Maxout(Function):
+  # Note that both forward and backward are @staticmethods
+  @staticmethod
+  # bias is an optional argument
+  def forward(ctx, input):
+    x = input
+    max_out=4    #Maxout Parameter
+    kernels = x.shape[1]  # to get how many kernels/output
+    feature_maps = int(kernels / max_out)
+    out_shape = (x.shape[0], feature_maps, max_out, x.shape[2], x.shape[3])
+    x= x.view(out_shape)
+    y, indices = torch.max(x[:, :, :], 2)
+    ctx.save_for_backward(input)
+    ctx.indices=indices
+    ctx.max_out=max_out
+    return y
+
+# This function has only a single output, so it gets only one gradient
+@staticmethod
+def backward(ctx, grad_output):
+  input1,indices,max_out= ctx.saved_variables[0],Variable(ctx.indices),ctx.max_out
+  input=input1.clone()
+  for i in range(max_out):
+      a0=indices==i
+      input[:,i:input.data.shape[1]:max_out]=a0.float()*grad_output
+
+
+  return input
+```
 
 ## Conclusion
 - 여러 activation들에 대해 선택에 대한 결론은 아래와 같음
