@@ -59,7 +59,7 @@ $$\theta = \theta - \eta \nabla_{\theta} J(\theta)$$
 - 현재 gradient를 통해 이동하는 방향과 별개로 과거에 이동했던 방향등을 기억하면서 그 방향으로 일정 정도를 추가적으로 이동하게 되는 방식
 - 수식으로 표현하면 아래와 같으며, $v_t$를 time step t에서 이동 벡터라 할 때 아래와 같은 식으로 이동을 표현 가능함
 
-$$v_t = \gamma v_{t-1} + \eta \nabla_{\theta}J(\theta)$$
+$$v_t = \gamma v_{t-1} + \eta \nabla_{\theta}J(\theta)\\$$
 $$\theta = \theta - v_t$$
 
 - durltj $\gamma$는 얼마나 momentum을 줄 것인지에 대한 term으로 보통 0.9정도의 값을 사용
@@ -74,7 +74,7 @@ $$v_t = \eta \nabla_{\theta}J(\theta)_t + \gamma \eta \nabla_{\theta}J(\theta)_{
 <center>
 <figure>
 <img src="/assets/post_img/study/2019-05-08-gradient_descents/fig4.gif" alt="views">
-<figcaption>t</figcaption>
+<figcaption></figcaption>
 </figure>
 </center>
 
@@ -115,12 +115,64 @@ $$v_t = \eta \nabla_{\theta}J(\theta)_t + \gamma \eta \nabla_{\theta}J(\theta)_{
 - 반면 NAG는 momentum step을 먼저 고려하여 momentum step을 먼저 이동했다고 가정하고 그 자리에서의 gradient를 구해 step을 이동함
 - 수식은 아래와 같음
 
-$$v_t = \gamma v_{t-1}+ \eta\nabla_{\theta}J(\theta-\gamma v_{t-1})$$
+$$v_t = \gamma v_{t-1}+ \eta\nabla_{\theta}J(\theta-\gamma v_{t-1})\\$$
 $$\theta = \theta - v_t$$
 
 - NAG를 이용할 경우 momentum 방식에 비해 보다 효과적으로 이동 가능함
 - Momentum 방식의 경우 멈춰야 할 시점에서도 관성에 의해 더 멀리 나아갈 수 있을 확률이 큰 단점이 존재하지만, NAG 방식의 경우 일단 모멘텀으로 이동을 반정도 한 후 어떤 방식으로 이동해야할지를 결정함
 - 따라서 momentum 방식의 빠른 이동이라는 이점은 누리면서도 멈춰야 할 적절한 시점에서 제동을 하는데에 훨씬 용이하게 됨
+
+## Adagrad
+- Adagrad(Adaptive Gradient)는 변수들을 update할 때 각 변수마다 step size를 다르게 설정해서 이동하는 방식
+- Adagrad의 기본적 아이디어는 '지금까지 많이 변화하지 않은 변수들은 step size를 크게, 많이 변화했던 변수들은 step size를 작게 설정' 하는것임
+- 자주 등장하거나 변화가 많았던 변수들의 경우 optimum에 가까히 있을 확률이 높기에 작은 크기로 이동하면서 세밀하게 값을 조정하고, 적게 변화한 변수들은 optimum값에 도달하기 위해 많이 이동해야할 확률이 높기에 먼저 빠르게 loss값을 줄이는 방향으로 이동하려는 방식
+- 특히 word2vec이나 GloVe같이 word representation을 학습시킬 경우 단어의 등장 확률에 따라 variable의 사용 비율이 확연하게 차이나기에 Adagrad와 같은 학습 방식을 이용하면 훨씬 더 좋은 성능을 거둘 수 있게 됨
+- Adagrad의 한 step을 수식화하면 아래와 같음
+
+$$G_{t} = G_{t-1} + (\nabla_{\theta}J(\theta_t))^2\\$$
+$$\theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \cdot \nabla_{\theta}J(\theta_t)$$
+
+- 신경망의 파라미터 갯수가 k 개일 때 $G_t$는 k차원의 벡터로서 time step t까지 각 변수가 이동한 gradient의 sum of squares를 저장하게 됨
+- $\theta$를 업데이트하는 상황에선 기존 step size $\eta$에 $G_t$의 root값에 반비례한 크기로 이동을 진행하며, 해당 시점까지 변화가 많았던 변수일수록 적게 이동하고 변화가 적었던 변수는 많이 이동하도록 함
+- 여기서 $\epsilon$은 $10^{-4}$ ~ $10^{-8}$ 정도의 작은 값으로서 0으로 나누는 것을 방지하기 위한 작은 값을 설정
+- $G_t$를 업데이트 하는 식에서 제곱은 element-wise 제곱을 의미하며 파라미터 $\theta$를 업데이트 하는 식에서도 $\cdot$은 element-wise 연산을 의미함
+- Adagrad를 사용하면 학습을 진행하면서 구지 step size decay등을 신경써주지 않아도 된다는 장점이 있음
+  - 보통 adagrad에서 step size로는 0.01정도를 사용한 뒤 그 이후로는 바꾸지 않음
+- 하지만 adagrad는 학습을 계속 진행하게 될 경우 step size가 너무 줄어들게 된다는 문제점이 존재
+- $G$에는 계속 제곱한 값을 넣어주기에 $G$의 값들은 계속해서 증가하게 되고, 이로인해 학습이 오래 진행될 경우 step size가 너무 작아져서 결국 거의 움직이지 않게 됨
+- 이를 보완하여 고친 알고리즘이 RMSProp와 AdaDelta임
+
+## RMSProp
+- RMSProp은 제프리 힌톤이 제안한 방법으로, Adagrad의 단점을 보완한 방법
+  - Adagrad의 식에서 gradient의 제곱값을 더해나가면서 구한 $G_t$ 부분을 합이 아니라 지수평균으로 바꾸어서 대채한 방법
+- 이렇게 합이 아니라 지수평균을 이용하게 될 경우 adagrad처럼 $G_t$가 무한정 커지지 않으면서 최근 변화량의 변수간 상대적인 크기 차이는 유지할 수 있게 됨
+- 수식은 아래와 같음
+
+$$G = \gamma G + (1-\gamma)(\nabla_{\theta}J(\theta_t))^2\\$$
+$$\theta = \theta - \frac{\eta}{\sqrt{G + \epsilon}} \cdot \nabla_{\theta}J(\theta_t)$$
+
+## AdaDelta
+- AdaDelta(Adaptive Delta)는 RMSProp과 유사하게 Adagrad의 단점을 보완하기 위해 제안된 방법
+- AdaDelta는 RMSProp과 동일하게 $G$를 구할때 합이 아닌 지수평균을 이용함
+- 하지만 AdaDelta는 step size를 단순하게 $\eta$로 사용하는 대신 step size의 변화값의 제곱을 갖고 지수평균 값을 사용함
+
+$$G = \gamma G + (1-\gamma)(\nabla_{\theta}J(\theta_t))^2\\$$
+$$\Delta_{\theta} =  \frac{\sqrt{s+\epsilon}}{\sqrt{G + \epsilon}} \cdot \nabla_{\theta}J(\theta_t)\\$$
+$$\theta = \theta - \Delta_{\theta}\\$$
+$$s = \gamma s + (1-\gamma) \Delta_{\theta}^2$$
+
+- 이는 gradient descent와 같은 first-order optimization 대신 second-order optimization을 approximate하기 위한 방법임
+- 실제로 [논문](https://www.matthewzeiler.com/pubs/googleTR2012/googleTR2012.pdf)의 저자는 SGD, momentum, Adagrad와 같은 식들의 경우 $\Delta \theta$의 unit을 구해보면 $\theta$의 unit이 아니라 $\theta$ unit의 역수를 따른다는것을 지적함
+- $\theta$의 unit을 $u(\theta)$라고 하고 loss function J는 unit이 없다고 할 때, first-order optimization은 이래와 같은 관계를 가짐
+
+$$\Delta \theta \propto \frac{\partial J}{\partial \theta} \propto \frac{1}{u(\theta)}$$
+
+- 반면 Newton method와 같은 second-order optimization을 고려하면 아래와 같이 바른 unit을 가지게 됨
+
+$$\Delta \theta \propto \frac{\frac{\partial J}{\partial \theta}}{\frac{\partial^2 J}{\partial \theta^2}} \propto u(\theta)$$
+
+- 따라서 저자는 Newton's method를 이용하여 $\Delta \theta$가 $\frac{\frac{\partial J}{\partial \theta}}{\frac{\partial^2 J}{\partial \theta^2}}$라고 생각한 후, $\frac{1}{\frac{\partial^2 J}{\partial \theta^2}} = \frac{\Delta \theta}{\frac{\partial J}{\partial \theta}}$ 이므로 이를 분자의 Root Mean Square(RMS), 분모의 RMS값의 비율로 근사한 것임
+  - 더 자세한 설명은 논문을..
 
 
 
