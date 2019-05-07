@@ -63,7 +63,7 @@ $$v_t = \gamma v_{t-1} + \eta \nabla_{\theta}J(\theta)$$
 
 $$\theta = \theta - v_t$$
 
-- durltj $\gamma$는 얼마나 momentum을 줄 것인지에 대한 term으로 보통 0.9정도의 값을 사용
+- 여기서 $\gamma$는 얼마나 momentum을 줄 것인지에 대한 term으로 보통 0.9정도의 값을 사용
 - 식을 보면 과거에 얼마나 이동했는지에 대한 이동 항 $v$를 기억하고 새로운 이동항을 구할 때 과거에 이동했던 정도에 관성항만큼 곱한 후 gradient를 이용한 이동 step 항을 더해주게 됨
 - 이렇게 할 경우 이동항 $v_t$는 다음과 같은 식으로 정리할 수 있어 gradient들의 지수평균을 이용하여 이동한다고도 해석이 가능해짐
 
@@ -202,10 +202,10 @@ $$\theta = \theta - \frac{\eta}{\sqrt{\hat{v_t}+\epsilon}}\hat{m_t}$$
 - 보통 $\beta_1$로는 0.9, $\beta_2$로는 0.999, $\epsilon$으로는 $10^{-8}$정도의 값을 사용함
 
 ## Summing up
-
-
-
-
-
-
-
+- 위에서 알아본 momentum, NAG, AdaGrad, AdaDelta, RMSProp, Adam등 다양한 알고리즘들 중 어느 알고리즘이 가장 좋다라고 말하기는 힘듦
+- 어떤 문제를 풀고있는지, 어떤 데이터셋을 사용하는지, 어떤 네트워크에 대해 적용하는지에 따라 각 방법의 성능은 판이하게 차이가 날 것이므로 실제로 네트워크를 학습시킬 때는 다양한 시도를 해보며 현재 경우에서는 어떤 알고리즘이 가장 성능이 좋은지에 대해 실험해볼 필요가 있음
+- Tensorflow등의 ML library를 사용하면 코드 한 줄만 변화시키면 쉽게 어떤 optimizer를 사용할것인지 설정이 가능함
+- 위에서 설명된 알고리즘들은 모두 SGD, 즉 단순한 first-order optimization의 변형들임
+- 이 외에도 Newton's method등 second-order optimization을 기반으로 한 알고리즘들도 존재함
+- 하지만 단순한 second-order optimization을 사용하기 위해선 Hessian Matrix라는 2차 편미분 행렬을 계산한 후 역행렬을 구해야 하므로 계산과정이 복잡하고 비용이 커 보통 잘 사용하지 않음
+- 이러한 큰 계산비용을 감소시키기 위해 hessian matrix를 근사하거나 추정하며 계산을 진행하는 BFGS / L-BFGS 등의 알고리즘, hessian matrix를 직접 계산하지 않으면서도 second-order optimization을 하게 해주는 Hessian-Free optimization등의 방법들도 존재함
