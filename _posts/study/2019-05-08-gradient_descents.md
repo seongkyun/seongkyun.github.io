@@ -59,7 +59,8 @@ $$\theta = \theta - \eta \nabla_{\theta} J(\theta)$$
 - 현재 gradient를 통해 이동하는 방향과 별개로 과거에 이동했던 방향등을 기억하면서 그 방향으로 일정 정도를 추가적으로 이동하게 되는 방식
 - 수식으로 표현하면 아래와 같으며, $v_t$를 time step t에서 이동 벡터라 할 때 아래와 같은 식으로 이동을 표현 가능함
 
-$$v_t = \gamma v_{t-1} + \eta \nabla_{\theta}J(\theta)\\$$
+$$v_t = \gamma v_{t-1} + \eta \nabla_{\theta}J(\theta)$$
+
 $$\theta = \theta - v_t$$
 
 - durltj $\gamma$는 얼마나 momentum을 줄 것인지에 대한 term으로 보통 0.9정도의 값을 사용
@@ -115,8 +116,9 @@ $$v_t = \eta \nabla_{\theta}J(\theta)_t + \gamma \eta \nabla_{\theta}J(\theta)_{
 - 반면 NAG는 momentum step을 먼저 고려하여 momentum step을 먼저 이동했다고 가정하고 그 자리에서의 gradient를 구해 step을 이동함
 - 수식은 아래와 같음
 
-$$v_t = \gamma v_{t-1}+ \eta\nabla_{\theta}J(\theta-\gamma v_{t-1}) \\
-\theta = \theta - v_t$$
+$$v_t = \gamma v_{t-1}+ \eta\nabla_{\theta}J(\theta-\gamma v_{t-1}) $$
+
+$$\theta = \theta - v_t$$
 
 - NAG를 이용할 경우 momentum 방식에 비해 보다 효과적으로 이동 가능함
 - Momentum 방식의 경우 멈춰야 할 시점에서도 관성에 의해 더 멀리 나아갈 수 있을 확률이 큰 단점이 존재하지만, NAG 방식의 경우 일단 모멘텀으로 이동을 반정도 한 후 어떤 방식으로 이동해야할지를 결정함
@@ -129,8 +131,9 @@ $$v_t = \gamma v_{t-1}+ \eta\nabla_{\theta}J(\theta-\gamma v_{t-1}) \\
 - 특히 word2vec이나 GloVe같이 word representation을 학습시킬 경우 단어의 등장 확률에 따라 variable의 사용 비율이 확연하게 차이나기에 Adagrad와 같은 학습 방식을 이용하면 훨씬 더 좋은 성능을 거둘 수 있게 됨
 - Adagrad의 한 step을 수식화하면 아래와 같음
 
-$$G_{t} = G_{t-1} + (\nabla_{\theta}J(\theta_t))^2 \\
-\theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \cdot \nabla_{\theta}J(\theta_t)$$
+$$G_{t} = G_{t-1} + (\nabla_{\theta}J(\theta_t))^2 $$
+
+$$\theta_{t+1} = \theta_t - \frac{\eta}{\sqrt{G_t + \epsilon}} \cdot \nabla_{\theta}J(\theta_t)$$
 
 - 신경망의 파라미터 갯수가 k 개일 때 $G_t$는 k차원의 벡터로서 time step t까지 각 변수가 이동한 gradient의 sum of squares를 저장하게 됨
 - $\theta$를 업데이트하는 상황에선 기존 step size $\eta$에 $G_t$의 root값에 반비례한 크기로 이동을 진행하며, 해당 시점까지 변화가 많았던 변수일수록 적게 이동하고 변화가 적었던 변수는 많이 이동하도록 함
@@ -148,17 +151,21 @@ $$G_{t} = G_{t-1} + (\nabla_{\theta}J(\theta_t))^2 \\
 - 이렇게 합이 아니라 지수평균을 이용하게 될 경우 adagrad처럼 $G_t$가 무한정 커지지 않으면서 최근 변화량의 변수간 상대적인 크기 차이는 유지할 수 있게 됨
 - 수식은 아래와 같음
 
-$$G = \gamma G + (1-\gamma)(\nabla_{\theta}J(\theta_t))^2 \\
-\theta = \theta - \frac{\eta}{\sqrt{G + \epsilon}} \cdot \nabla_{\theta}J(\theta_t)$$
+$$G = \gamma G + (1-\gamma)(\nabla_{\theta}J(\theta_t))^2 $$
+
+$$\theta = \theta - \frac{\eta}{\sqrt{G + \epsilon}} \cdot \nabla_{\theta}J(\theta_t)$$
 
 ## AdaDelta
 - AdaDelta(Adaptive Delta)는 RMSProp과 유사하게 Adagrad의 단점을 보완하기 위해 제안된 방법
 - AdaDelta는 RMSProp과 동일하게 $G$를 구할때 합이 아닌 지수평균을 이용함
 - 하지만 AdaDelta는 step size를 단순하게 $\eta$로 사용하는 대신 step size의 변화값의 제곱을 갖고 지수평균 값을 사용함
 
-$$G = \gamma G + (1-\gamma)(\nabla_{\theta}J(\theta_t))^2 \\
-\Delta_{\theta} =  \frac{\sqrt{s+\epsilon}}{\sqrt{G + \epsilon}} \cdot \nabla_{\theta}J(\theta_t) \\
-\theta = \theta - \Delta_{\theta} \\
+$$G = \gamma G + (1-\gamma)(\nabla_{\theta}J(\theta_t))^2 $$
+
+$$\Delta_{\theta} =  \frac{\sqrt{s+\epsilon}}{\sqrt{G + \epsilon}} \cdot \nabla_{\theta}J(\theta_t) $$
+
+$$\theta = \theta - \Delta_{\theta} $$
+
 $$s = \gamma s + (1-\gamma) \Delta_{\theta}^2$$
 
 - 이는 gradient descent와 같은 first-order optimization 대신 second-order optimization을 approximate하기 위한 방법임
@@ -178,16 +185,19 @@ $$\Delta \theta \propto \frac{\frac{\partial J}{\partial \theta}}{\frac{\partial
 - Adam(Adaptive Moment Estimation)은 RMSProp과 momentum 방식을 합친 것과 같은 알고리즘임
 - 이 방식에서는 momentum 방식과 유사하게 지금까지 계산해온 기울기의 지수평균을 저장하며 RMSProp과 유사하게 기울기의 제곱값의 지수평균을 저장함
 
-$$m_t = \beta_1 m_{t-1} + (1-\beta_1)\nabla_\theta J(\theta) \\
-v_t = \beta_2 v_{t-1} + (1-\beta_2)(\nabla_\theta J(\theta))^2$$
+$$m_t = \beta_1 m_{t-1} + (1-\beta_1)\nabla_\theta J(\theta) $$
+
+$$v_t = \beta_2 v_{t-1} + (1-\beta_2)(\nabla_\theta J(\theta))^2$$
 
 - 다만 Adam에서는 m과 v가 처음에 0으로 초기화되어 있기에 학습 초반부에서는 $m_t$, $v_t$가 0에 가깝게 bias 되어있을 것이라 판단하고 이를 unbiased하게 만들어주는 작업을 거치게 됨
 - $m_t$와 $v_t$의 식을 $\sum$ 형태로 펼친 후 양 변에 expectation을 씌워 정리해보면 다음과 같은 보정을 통해 unbiased된 expectation을 얻을 수 있게 됨
 - 이 보정된 expectation들을 갖고 gradient가 들어갈 자리에 $\hat{m_t}$, $G_t$가 들어갈 자리에 $\hat{v_t}$를 넣어 계산을 진행함
 
-$$\hat{m_t} = \frac{m_t}{1-\beta_1^t} \\
-\hat{v_t} = \frac{v_t}{1-\beta_2^t} \\
-\theta = \theta - \frac{\eta}{\sqrt{\hat{v_t}+\epsilon}}\hat{m_t}$$
+$$\hat{m_t} = \frac{m_t}{1-\beta_1^t} $$
+
+$$\hat{v_t} = \frac{v_t}{1-\beta_2^t} $$
+
+$$\theta = \theta - \frac{\eta}{\sqrt{\hat{v_t}+\epsilon}}\hat{m_t}$$
 
 - 보통 $\beta_1$로는 0.9, $\beta_2$로는 0.999, $\epsilon$으로는 $10^{-8}$정도의 값을 사용함
 
