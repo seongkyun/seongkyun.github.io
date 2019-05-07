@@ -174,6 +174,25 @@ $$\Delta \theta \propto \frac{\frac{\partial J}{\partial \theta}}{\frac{\partial
 - 따라서 저자는 Newton's method를 이용하여 $\Delta \theta$가 $\frac{\frac{\partial J}{\partial \theta}}{\frac{\partial^2 J}{\partial \theta^2}}$라고 생각한 후, $\frac{1}{\frac{\partial^2 J}{\partial \theta^2}} = \frac{\Delta \theta}{\frac{\partial J}{\partial \theta}}$ 이므로 이를 분자의 Root Mean Square(RMS), 분모의 RMS값의 비율로 근사한 것임
   - 더 자세한 설명은 논문을..
 
+## Adam
+- Adam(Adaptive Moment Estimation)은 RMSProp과 momentum 방식을 합친 것과 같은 알고리즘임
+- 이 방식에서는 momentum 방식과 유사하게 지금까지 계산해온 기울기의 지수평균을 저장하며 RMSProp과 유사하게 기울기의 제곱값의 지수평균을 저장함
+
+$$m_t = \beta_1 m_{t-1} + (1-\beta_1)\nabla_\theta J(\theta)\\$$
+$$v_t = \beta_2 v_{t-1} + (1-\beta_2)(\nabla_\theta J(\theta))^2$$
+
+- 다만 Adam에서는 m과 v가 처음에 0으로 초기화되어 있기에 학습 초반부에서는 $m_t$, $v_t$가 0에 가깝게 bias 되어있을 것이라 판단하고 이를 unbiased하게 만들어주는 작업을 거치게 됨
+- $m_t$와 $v_t$의 식을 $\sum$ 형태로 펼친 후 양 변에 expectation을 씌워 정리해보면 다음과 같은 보정을 통해 unbiased된 expectation을 얻을 수 있게 됨
+- 이 보정된 expectation들을 갖고 gradient가 들어갈 자리에 $\hat{m_t}$, $G_t$가 들어갈 자리에 $\hat{v_t}$를 넣어 계산을 진행함
+
+$$\hat{m_t} = \frac{m_t}{1-\beta_1^t}\\$$
+$$\hat{v_t} = \frac{v_t}{1-\beta_2^t}\\$$
+$$\theta = \theta - \frac{\eta}{\sqrt{\hat{v_t}+\epsilon}}\hat{m_t}$$
+
+- 보통 $\beta_1$로는 0.9, $\beta_2$로는 0.999, $\epsilon$으로는 $10^{-8}$정도의 값을 사용함
+
+## Summing up
+
 
 
 
