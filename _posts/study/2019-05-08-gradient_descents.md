@@ -45,3 +45,9 @@ $$\theta = \theta - \eta \nabla_{\theta} J(\theta)$$
 <figcaption>Gradient Descent Optimization Algorithms at Saddle Point</figcaption>
 </figure>
 </center>
+
+- 위 그림들은 각각 SGD 및 SGD 변형 알고리즘들이 minima를 찾는 과정을 시각화 한 것
+- 빨간색으로 표현되는 SGD가 우리가 흔히 알고있는 Naive Stochastic Gradient Descent 알고리즘이고, Momentum, NAG, Adagrad, AdaDelta, RMSprop 등은 모두 SGD의 변형된 꼴
+- 그림처럼 모든 경우에서 SGD는 다른 알고리즘보다 성능이 월등히 낮음
+  - 다른 알고리즘들보다 이동속도가 현저히 낮음
+  - 방향을 제대로 잡지 못하고 이상한곳에 수렴하는경우도 관찰 가능
