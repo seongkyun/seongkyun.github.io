@@ -101,5 +101,30 @@ $$v_t = \eta \nabla_{\theta}J(\theta)_t + \gamma \eta \nabla_{\theta}J(\theta)_{
 - 기존의 SGD의 경우 그림의 좌측부분처럼 local minima에 빠지게 되면 gradient가 0이 되어 이동 불가하지만 momentum 방식의 경우 기존에 이동했던 방향에 관성이 있어 local minima를 빠져나와 더 좋은 broad minima에 수렴할 수 있게 될 확률이 큼
 - 반면에 momentum 방식을 이용하게 되면 기존의 변수들 $\theta$ 외에도 과거 이동했던 양을 변수별로 저장해야 하므로 변수에 대한 메모리가 기존의 두 배로 필요하게 됨
 
+## Nesterov Accelerated Gradient (NAG)
+- Nesterov Accelerated Gradient(NAG)는 momentum 방식을 기초로 하지만, gradient를 계싼하는 방식이 다름
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-05-08-gradient_descents/fig7.jpeg" alt="views">
+<figcaption>Difference between Momentum and NAG. Picture from CS231</figcaption>
+</figure>
+</center>
+
+- Momentum 방식에서는 이동 벡터 $v_t$ 계산시 현재 위치에서의 gradient와 momentum step을 독립적으로 계산하고 합침
+- 반면 NAG는 momentum step을 먼저 고려하여 momentum step을 먼저 이동했다고 가정하고 그 자리에서의 gradient를 구해 step을 이동함
+- 수식은 아래와 같음
+
+$$v_t = \gamma v_{t-1}+ \eta\nabla_{\theta}J(\theta-\gamma v_{t-1})$$
+$$\theta = \theta - v_t$$
+
+- NAG를 이용할 경우 momentum 방식에 비해 보다 효과적으로 이동 가능함
+- Momentum 방식의 경우 멈춰야 할 시점에서도 관성에 의해 더 멀리 나아갈 수 있을 확률이 큰 단점이 존재하지만, NAG 방식의 경우 일단 모멘텀으로 이동을 반정도 한 후 어떤 방식으로 이동해야할지를 결정함
+- 따라서 momentum 방식의 빠른 이동이라는 이점은 누리면서도 멈춰야 할 적절한 시점에서 제동을 하는데에 훨씬 용이하게 됨
+
+
+
+
+
 
 
