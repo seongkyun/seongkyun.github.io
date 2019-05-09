@@ -20,6 +20,7 @@ comments: true
 
 ## Linux GPU CUDA dependency
 - 반드시 자신의 cuDNN, CUDA에 알맞은 tensorflow 버전을 설치해야 하며, 다르게 될 경우 십중팔구 error가 발생한다.
+  - 나머지 경우(Linux W/O GPU, mac, windows 등) 위의 글에서 확인하면 됨
 
 <center>
 <figure>
