@@ -71,4 +71,16 @@ for iteration in range(start_iter, max_iter):
 ```
 
 ## Tensorboard 실행
+- 새로운 터미널을 켠 후, `tensorboard --logdir=directory_to_log_file` 로 tensorboard를 실행한다.
+  - 보통 log 파일은 별도의 설정이 없다면 해당 코드를 실행시킨 폴더에 `runs` 폴더가 생성된 후 그 안에 해당 시점 이름의 폴더에 저장된다.
+  - 만약 특정 위치로 log가 저장되게 하고 싶다면, 위 코드에서 `summary = SummaryWriter(dir_to_log_file)`의 dir_to_log_file에 저장되게 할 수 있다.
+- 한 번에 두 개의 학습이 돌아가고 있는 경우, 별도 port를 설정해야 한다.
+  - `tensorboard --logdir=directory_to_log_file --port=8008` 또는 `--port=6006`
+  - tensorboard의 기본 port 번호는 6006이다.
+- 실행 후 생성되는 인터넷 주소를 복사하여 웹 브라우저에 넣으면 그래프를 확인 할 수 있다.
+  - 형식은 `username:port`으로 주소가 생성된다.
+- 종료의 경우 tensorboard를 실행시킨 터미널에서 `Ctrl + C`로 종료한다.
 
+## 학습을 끊었다가 이어서 하게되는 경우
+- 메인 코드에서 `summary = SummaryWriter(dir_to_log_file)`에서 dir_to_log_file의 주소를 이전 log가 존재하던위치로 설정해주면 알아서 이어서 그래프를 plot해준다.
+- 하지만 x축으로 이용되는 변수(`iteration`)가 다시 1부터 시작하게 될 경우 그래프가 덧씌어져 의미 없게 되므로 이에대한 대처코드가 training code에 존재해야 한다.
