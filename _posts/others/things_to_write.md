@@ -3,4 +3,4 @@
 - 우분투 파이썬 버전 선택 및 관리
   - ~~https://codechacha.com/ko/change-python-version/~~
 - 텐서보드 사용법
-  - https://pythonkim.tistory.com/39
+  - ~~https://pythonkim.tistory.com/39~~
