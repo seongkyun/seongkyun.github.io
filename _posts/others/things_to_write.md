@@ -1,6 +1,0 @@
-- 텐서플로 이전버전 깔기 및 관련 cuda version들
-  - ~~https://stackoverflow.com/questions/50622525/which-tensorflow-and-cuda-version-combinations-are-compatible~~
-- 우분투 파이썬 버전 선택 및 관리
-  - ~~https://codechacha.com/ko/change-python-version/~~
-- 텐서보드 사용법
-  - ~~https://pythonkim.tistory.com/39~~
