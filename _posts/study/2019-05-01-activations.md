@@ -195,7 +195,7 @@ $$f(x)=\begin{cases} x & \mbox{if } x>0 \\\alpha(e^{x}-1) & \mbox{if } x\leq 0\e
   - ReLU를 y축에서 -1로 이동 후 $e^{x}$로 근사화하여 0 근처에서 항상 미분 가능한 꼴이 됨
 - ELU의 특징은 다음과 같음
   - ReLU의 장점을 모두 포함
-  - Dyine ReLU 문제 해결
+  - Dying ReLU 문제 해결
   - 출력값이 거의 zero-centered함
   - ReLU, Leaky ReLU와 달리 exp()에 대한 미분값을 계산해야 하는 비용이 발생
 
