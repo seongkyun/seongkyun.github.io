@@ -67,7 +67,7 @@ def sigmoid(z):
 - Tanh 함수는 함수값을 [-1, 1]로 제한시킴
 - 값을 saturate 시킨다는 점에서 sigmoid와 비슷하나 zero-centered 모양임
 - 따라서 tanh 비선형함수는 sigmoid보다 많이 사용됨
-- Tanh는 다음과 같이 sigmoid 함수($\simga (x)$)를 이용해 아래와같이 표현 가능
+- Tanh는 다음과 같이 sigmoid 함수($\sigma (x)$)를 이용해 아래와같이 표현 가능
   - $tanh(x)=2\sigma (2x)-1$
 
 ```python
