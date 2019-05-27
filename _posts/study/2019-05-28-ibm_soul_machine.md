@@ -12,7 +12,6 @@ comments: true
 - 참고 글
   - http://www.seminartoday.net/news/articleView.html?idxno=10131
   - https://www.ibm.com/watson/kr-ko/products.html
-
 - __IBM Watson API:__ IBM에서 제공하는 다양한 AI API에 기본으로 탑재되는 인공지능. Watson API는 IBM Watson의 Cognitive 기술을 담아 애플리케이션이나 솔루션을 개발 할 수 있도록 모듈화 한 서비스. IBM 클라우드 플랫폼인 '블루믹스' 상에서 이용 가능하며, 제공하는 IBM Watson의 API는 아래와 같음.
   - AI Assistant: 다양한 대화 기술을 애플리케이션에 통합
     - Watson Assistant: 간편한 도구 및 대화 트리로 챗봇 개발 (한국어 지원)
@@ -34,9 +33,12 @@ comments: true
 ## Soul Machine
 - 참고 글
   - https://m.blog.naver.com/PostView.nhn?blogId=ibm_korea&logNo=221330091341&proxyReferer=https%3A%2F%2Fwww.google.com%2F
-
-- __소울 머신__ 은 뉴질랜드에 본사를 둔 회사로, IBM Watson의 Watson Assistant 기반의 챗봇에 사람의 얼굴 표정과 목소리로 사용자의 감정까지 고려하는 인공지능 아바타를 제작. 사용자의 표정이나 목소리로 분석된 감정을 판단하여 슬픈 얼굴 표정이나 목소리로 위로를 전하고 답변하는 등의 기능 수행.
-  - 영화 '아바타'나 '킹콩'의 디지털 애니메이션 부문으로 제작 과정에 참여
+  - https://www.ibm.com/case-studies/soul-machines-hybrid-cloud-ai-chatbot
+- __소울 머신__ 은 뉴질랜드에 본사를 둔 회사로, IBM Watson의 Watson Assistant 기반의 챗봇에 사람의 얼굴 표정과 목소리로 사용자의 감정까지 고려하는 인공지능 아바타를 제작.
+- 사용자의 표정이나 목소리로 분석된 감정을 판단하여 슬픈 얼굴 표정이나 목소리로 위로를 전하고 답변하는 등의 기능 수행.
+- 소울머신은 IBM Watson 기술을 이용해 감정적으로 고객의 요구 및 질문에 반응하는 인공 인물을 제작하는 서비스를 제공
+- 소울머신 적용시 40%이상의 human factor 감소, 지속적인 학습으로 정확도의 점차적 향상이 가능
+- IBM Watson API가 적용된 플랫폼에 대해 맞춤형 아바타 제작 및 적용시 8-12주의 시간 소모
 - 클라우딩 서비스 기반의 IBM Watson Assistant와 소울머신 플랫폼을 통합하여 구현되며, 아래와 같이 동작
   - 사용자가 소울머신의 가상 인공 인물에게 질문
   - 소울머신 플랫폼에서 입력된 고객의 음성 오디오 스트림을 Watson Assistant API로 전송(Cloud)
@@ -46,8 +48,6 @@ comments: true
   - Watson이 답변을 생성하는 동안 __소울머신 플랫폼은 고객의 목소리 톤과 미세한 얼굴 표정 등 감지된 시청각 자료를 분석__
   - 최종적으로 Watson이 만든 답변과 소울머신의 시청각 자료 분석 결과를 토대로 사용자의 질문에 대한 알맞은 목소리 톤과 얼굴 표정으로 결과 출력(대답)
 - 2017년 호주 정부의 장애은 서비스 국가표준인 NDIS에 적용하기 위한 Nadia를 개발하여 적용
-- 
-
 
 <center>
 <figure>
