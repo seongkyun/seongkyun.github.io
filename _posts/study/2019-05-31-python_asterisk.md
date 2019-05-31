@@ -56,7 +56,7 @@ for i, vector in enumerate(vector_list * 3):
 # 3 scalar product of vector: [3, 6, 9]
 ```
 
-3. 가변인자 (Variadic Parameters)를 사용하고자 할 때
+## 3. 가변인자 (Variadic Parameters)를 사용하고자 할 때
 - 함수에서 가변인자를 필요로 할 때 (들어오는 인자의 갯수를 모르거나 어떤 인자라도 모두 받아서 처리해야 할 때) 사용
 - 파이썬에서는 positional arguments와 keyworkd arguments의 두 가지 종류의 인자가 존재하며, 전자(positional arguments)는 위치에 따라 정해지는 인자, 후자(keyword arguments)는 키워드를 가진(이름을 가진)인자를 의미함
 - Variadic positional/Keyword argument를 살피기 전 간단히 두 인자의 차이에 대해 살펴보면 아래와 같음
@@ -143,6 +143,82 @@ def save_ranking(**kwargs, *args):
 - 보통은 코드의 일관성을 위해 관례적으로 `*args`와 `**kwargs`를 사용되지만, `*required`나 `**optional`처럼 인자명도 일반변수와 같이 원하는대로 지정이 가능함
   - 단, 오픈소스 프로젝트 진행하고 있고 별 특별한 의미가 없다면 관례적인 표현인 `*args`와 `**kwargs`를 따르는게 좋음
 
+## 4. 컨테이너 타입의 데이터를 unpacking 할 때
+- \* 는 컨테이너 타입의 데이터를 unpacking하는 경우에도 사용 가능함
+- 이는 3번의 경우와 유사한 원리로 종종 사용할만한 연산방법.
+- 가장 쉬운 예로 _list_ 나 _tuple_ 또는 _dict_ 형태의 데이터를 가지고 있고 어떤 함수가 가변인자를 받는 경우에 사용 가능함
 
+```python
+from functools import reduce
 
+primes = [2, 3, 5, 7, 11, 13]
+
+def product(*numbers):
+    p = reduce(lambda x, y: x * y, numbers)
+    return p
+
+product(*primes)
+# 30030
+
+product(primes)
+# [2, 3, 5, 7, 11, 13]
+```
+
+- `product()` 함수가 가변인자를 받고 있기 때문에 리스트의 데이터를 모두 unpacking하여 함수에 전달해야 함
+- 이 경우 함수에 값을 전달할 때 `*primes`와 같이 전달하면 `primes` 리스트의 모든 값들이 unpacking되어 `numbers`라는 리스트에 저장됨
+- 만약 이를 `primes` 그대로 전달하려면 이 자체가 하나의 값으로 쓰여 `numbers`에는 `primes`라는 원소 하나가 존재하게 됨
+  - numbers = [primes] = [[2, 3, 5, 7, 11, 13]]
+- _tuple_ 또한 _list_ 와 동일하게 동작하며 _dict_ 의 경우 \* 대신 \*\*을 사용하여 동일한 형태로 사용 가능
+
+```python
+headers = {
+    'Accept': 'text/plain',
+    'Content-Length': 348,
+    'Host': 'http://mingrammer.com'
+}
+
+def pre_process(**headers):
+    content_length = headers['Content-Length']
+    print('content length: ', content_length)
+
+    host = headers['Host']
+    if 'https' not in host:
+        raise ValueError('You must use SSL for http communication')
+
+pre_process(**headers)
+# content length:  348
+# Traceback (most recent call last):
+#   File "<stdin>", line 1, in <module>
+#   File "<stdin>", line 7, in pre_process
+# ValueError: You must use SSL for http communication
+```
+
+- 또 다른 형태의 unpacking이 한 가지 더 존재하는데, 이는 ㅎ마수의 인자로써 사용하는게 아닌 리스트나 튜플 데이터를 다른 변수에 가변적으로 unpacking하여 사용하는 형태임
+
+```python
+numbers = [1, 2, 3, 4, 5, 6]
+
+# unpacking의 좌변은 리스트 또는 튜플의 형태를 가져야하므로 단일 unpacking의 경우 *a가 아닌 *a,를 사용
+*a, = numbers
+# a = [1, 2, 3, 4, 5, 6]
+
+*a, b = numbers
+# a = [1, 2, 3, 4, 5]
+# b = 6
+
+a, *b, = numbers
+# a = 1
+# b = [2, 3, 4, 5, 6]
+
+a, *b, c = numbers
+# a = 1
+# b = [2, 3, 4, 5]
+# c = 6
+```
+
+- 여기서 `*a`, `*b`로 받는 부분들은 우변의 리스트 또는 튜플이 unpacking된 후 다른 변수들에 할당된 값 외의 나머지 값들을 다시 하나의 리스트로 packing함
+  - 3번의 가변인자 packing과 동일한 개념
+
+## 결론
+- 3번의 내용이 매우 자주 사용되는 중요한 기능이자 자주 헷갈릴 수 있는 부분이기에 
 
