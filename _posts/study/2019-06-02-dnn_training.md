@@ -137,3 +137,6 @@ model = my_model(my_transform, dataset, ResNet50, SGDOptimizer)
   - https://arxiv.org/abs/1503.02531?fbclid=IwAR2HSli0-ilYp5SVP6avCmIyYV95KpSAm-nrJZ7w5wDn-MnDl6nRnHb9Edw
 - __계속 학습 시키기.__ Validation loss가 줄어들지 않으면 대부분 학습을 중단시킴. 하지만 경험상 아무리 오랜시간 학습시켜도 학습은 계속되게 되어있음. 저자의 일례로 휴가기간 내내 실수로 돌려둔 학습모델의 성능이 엄청 좋아진 경험이 있다고 함.
 
+## 결론
+- 위의 일련의 과정을 통해 성공적인 학습을 위한 모든 요소들을 갖추게 됨. 기술, 데이터셋, 해결하고자 하는 문제에 대한 깊은 이해, 학습과 평가를 위한 총체적인 인프라를 갖추었으며 더 복잡해지는 모델들도 탐색하고, 각 단계에서 예측가능한 만큼의 성능 향상도 이루었을 것임. Good luck!
+
