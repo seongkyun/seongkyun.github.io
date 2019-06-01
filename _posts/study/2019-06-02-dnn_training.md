@@ -93,9 +93,19 @@ model = my_model(my_transform, dataset, ResNet50, SGDOptimizer)
 - __Dependency를 알기 위해 역전파 이용.__ 보통 대부분의 실수는 배치사이 차원간에 정보를 섞어버리는 실수. 이렇게되도 학습은 보통 계속됨.(다른 case로부터 섞인 필요없는 정보를 무시하도록 네트워크가 학습되므로) 특정 예제 i에 대한 loss를 1.0으로 설정하고 입력단까지 back propagation시켜서 해당 i번째 입력에 대해서만 0이 아닌 gradient가 계산되는지를 출력해보면 됨. 즉, 경사도를 이용해 신경망이 어떤 정보에 의존적인가에 대한 정보를 얻을 수 있음.
 - __Generalize a special case.__ 보통 코딩시 처음에는 매우 구체적인 함수부터 시작해서 잘 동작하는지 확인한다음 일반적으로 작동하는 함수를 다시 짜서 올바른 결과가 나오는지 확인하는 방법을 사용. 벡터 연산 코드에도 종종 쓰임.
 
+### 3. Overfitting 시키기
+- 
 
+### 4. 일반화(Regularize)
+- 
 
+### 5. Tunning
+- 
 
+### 6. Squeeze out the juice
+- 
 
+## 결론
+- 
 
 
