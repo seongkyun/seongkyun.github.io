@@ -105,10 +105,29 @@ model = my_model(my_transform, dataset, ResNet50, SGDOptimizer)
 - __Learning rate decay를 너무 믿진 말기.__ 다른 도메인에서 쓰이던 코드를 가져와서 재사용하는 경우 learning rate decay를 매우 조심해서 사용해야 함. 서로 다른 task에 대해 다른 learning rate decay function을 쓰는건 당연한 일. 게다가 lr decaying function은 보통 현재 epoch 숫자에 맞춰 계산되도록 구현되어 있는데, 적정 epoch은 dataset의 종류에 따라 크게 달라짐. 예를들어 ImageNet일때 30 epoch에서 1/10 decaying이지만, 다른 데이터셋은 다른 epoch에 적용되어야 함. 이로인해 lr이 너무 빨리 작아져서 적절하게 모델이 학습되지 않을 수 있음. 따라서 데이터셋에 따라 decaying을 일단 적용하지 말고, 마지막에 튜닝하는식으로 적용시켜야 함.
 
 ### 4. 일반화(Regularize)
-- 
+- 지금까지 문제가 없었다면 최소한 학습용 데이터셋에는 확실하게 맞춰진 큰 모델을 갖고있게됨을 의미.
+- 이제 regularization을 적용해서 학습정확도는 좀 잃더라도 테스트 정확도를 올릴 차례.
+- __더 많은 학습용 데이터셋.__ 어떠한 경우에도 모델의 일반화에 최선의 방법은 더 많은 실제 데이터를 모으는것임. 더 많은 데이터를 모을 수 있는 상황에서 엔지니어링에 많은 노력을 소모하는것은 매우 흔한 실수. 더 많은 학습용 데이터를 통해 네트워크의 성능을 지속적으로 향상 시킬 수 있음. 차선책으로는 앙상블모델이 있지만 앙상블도 5개정도 모델 이후로는 성능이 증가하지 않음
+- __Data augmentation.__ 실제 데이터셋을 더 확보하는 방법 다음으로 좋은 방법은 가짜 데이터셋을 만들어 내는 것임. Resize, crop, flipping 등의 distortion을 이용하여 원래 학습 데이터셋보다 더 많은 학습용 데이터셋을 확보 가능
+- __Creative augmentation.__ Data augmentation 외에도 도메인 랜덤화, 시뮬레이션, 데이터와 배경을 합성시키는 하이브리드 기법, GAN등을 이용한 데이터의 증대 가능
+  - http://vladlen.info/publications/playing-data-ground-truth-computer-games/?fbclid=IwAR3Bbb2-JTT46xou6-ueUpAXdqM3bL2i9UivKKRn05oRWCNnp7QRupTBZWA
+  - https://arxiv.org/abs/1708.01642?fbclid=IwAR2pQV7k2oj8H6j2ndxTNCx5IC46VZMGgg2uFElT0CuzOAufePq-ea6JdU8
+- __Pre-training.__ 미리 학습시킨 네트워크를 사용하는 경우 웬만해선 성능이 더 좋음. 이미 충분한 데이터가 존재하더라도 pre-trained model을 불러와서 재학습시킬 때의 정확도가 훨신 높음.
+- __지도학습 고수하기.__ 비지도학습에 현혹되지 말 것. 최신 결과물 중 쓸만한 방법이 없음. 반면 자연어처리 분야는 BERT 등의 비지도학습 기법들의 성능이 좋은 편.
+- __입력 차원은 낮게.__ 이상한 정보를 포함하는 feature를 제거시켜야 함. 이상한 입력이 추가될수록 학습용 데이터셋이 충분하지 않은 경우 overfitting이 발생하게 됨. 이미지 내의 정보중 세세한 디테일한 내용이 중요하지 않다면 작은 이미지를 이용해 학습시키는것도 좋은 방법이 될 수 있음.
+- __모델 크기는 작게.__ 대부분의 경우 도메인에 대한 knowledge를 이용해 신경망의 크기를 줄일 수 있음. 예를 들어 ImageNet의 backbone 가장 마지막에 fc layer를 사용하곤 했지만 훗날 average pooling으로 대체되며 파라미터 수를 많이 줄일 수 있게되었음.
+- __Batch size는 작게.__ Batch normalization 안의 정규화 때문에 작은 크기의 batch가 더 일반화 성능을 더 좋게 함. 이는 batch의 평균/분산 값들이 전체 데이터셋의 평균/분산 값의 추정치이기 때문인데, 작은 크기의 batch를 사용하면 scale과 offset 값이 batch에 따라 더 많이 wiggle되기 때문임.
+  - 즉, 작은 크기의 batch를 사용함에 따라 학습과정에서의 불확실성(noise)이 증가하게 되어 일반화 성능이 향상될 수밖에 없음. 작은 크기의 batch는 그만큼 많은 parameter update가 수행되므로 noise성분을 더 많이 갖게 됨.
+- __Drop.__ 드롭아웃을 추가. ConvNet의 경우 Dropout2d (spatial dropout)을 적용. 단, Dropout은 batch norm과 잘 어울리지 못하므로 주의해서 적당히 써야 함.
+  - https://arxiv.org/abs/1801.05134?fbclid=IwAR01IhZoe7yftt9oml_-DHSWqvHXqwjOzAXGtus1ZTCYvoEff8IuUQoNBi8
+- __Weight decaying.__ Weight decaying penalty를 증가시킴.
+- __Early stopping.__ 지금까지 측정된 validation loss를 이용하여 overfitting이 시작되려는 시점에 학습을 종료
+- __더 큰 모델을 시도.__ 맨 마지막으로 큰 모델을 사용할 경우 overfitting될 수 있지만 그 전에 학습을 미리 멈추게 될 경우 작은 모델보다 훨씬 나은 성능을 보여 줄 수 있음
+
+- 마지막으로, 학습시킨 분류기가 잘 동작한다는 추가적 확신을 얻기 위해 네트워크의 첫 번째 레이어의 weight값을 시각화해서 깔끔한 모서리가 나오는지를 확인. 만약 filter(weight 값)가 noise처럼 보인다면 제대로 학습된 것이 아니라고 의심 해 볼 수 있음. 비슷하게 네트워크의 중간 weight값을 시각화해서 이로인해 뭐가 잘못되었는지를 파악 할 수 있음.
 
 ### 5. Tunning
-- 
+- __그리드 탐색보단 무작위 탐색.__ 
 
 ### 6. Squeeze out the juice
 - 
