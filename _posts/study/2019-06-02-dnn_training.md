@@ -127,12 +127,18 @@ model = my_model(my_transform, dataset, ResNet50, SGDOptimizer)
 - 마지막으로, 학습시킨 분류기가 잘 동작한다는 추가적 확신을 얻기 위해 네트워크의 첫 번째 레이어의 weight값을 시각화해서 깔끔한 모서리가 나오는지를 확인. 만약 filter(weight 값)가 noise처럼 보인다면 제대로 학습된 것이 아니라고 의심 해 볼 수 있음. 비슷하게 네트워크의 중간 weight값을 시각화해서 이로인해 뭐가 잘못되었는지를 파악 할 수 있음.
 
 ### 5. Tunning
-- __그리드 탐색보단 무작위 탐색.__ 
+- __그리드 탐색보단 무작위 탐색.__ 여러 개의 하이퍼파라미터를 그리드 탐색방법으로 동시에 튜닝하게 될 경우 경우의 수가 너무 많음. 무작위 탐색방법을 적용하는게 가장 효율적임. 이유는 인공신경망의 성능이 특정한 소수의 파라미터에 훨씬 민감하게 반응하기 때문임. 예를 들어 파라미터 a를 변경했을 때 loss가 달라졌지만 b는 변경해도 아무런 영향이 없다면 a를 더 철저히 sampling해보는게 더 좋은 방법.
+  - http://jmlr.csail.mit.edu/papers/volume13/bergstra12a/bergstra12a.pdf?fbclid=IwAR3DcdRfOMcrro_RyetpXE-CARWpn9fpYvLLIZjP2qXnyEGBDDYnvkTlNUk
+- __하이퍼파라미터 최적화.__ 정말 다양하고 많은 베이지안 하이퍼파라미터 최적화 도구들이 존재. 최고의 방법은 노가다.
 
 ### 6. Squeeze out the juice
-- 
+- 최적의 아키텍처와 하이퍼파라미터를 찾아낸 후에도 마지막 한방울의 성능까지 짜낼 수 있는 몇 가지 트릭이 존재.
+- __앙상블 모델.__ 앙상블 모델은 어떠한 경우에서라도 2%정도의 정확도를 올려주는 확실한 방법임. 계산량 부담이 불가능한 경우 dark knowledge distillation을 통해 앙상블 모델의 정보를 작은 단일 모델로 증류(distillation)하는 기법을 시도.
+  - https://arxiv.org/abs/1503.02531?fbclid=IwAR2HSli0-ilYp5SVP6avCmIyYV95KpSAm-nrJZ7w5wDn-MnDl6nRnHb9Edw
+- __계속 학습 시키기.__ Validation loss가 줄어들지 않으면 대부분 학습을 중단시킴. 하지만 경험상 아무리 오랜시간 학습시켜도 학습은 계속되게 되어있음. 저자의 일례로 휴가기간 내내 실수로 돌려둔 학습모델의 성능이 엄청 좋아진 경험이 있다고 함.
 
 ## 결론
+- 
 - 
 
 
