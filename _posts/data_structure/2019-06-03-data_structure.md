@@ -84,3 +84,28 @@ comments: true
 <figcaption> </figcaption>
 </figure>
 </center>
+
+## 7-4 큐의 활용
+- 실제시 시스템/하드웨어 개발이나 운영체제 등에서 사용됨
+
+### 시뮬레이션의 주제
+- 주어진 조건을 따름
+- 대기실을 __큐__ 라고 여기고, 제한시간 1시간동안 조건을 따르는 입력이 주어질 때 큐가 터지는지(메모리 에러) 터지지 않는지를 판단
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-06-03-data_structure/fig6.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+### 시뮬레이션 예제의 작성
+- 성공 및 실패 확률을 계산해보는 프로그램(아날로그로 계산해야하긴함..)
+- 이런식으로 큐의 실제 예시 적용이 가능하다는것을 알면 됨.
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-06-03-data_structure/fig7.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
