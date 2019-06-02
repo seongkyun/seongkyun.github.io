@@ -97,6 +97,77 @@ comments: true
 </center>
 
 ### 원형 큐의 문제점 해결
+- 텅 비어있는 상태를 초기화 상태로 정의하고, 초기화 상태에서 `F`와 `R`은 같은 배열 index를 갖도록 설텅
+- 초기화 된 상태, 즉 `F`와 `R`이 같은 공간을 가리키는 상태를 Empty 상태로 정의
+  - 해당 상태에 해당 index에는 정보를 넣지 못함
+    - 메모리 손실!
+    - 하지만 일반적으로 배열의 길이가 매우 길어지므로 한 칸의 메모리 손실은 매우 적으며, 이로인한 코드상의 이점이 훨씬 크므로 의미있음!
+- `R` 바로 다음자리가 `F`가 되는 경우 Full 상태로 정의
 
+- __즉, 다음과 같은 상대적인 `F`와 `R`의 관계를 통해 Empty와 Full을 구분__
+  - `R == F`: Empty
+  - `R+1 = F`: Full
+- 참고로 절대위치가 아닌 상대위치임!
 
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-06-01-data_structure/fig7.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
 
+### 원형 큐의 구현: 헤더파일
+- 포인터 변수인 `front`(F)와 `rear`(R)은 배열의 index를 나타냄
+- F와 R의 위치를 알고 배열의 끝에 도달했을 때 다시 0번 인덱스로 보내주는 helper function 정의 필요
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-06-01-data_structure/fig8.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+### 원형 큐의 구현: Helper Function
+- `front`, `rear` 값이 이동 시 가져야 할 올바른 index값을 반환하도록 정의
+  - `front`나 `rear`의 값(배열의 index)이 맨 마지막일 경우 처음 값인 0을 반환하고
+  - 아니면 다음 index를 반환하도록 정의
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-06-01-data_structure/fig9.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+### 원형 큐의 구현: 함수의 정의1
+- 각각 초기화 함수와 비어있는지를 구분하는 구분하는 함수
+- 초기화 값이 0이 아닌 다른값이어도 동작에는 전혀 문제가 없음!
+  - 원형 꼴이므로
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-06-01-data_structure/fig10.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+  
+### 원형 큐의 구현: 함수의 정의2
+- Enqueue는 원형큐가 꽉 찬 경우를 제외하고 다음 인덱스값을 얻은다음 update된 인덱스 자리에 새로운 값을 저장함
+- Dequeue는 원형큐가 텅 빈 경우를 제외하고 다음 인덱스값을 얻은다음 update된 인덱스 자리의 데이터를 반환
+  - 둘 다 포인터 이동 후 en/de queue 연산 실행
+  
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-06-01-data_structure/fig11.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>  
+
+### 원형 큐의 실행
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-06-01-data_structure/fig12.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>  
