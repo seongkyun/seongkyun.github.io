@@ -115,7 +115,7 @@ Authors: Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, Zb
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig6.ng" alt="views">
+<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig6.png" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
@@ -127,14 +127,54 @@ Authors: Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, Zb
 ---
 
 ## Inception v2
-- 지금까지 설명했던것들을 모으면 Inception v2 모델이 된다.
-
+- 지금까지 설명했던것들을 모으면 Inception v2 모델이 된다.(아래 그림)
+  - 아래 모델을 Inception v3로 알고 있는경우가 많은데 그 이유는 뒤에서 셜명됨
+  
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig7png" alt="views">
+<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig7.png" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig8.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 위 표를 잘 보면 레이어 앞단은 기존 conv layer들과 다를바 없음(stem layers)
+- 중간부터는 앞에서 설명한 기본 inception layer들이 등장함
+- 중간 아래에는 figure 5, 6, 7로 표기되어있으며, 이는 앞서 설명한 여러 기법들이 차례차례 적용된것
+- 자세한 구조는 아래 그림 참고
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig9.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+---
+
+## Inception v3
+- Inception v3는 v2를 만들고 난 후 이를 이용해 이것저것 해보다가 결과가 더 좋은것들을 묶어 판올림한 모델
+- 따라서 모델 구조는 바뀌지 않으므로 inception v2 구조를 그대로 inception v3라 생각해도 됨
+  - 사실 inception v3은 inception v2++ 정도로 봐도 무방...
+- 간단하게 정확도로 결과를 확인하면 아래와 같음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig10.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+
+
+
+
 
 
 <center>
