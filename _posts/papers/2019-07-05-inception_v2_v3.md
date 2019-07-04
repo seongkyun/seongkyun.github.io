@@ -171,15 +171,29 @@ Authors: Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, Zb
 </figure>
 </center>
 
-
-
-
-
-
+- 왼쪽의 표에서 inception v2 기본 버전의 top-1 error 값이 23.4%임을 확인 가능
+- 여기에 각종 기능을 붙여본다.
+  - RMSProp: Optimizer를 바꾼다
+  - Label Smoothing
+    - 논문에 자세히 나오지만, 간단히 설명하면 target 값을 one-hot encode된 값을 사용하는것이 아니라 값이 0인 레이블에 대해서도 아주 작은 값 $e$을 배분하고, 정답은 대충 $1-(ㅜ-1)\times e$ 로 하여 반영하는것임
+  - Factorized 7x7
+    - 맨 앞단 conv 7x7 레이어를 3x3 레이어 두개로 factorization 한 것임(앞에서 설명된 내용)
+    - 그런데 inception v2 레이어 표를 보면 이미 적용되어있기는 함...
+  - BN-auxiliary
+    - 마지막 fully connected 레이어에 Batch Normalization(BN)을 적용
+- 위의 것들을 모두 적용한게 Inception v3다.
+- 최종 결과는 다음과 같음
 
 <center>
 <figure>
-<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig1.png" alt="views">
+<img src="/assets/post_img/papers/2019-07-05-inception_v2_v3/fig11.png" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
+
+- 성능은 매우 좋다고 한다..
+
+### 참고사항
+- Pre-trained model로 주로 사용하는 모델은 inception v3이다.
+- 하지만 논문에서 설명하는 inception v3과는 완벽히 일치하지 않는다
+  - 내부적으로도 버전 구분이 잘 되지 않아 날짜로 확인해야 한다고 한다..
