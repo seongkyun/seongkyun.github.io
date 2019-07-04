@@ -43,6 +43,7 @@ Authors: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed
 <img src="/assets/post_img/papers/2019-07-04-inception_v1/fig1.png" alt="views">
 <figcaption></figcaption>
 </figure>
+</center>
 
 - 구글넷이 깊은 망을 만들고도 학습이 가능했던것은 inception module 덕분임
 - 위 그림은 inception module의 구조를 나타낸 것으로, 입력값에 대해 4가지 종류의 연산을 수행하고 4개의 결과를 채널 방향으로 concat함
@@ -83,6 +84,7 @@ Authors: Christian Szegedy, Wei Liu, Yangqing Jia, Pierre Sermanet, Scott Reed
 <img src="/assets/post_img/papers/2019-07-04-inception_v1/fig2.png" alt="views">
 <figcaption></figcaption>
 </figure>
+</center>
 
 - Inception v1 은 위 그림이 핵심
 - 일단 (a) 모델에서 (conv 연산)
