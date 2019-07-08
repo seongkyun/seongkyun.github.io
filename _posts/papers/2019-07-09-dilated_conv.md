@@ -114,13 +114,6 @@ Authors: Fisher Yu, Vladlen Koltun
 - Front-end 모듈만 적용해도 기존 segmentation 논문들보다 성능이 개선되었고, context 모듈을 추가하면 추가적인 성능의 개선이 있었으며 CRF-RNN까지 적용하면 더 좋아지는것을 알 수 있음
 - 아래 표에서 front-end는 front-end 모듈만 있는 경우이고, basic/large는 context 모듈까지 적용된 경우이며 CRF는 CRF까지 적용된 경우, RNN은 CRF-RNN이 적용된 경우를 의미
 
-<center>
-<figure>
-<img src="/assets/post_img/papers/2019-07-09-dilated_conv/fig7.PNG" alt="views">
-<figcaption></figcaption>
-</figure>
-</center>
-
 ## 결론
 - 이 글에선 Fisher Yu의 dilated conv를 이용한 segmentation 방법에 대해 살폈음
 - 이들은 FCN의 VGG16을 그대로 사용하지 않고 분석을 통해 뒷부분을 수정한 front-end 모듈을 만들어냄
