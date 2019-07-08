@@ -61,6 +61,70 @@ Authors: Fisher Yu, Vladlen Koltun
 - 아래는 dilated convolution(atrous conv)을 통해 얻은 결과
 - Fisher Yu는 context module이라는것을 개발하여 segmentation의 성능을 끌어 올렸으며, 여기에 dilated convoluton을 적용함
 
+## Front-end 모듈
+- FCN이 VGG16 classification 모델을 거의 그대로 사용한 반면 논문에서는 성능 분석을 통해 모델을 수정함
+  - VGG16의 뒷단을 그대로 사용하였지만 오히려 크게 도움이 되지 않아 뒷부분을 아래처럼 수정했다고 함
+- 먼저 pool4, 5는 제거함. FCN은 이를 그대로 두었기에 feature map의 크기가 1/32까지 작아지고 이로 인해 좀 더 해상도가 높은 pool4, 3의 결과를 사용하기 위해 skip layer라는 것을 포함시킴
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-09-dilated_conv/fig3.PNG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 하지만 Fisher Yu는 pool4와 pool5를 제거함으로써 최종 featue map의 크기는 원영상의 1/8수준으로만 작아지게 하였고 이로인해 up-sample을 통한 원영상 크기로의 복원 과정에서도 상당한 detail 정보들이 살아있게 됨
+- 또한 conv5, 6(fc6)에는 일반적인 conv 사용하는 대신 conv5는 2-dilated conv를, conv6에는 4-dilated conv를 적용함
+- 결과적으로 skip layer도 없고 망도 더 간단해졌기에 연산 측면에서는 훨씬 가벼워졌음
+- 아래 표와 그림을 보면 front-end의 수정만으로도 이전 결과들보다 정밀도가 상당히 향상된 것을 확인 가능
+- 아래 표와 그림에서 DeepLab은 dilated conv를 사용했지만 구조가 약간 다른 모델
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-09-dilated_conv/fig4.PNG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+## Context 모듈
+- Front-end 모듈뿐만 아니라 다중 scale의 context를 잘 추출해내기 위한 context 모듈도 개발했고, basic과 large 모듈이 있음
+- Basic type은 feature map의 개수가 동일하지만 large type은 feature map의 개수가 늘었다가 최종단만 feature map의 개수가 원래의 개수와 같아지도록 구성됨
+- Context 모듈은 기본적으로 어떤 망이든 적용이 가능할 수 있도록 설계되었으며 자신들의 front-end 모듈 뒤에 context 모듈을 배치함
+- Context 모듈의 구성은 아래 표와 간으며 전부 convolutional layer로만 구성됨
+- 아래 표에서 C는 feature map의 개수를, dialteion은 dilated conv의 확장 계수(rate), convolution만으로 구성이 되었지만 뒷단으로 갈수록 RF의 크기가 커지도록 구성된것을 확인 가능함
+  - 표를 이해해보면, layer 1에서 3x3 conv, layer 2에서 3x3 conv가 되면 RF가 5x5가 되는것을 확인 할 수 있음
+  - 쉽게 생각해서 3x3 conv 두번 했을때 RF나 5x5 한번했을때 RF나 coverage가 동일해지는데 이런식으로 이해하면 됨
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-09-dilated_conv/fig5.PNG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+## 결과
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-09-dilated_conv/fig6.PNG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- Front-end 모듈만 적용해도 기존 segmentation 논문들보다 성능이 개선되었고, context 모듈을 추가하면 추가적인 성능의 개선이 있었으며 CRF-RNN까지 적용하면 더 좋아지는것을 알 수 있음
+- 아래 표에서 front-end는 front-end 모듈만 있는 경우이고, basic/large는 context 모듈까지 적용된 경우이며 CRF는 CRF까지 적용된 경우, RNN은 CRF-RNN이 적용된 경우를 의미
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-09-dilated_conv/fig7.PNG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+## 결론
+- 이 글에선 Fisher Yu의 dilated conv를 이용한 segmentation 방법에 대해 살폈음
+- 이들은 FCN의 VGG16을 그대로 사용하지 않고 분석을 통해 뒷부분을 수정한 front-end 모듈을 만들어냄
+- 또한 dilated convolution을 사용하여 망의 복잡도를 높이지 않으면서도 receptive field를 넓게 볼 수 있어 다양한 scale에 대응이 가능하게 함
+- 그리고 그 개념을 활용한 context 모듈까지 만들어 성능의 개선을 꾀함
 
 
