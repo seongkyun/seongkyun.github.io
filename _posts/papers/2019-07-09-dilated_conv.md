@@ -125,6 +125,7 @@ Authors: Fisher Yu, Vladlen Koltun
 - 이 글에선 Fisher Yu의 dilated conv를 이용한 segmentation 방법에 대해 살폈음
 - 이들은 FCN의 VGG16을 그대로 사용하지 않고 분석을 통해 뒷부분을 수정한 front-end 모듈을 만들어냄
 - 또한 dilated convolution을 사용하여 망의 복잡도를 높이지 않으면서도 receptive field를 넓게 볼 수 있어 다양한 scale에 대응이 가능하게 함
+  - Receptive field는 필터가 한번에 보는 영역으로 feature를 잘 추출하기 위해선 receptive field가 넓을수록 좋다고 한다.
 - 그리고 그 개념을 활용한 context 모듈까지 만들어 성능의 개선을 꾀함
 
 
