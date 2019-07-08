@@ -1,2 +1,1 @@
 - Google Inception
-- Dilated convolution
