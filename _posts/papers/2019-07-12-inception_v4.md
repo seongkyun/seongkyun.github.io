@@ -39,4 +39,120 @@ Authors: Christian Szegedy, Sergey Ioffe, Vincent Vanhoucke, Alex Alemi
   - 즉, residual의 개념은 이전 몇 단계 전 레이어의 결과를 현재 레이어의 결과와 합쳐서 내보내는것을 의미
   
 ## Inception v4, Inception-resnet v2
+- Inception v4의 전체 망 구조는 아래와같음
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig2.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- Inception v3와 마찬가지로 거의 유사한 형태의 네트워크 구성을 갖지만 세부적인 inception 모듈의 구성이 다름
+
+## Versioning
+- Inception에 resnet이 추가되면서 버저닝이 생김
+- Inception v3를 확장한게 Inception v4
+- 여기에 Inception v3와 v4에 각각 residual connection을 적용한 버전이 Inception-resnet v1, Inception-resnet v2다.
+  - Inception v3를 적용한 resnet은 Inception-resnet v1
+  - Inception v4를 적용한 resnet은 Inception-resnet v2
+
+## Stem Layer
+- Inception v3에서 앞단의 conv 레이어를 stem영역이라고 부름
+- Inception v4에서는 이 부분을 약간 변경함
+  - Inception-resnet v2 (Inception v4)에서도 stem영역은 동일하게 아래의 구조를 사용
+- Stem 영역의 구조는 아래와 같음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig3.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 이런 구조가 나오게 된 배경지식은 Inception v3에서 다루었고, Inception v4에서는 앞단의 영역에도 이런 모델이 추가로 적용되어있음
+  - 아마도 이것저것 테스트해보다가 결과가 더 좋게 나오기에 이를 채용한듯 하다..
+
+### 4 x Inception-A
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig4.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+### 7 x Inception-B
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig5.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+### 3 x Inception-C
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig6.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 위에서 설명된 Inception 모듈은 모두 입출력 크기의 변화가 없음
+  - Inception 모듈의 input, output 사이즈를 의미
+- 실제 크기 변화가 발생되는 부분은 아래처럼 reduction이라는 이름을 사용함
+
+### Reduction-A
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig7.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+### Reduction-B
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig8.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- Inception v4 모듈엔 새로운 컨셉이 등장하지 않고 기존의 Inception v3 모델을 이것저것 실험해보며 좋은 성능을 보인 case들을 조합해놓은것임
+
+## Resnet
+- 논문에선 버전을 Inception-resnet v1과 v2로 구분하여 그림으로 설명함
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig9.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 특별한 내용 없이 residual connection만 추가된 구조
+
+## 결과
+- Resnet 도입으로 학습 속도가 빨라짐
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig10.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 위 그림은 Inception v3와 Inception-resnet v1의 error rate 수렴 속도를 나타냄
+  - Resnet이 적용된 모델의 수렴속도가 훨씬 빠른것을 볼 수 있음
+- 성능지표는 아래와같음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-07-12-inception_v4/fig11.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
