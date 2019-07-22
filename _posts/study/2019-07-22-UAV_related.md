@@ -74,8 +74,26 @@ comments: true
   - 제안하는 방법은 33ms의 속도로 동작
 
 ### Object Recognition in Aerial Images Using Convolutional Neural Networks (2017)
+- https://webcache.googleusercontent.com/search?q=cache:Fic0MXgNDy0J:https://www.mdpi.com/2313-433X/3/2/21/pdf+&cd=4&hl=en&ct=clnk&gl=kr
 
+- YOLO를 이용하여 UAV imagery dataset을 제안하고 모델을 학습시킴.
+- 다만, YOLO의 hyper parameter들을 이용하여 최적화함
+  - YOLO가 갖는 작은 객체를 잘 찾지 못하는 단점등에 대해 논해야 함
+- Top-view 방식이며, 150FPS로 동작하지만 그 한계가 명확함
 
+### Vehicle Detection Under UAV Based on Optimal Dense YOLO Method (2018)
+- https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8599403
+
+- YOLO v2의 구조를 활용하여 작은 객체를 잘 찾도록 최적화 된 네트워크를 제안하고, 이를 DOLO라고 명명
+- Top-view 방식의 vehicle detection에서 정확도가 비교적 뛰어나지만, 단순히 YOLO의 네트워크를 깊게 하여 표현력을 증대시키고 Dense YOLO라고 하며 DOLO로 명명
+- 또한 네트워크 전체의 깊이가 깊어짐에 따라 연산량의 증가폭이 큼
+  - 실시간 동작이 가능하지만, 정확도가 좋은 모델은 연산량이 매우 큼
+  
+### Real-time Vehicle Detection from UAV Imagery (2018)
+- https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=8499466&tag=1
+
+- 네트워크 구조가 복잡하고 느리지만 성능이 좋은 RefineDet을 최적화하여 UAV Imagery object detection을 수행
+  - 구조를 그대로 사용한것이 아니라 default box의 크기를 작게 해 작은 객체 탐지에 최적화시킴
 
 
 
