@@ -59,14 +59,21 @@ comments: true
 - https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7726065
 
 - 원래의 Viola-Jones obejct detection method를 개선시켜 저 고도에서의 UAV imagery vehicle detection이 잘되도록 함
-  - 다양한 방향을 갖는 영상에 대비되도록 도로를 수평방향으로 정렬시키는 과정이 필요함\
+  - 다양한 방향을 갖는 영상에 대비되도록 도로를 수평방향으로 정렬시키는 과정이 필요함
   - Detection 후 tracker를 이용하여 tracking
 - 일반화 성능이 떨어지는 hand crafted method
 
 ## Deep learning methods
+### Fast Vehicle Detection in UAV Images (2017)
+- https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7958795
 
+- 기존의 YOLO V2 구조를 그대로 이용하여 UAV imagery에서의 vehicle detection을 수행
+  - YOLO V2의 구조적 단점을 거론해야 함 (작은 객체를 찾도록 최적화되어있지 않음)
+- Image annotation과 data augmentation을 적용하였으며, 영상에서 vehicle을 annotate하기위해 CSK tracking을 적용함. 
+- 입력으로 416x416 크기 영상을 사용하며, GeForce GTX 1060에서 48ms의 속도로 동작함
+  - 제안하는 방법은 33ms의 속도로 동작
 
-
+### Object Recognition in Aerial Images Using Convolutional Neural Networks (2017)
 
 
 
