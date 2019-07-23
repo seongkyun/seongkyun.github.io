@@ -55,7 +55,7 @@ comments: true
 - 아스팔트를 일단 찾은 후 해당 영역에서 수직/수평 방향의 필터링 연산을 수행하여 생성된 HOG feature를 이용하여 catalog에 등록된 reference car feature와의 유사도를 계산하여 vehicle detection을 수행
 - 일반화성능이 떨어지고 사용에 제한이 있으며 정확도가 낮음
 
-### An Enhanced Viola–Jones Vehicle Detection Method From Unmanned Aerial Vehicles Imagery
+### An Enhanced Viola–Jones Vehicle Detection Method From Unmanned Aerial Vehicles Imagery (2017)
 - https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7726065
 
 - 원래의 Viola-Jones obejct detection method를 개선시켜 저 고도에서의 UAV imagery vehicle detection이 잘되도록 함
