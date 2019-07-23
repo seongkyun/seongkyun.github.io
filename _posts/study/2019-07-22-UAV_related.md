@@ -79,6 +79,7 @@ comments: true
 - YOLO를 이용하여 UAV imagery dataset을 제안하고 모델을 학습시킴.
 - 다만, YOLO의 hyper parameter들을 이용하여 최적화함
   - YOLO가 갖는 작은 객체를 잘 찾지 못하는 단점등에 대해 논해야 함
+  - 또한 YOLO를 이용할 경우 저 고도에서 큰 객체밖에 찾지 못함
 - Top-view 방식이며, 150FPS로 동작하지만 그 한계가 명확함
 
 ### Vehicle Detection Under UAV Based on Optimal Dense YOLO Method (2018)
@@ -95,5 +96,8 @@ comments: true
 - 네트워크 구조가 복잡하고 느리지만 성능이 좋은 RefineDet을 최적화하여 UAV Imagery object detection을 수행
   - 구조를 그대로 사용한것이 아니라 default box의 크기를 작게 해 작은 객체 탐지에 최적화시킴
 
+### A Closer Look at Faster R-CNN for Vehicle Detection (2016)
+- https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=7535375
 
-
+- Faster RCNN을 사용하여 vehicle detection을 수행.(UAV 아님)
+  - Faster RCNN 기반의 새로운 detector를 제안함
