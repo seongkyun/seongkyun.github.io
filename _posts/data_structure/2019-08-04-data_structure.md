@@ -1,0 +1,16 @@
+---
+layout: post
+title: CH8-4. 수식 트리 (Expression Tree) 의 구현
+category: data_structure
+tags: [data structure, 자료구조]
+comments: true
+---
+
+# CH8-4. 수식 트리 (Expression Tree) 의 구현
+
+<center>
+<figure>
+<img src="/assets/post_img/data_structure/2019-08-04-data_structure/fig1.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
