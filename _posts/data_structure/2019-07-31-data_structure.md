@@ -1,12 +1,12 @@
 ---
 layout: post
-title: CH8-1. 트리(Tree)의 개요 2
+title: CH8 트리(Tree) 1-2 (트리의 개요)
 category: data_structure
 tags: [data structure, 자료구조]
 comments: true
 ---
 
-# CH8-1. 트리(Tree)의 개요 2
+# CH8 트리(Tree) 1-2 (트리의 개요)
 ## 서브 트리의 이해
 - 서브 트리는 서브트리로 구성된 재귀적인 구조를 가짐
   - 서브트리는 자신을 부모노드로 하는 또다른 자식노드들을 가짐
