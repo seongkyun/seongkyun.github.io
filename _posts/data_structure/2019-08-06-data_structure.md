@@ -1,12 +1,12 @@
 ---
 layout: post
-title: CH9 우선순위 큐 (Priority Queue) 1 (우선순위 큐의 이해)
+title: CH9. 우선순위 큐 (Priority Queue) 1 (우선순위 큐의 이해)
 category: data_structure
 tags: [data structure, 자료구조]
 comments: true
 ---
 
-# CH9 우선순위 큐 (Priority Queue) 1 (우선순위 큐의 이해)
+# CH9. 우선순위 큐 (Priority Queue) 1 (우선순위 큐의 이해)
 - 기존에 공부했던 큐의 연장선이 아님
   - 적절한 비교가 아님
   - 기존의 큐는 반드시 선입선출 되는 꼴
