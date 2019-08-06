@@ -1,12 +1,12 @@
 ---
 layout: post
-title: CH8-2. 이진 트리의 구현
+title: CH8. 트리(Tree) 2 (이진 트리의 구현)
 category: data_structure
 tags: [data structure, 자료구조]
 comments: true
 ---
 
-# CH8-2. 이진 트리의 구현
+# CH8. 트리(Tree) 2 (이진 트리의 구현)
 - 이진 트리를 구현할 수 있는 '도구'를 만드는 작업
 
 ## 이진 트리 구현의 두 가지 방법
