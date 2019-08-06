@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CH8 트리(Tree) 1-1 (트리의 개요)
+title: CH8. 트리(Tree) 1-1 (트리의 개요)
 category: data_structure
 tags: [data structure, 자료구조]
 comments: true
