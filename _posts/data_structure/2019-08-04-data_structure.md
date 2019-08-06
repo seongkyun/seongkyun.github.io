@@ -1,12 +1,12 @@
 ---
 layout: post
-title: CH8-4. 수식 트리 (Expression Tree) 의 구현
+title: CH8. 트리(Tree) 4 (수식 트리 (Expression Tree) 의 구현)
 category: data_structure
 tags: [data structure, 자료구조]
 comments: true
 ---
 
-# CH8-4. 수식 트리 (Expression Tree) 의 구현
+# CH8. 트리(Tree) 4 (수식 트리 (Expression Tree) 의 구현)
 - 지난 시간까지 만들어놓은 이진 트리를 구성하는 도구를 이용하여 수식트리를 구현
 - 수식트리는 이진트리의 일종으로, 수식을 트리 형식으로 구현하는것을 의미
 - 전, 중, 후위 연산자처럼 도 하나의 수식 표기 방법
