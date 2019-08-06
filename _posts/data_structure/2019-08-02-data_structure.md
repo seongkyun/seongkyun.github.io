@@ -1,12 +1,12 @@
 ---
 layout: post
-title: CH8-3. 이진 트리의 순회 (Traversal)
+title: CH8. 트리(Tree) 3 (이진 트리의 순회 (Traversal))
 category: data_structure
 tags: [data structure, 자료구조]
 comments: true
 ---
 
-# CH8-3. 이진 트리의 순회 (Traversal)
+# CH8. 트리(Tree) 3 (이진 트리의 순회 (Traversal))
 - 재귀를 사용하면 어렵지 않게 구현 가능
 
 ## 순회의 세 가지 방법
