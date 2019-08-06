@@ -1,12 +1,12 @@
 ---
 layout: post
-title: CH7. 덱 (Deque)
+title: CH7. 덱 (Deque) 3
 category: data_structure
 tags: [data structure, 자료구조]
 comments: true
 ---
 
-# CH7. 덱 (Deque)
+# CH7. 덱 (Deque) 3
 
 ## 7-5 덱(Deque)의 이해와 구현
 - '디큐'가 아닌 '덱'으로 읽는 이유? -> 발음상 '디큐' 가 맞지만, dequeue와의 구별을 위해 보통 '덱'으로 읽음
