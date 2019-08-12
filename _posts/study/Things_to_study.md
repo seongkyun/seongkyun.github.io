@@ -6,6 +6,7 @@
 - CVPR2018 논문들(한글): https://medium.com/@yckim/cvpr-2018-paper-summary-ec43ce453dc3
 - MobileNet V2: http://openresearch.ai/t/mobilenetv2-inverted-residuals-and-linear-bottlenecks-mobile-networks-for-classification-detection-and-segmentation/130
 - 카카오 AI 매거진: https://brunch.co.kr/magazine/kakaoaireport
+- Docker: http://pyrasis.com/private/2014/11/30/publish-docker-for-the-really-impatient-book
 
 ## Done
 - Activation function 설명: http://nmhkahn.github.io/NN
