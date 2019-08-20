@@ -7,6 +7,7 @@
 - MobileNet V2: http://openresearch.ai/t/mobilenetv2-inverted-residuals-and-linear-bottlenecks-mobile-networks-for-classification-detection-and-segmentation/130
 - 카카오 AI 매거진: https://brunch.co.kr/magazine/kakaoaireport
 - Docker: http://pyrasis.com/private/2014/11/30/publish-docker-for-the-really-impatient-book
+- DSSD: https://github.com/hwkim94/hwkim94.github.io/wiki/DSSD-:-Deconvolutional-Single-Shot-Detector(2017)
 
 ## Done
 - Activation function 설명: http://nmhkahn.github.io/NN
