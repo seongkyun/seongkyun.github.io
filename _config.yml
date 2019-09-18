@@ -47,6 +47,7 @@ nav:
     - { papers: '/blog/categories/#papers' }
     - { git: '/blog/categories/#git' }
     - { data_structure: '/blog/categories/#data_structure' }
+    - { algorithm: '/blog/categories/#algorithm' }
     - { Tags: '/blog/tags/' }
   About:
     - '/about/'
