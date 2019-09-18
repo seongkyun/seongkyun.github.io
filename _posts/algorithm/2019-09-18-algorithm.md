@@ -311,6 +311,7 @@ int main()
   - `참고 2`: 입력받은 숫자, 혹은 계산된 숫자로 리스트 길이 초기화는 불가능!
     - 동적할당 쓰면 되지만, 코딩테스트에서 동적할당을 쓸 일은 없다.
   - `참고 3`: C++ iostream의 cin, cout, endl은 굉장히 느리므로, stdio.h 의 scanf, printf를 사용하자!
+
 ```c
 #pragma warning(disable:4996)
 #include<iostream>
