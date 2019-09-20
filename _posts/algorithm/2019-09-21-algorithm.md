@@ -238,9 +238,134 @@ int main()
 		scanf("%d", &nums[j]);
 
 	int result = 0;
-	counter(S, result, nums, 0, 0);
-	if (S == 0) result -= 1; // S=0이라면 모든 원소가 0으로 더해지는 공집합분을 빼준다.
+	counter(S, result, nums, 0, 0);// S=0일 경우, 아무것도 선택하지 못해 결과가 0이어도 카운팅 된다.
+	if (S == 0) result -= 1;  // 이를 위해서 S=0일때는 하나를 빼준다. (공집합의 경우를 빼줌)
 	printf("%d\n", result);
 	return 0;
 }
+```
+
+### 14501 퇴사
+- 조건은 https://www.acmicpc.net/problem/14501 참고
+
+- 1. 불가능한 경우
+  - index가 주어지는 퇴사일을 넘겨버리는 경우
+- 2. 가능한 경우
+  - index가 퇴사일이면서 (현재 해당 날짜만큼 일을 안해도 퇴사일까지는 회사에 있어야 하므로)
+  - 가장 높은 금액을 벌 수 있을때(누적금액이 가장 큰 경우)
+- 3. 더 계산해야 하는 경우
+  - 당일 일을 맡게 된다면, 해당 금액을 번 금액에 더해주고 종료일로 jump
+  - 당일 일을 안한다면, 돈은 못벌로 다음날로 이동 (idx + 1)
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <vector>
+using namespace std;
+
+int ans = 0;
+void pay(vector<int> days, vector<int> pays, int idx, int sum)
+{
+	int n = days.size(); // 회사 다니는 날을 n으로 설정
+	if (idx == n) // 만약 오늘이 회사 마지막 날이고
+	{
+		if (ans < sum) // 돈을 가장 많이 번 경우라면
+			ans = sum; // 정답을 ans에 저장하고 빠져나옴
+		return;
+	}
+	if (idx > n)
+		return; // 회사 마지막날을 넘은경우, 불가능하므로 끝
+	pay(days, pays, idx + 1, sum); // 오늘 일을 맡지 않는다면, 내일로 넘어감
+	pay(days, pays, idx + days[idx], sum + pays[idx]); // 오늘 일을 맡는다면, 돈을 벌로 종료일로 점프
+}
+int main()
+{
+	int n;
+	scanf("%d", &n);
+
+	vector<int> days(n);
+	vector<int> pays(n);
+	for (int j = 0; j < n; j++)
+		scanf("%d %d", &days[j], &pays[j]);
+	
+	pay(days, pays, 0, 0);
+	printf("%d\n", ans);
+
+	return 0;
+}
+```
+
+### 14888 연산자 끼워넣기, 15658 연산자 끼워넣기(2)
+- 주어진 주열에 제한없이 주어지는 연산자들을 조합해서 최댓값과 최솟값을 뽑아낸다.
+
+- 1. 불가능한 경우
+  - 각 연산자가 모두 소진된 경우
+- 2. 가능한 경우
+  - index의 크기가 주어진 숫자를 모두 사용했으면서
+  - 결과가 최댓값이라면
+- 3. 다음으로 가야하는 경우
+  - case 1. 더하기 연산
+  - case 2. 빼기 연산
+  - case 3. 곱하기 연산
+  - case 4. 나누기 연산
+  
+- C++ STL에 대해서
+  - pair<int, int> 는 두 int형 벡터를 쌍으로 묶을 수 있다.
+    - v.first, v.second로 구분됨
+  - auto의 편리함
+    - 변수앞에 사용시 초기화되는 값의 자료형에 따라 자동으로 알맞게 할당된다.
+    - for문 안에서 사용하면 Python의 for (j in list) 처럼 사용된다.
+  - make_pair(val1, val2): 두 값(클래스)을 쌍으로 묶어 first, second로 구분하는 클래스 생성
+ 
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <algorithm>
+#include <vector>
+using namespace std;
+
+pair<int, int> calc(vector<int> &nums, int idx, int cur, int p, int mi, int mu, int d) // 정답을 쌍으로 묶기 위해 pair 사용
+{
+	int N = nums.size(); // 전체 숫자의 갯수 초기화
+	if (idx == N) return make_pair(cur, cur); // index가 N까지 돌아 더 이상 숫자가 없는 경우, 현재의 값(cur)을 쌍으로 만들어 return
+
+	vector<pair<int, int>> tmp; // 더 돌아야 하는 경우, 각 연산자별로 재귀적 구성
+	if (p > 0)	tmp.push_back(calc(nums, idx + 1, cur + nums[idx], p - 1, mi, mu, d));
+	if (mi > 0)	tmp.push_back(calc(nums, idx + 1, cur - nums[idx], p, mi - 1, mu, d));
+	if (mu > 0)	tmp.push_back(calc(nums, idx + 1, cur * nums[idx], p, mi, mu - 1, d));
+	if (d > 0)	tmp.push_back(calc(nums, idx + 1, cur / nums[idx], p, mi, mu, d - 1));
+
+	auto ans = tmp[0]; // 자동으로 알맞은 형태로 변수 할당
+	for (auto k : tmp)	// tmp 안의 변수를 자동 알맞은 형태로 k에 할당
+	{
+		if (ans.first < k.first)
+			ans.first = k.first; // 최댓값 할당
+		if (ans.second > k.second)
+			ans.second = k.second; // 최솟값 할당
+	}
+	return ans; // 순서대로 ans.first에 최댓값, ans.second에 최솟값이 담김
+}
+
+int main(void)
+{
+	int N;
+	scanf("%d", &N);
+	
+	vector<int> nums(N);
+	for (int j = 0; j < N; j++)
+		cin >> nums[j];
+
+	vector<int> ops(4);
+	for (int j = 0; j < 4; j++)
+		cin >> ops[j];
+
+	auto answer = calc(nums, 1, nums[0], ops[0], ops[1], ops[2], ops[3]);
+
+	printf("%d\n%d\n", answer.first, answer.second);
+
+	return 0;
+}
+
 ```
