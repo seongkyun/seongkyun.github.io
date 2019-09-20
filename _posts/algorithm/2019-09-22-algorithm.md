@@ -56,3 +56,171 @@ comments: true
 
 ### 차수
 - 정점과 연결되어있는 간선의 개수를 의미
+- 5의 차수: 3
+- 4의 차수: 4
+  - 각각 연결된 노드와의 간선 갯수
+  
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig1.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 방향이 있는 그래프의 경우, In-degree와 Out-degree로 나누어서 차수를 따로 계산한다.
+  - 4의 In-degree: 3 (3개가 들어옴)
+  - 4의 Out-degree: 1 (1개가 나감)
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig2.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+## 그래프의 표현
+- 그래프를 저장하는 경우, 노드와 간선의 갯수를 모두 저장
+  - 하지만, 노드보다 간선간의 연결이 더 중요한 의미를 가짐
+- 아래와 같은 그래프는 정점이 6개, 간선이 8개인 구조
+  - 각각 정점은 개수만, 간선은 어떤 간선인지 저장하게 됨
+- __즉, 간선을 어떤 정점 x와 연결되어있는지 효율적으로 나타내는게 가장 중요함__
+  - 이와 관련해서 3가지 방법이 있음
+  
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig3.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+### 인접 행렬
+- 정점의 개수를 V라 했을 때, VxV 크기의 이차원 배열을 이용
+  - A[i][j] = 1 -> 연결되어있음
+  - A[i][j] = 0 -> 연결되어있지 않음
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig4.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 이처럼 두 관계를 서로 나타냄
+  - 양방향이므로 색 별로 보면 서로 같은 대칭위치에 1로 존재하는것을 확인 가능
+- 만약 가중치가 있을 경우, 아래와 같이 가중치값으로 표현하면 됨
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig5.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+### 인접 리스트
+- 리스트를 이용해서 그래프를 저장하고 표현함
+  - A[i] 는 i와 연결된 정점을 리스트로 포함하고 있음
+    - 와 연결된 정점을 저장
+- 저장함에 있어서 순서는 중요하지 않음
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig6.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 위 사진처럼, 각 노드에 몇 번 노드에 연결되어있는지를 저장하게 됨
+  - 저장의 순서는 중요하지 않음
+  - 동적 배열이 필요함(길이는 능동적으로 늘어나야 하므로)
+    - linked list를 사용
+    - C의 경우 vector를, Python은 array list를 사용하면 됨
+- 총 원소의 갯수는 간선의 개수가 됨
+- 만약 그래프의 간선에 가중치가 존재하는 경우 아래와 같이 표현됨
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig7.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 즉, 각 배열의 원소를 2차원으로 하여 하나는 연결된 노드를, 나머지 하나는 그 노드와 연결된 간선의 가중치를 저장하면 됨
+
+- 만약, 어떤 노드에서 x 노드와 연결된 모든 간선을 효율적으로 찾으려면?
+  - 인접 리스트보다는 인접 행렬 방법이 더 쉽게 찾을 수 있음
+  - 하지만, 인접 행렬 방법은 존재하지 않는 간선의 정보도 0으로 모두 저장해야하므로 메모리 낭비가 생김
+    - 보통 그래프가 행 렬 각각 100만 단위인걸 감안하면 critical함
+  - 따라서 메모리 관점에서는 인접 리스트 방식의 그래프 표현방식이 유리
+- 즉, 인접 리스트 방식으로 표현된 그래프가 빠르고 공간 효율적으로 참조 가능
+  - 간선 개수가 정점 수보다 보통 훨씬 적으므로 엄청나게 효율적
+  - 반면 인접 리스트는 엄청 비효율적인 메모리낭비가 있음을 의미
+
+### 공간 복잡도
+- 인접 행렬: $O(V^2)$
+- 인접 리스트: $O(E)$
+  - 보통 E<<<$V^2$ 인걸 감안하면 인접 리스트가 굉장히 효율적임
+
+- 인접 행렬
+  - 장점 1. 임의의 정점 u, v에서 u -> v 존재여부 확인: O(1)
+    - A[u][v] 값만 확인하면 됨
+    - 반면 인접 리스트는 v->u 참조시 u의 차수만큼 빅-오 발생
+  - 장점 2. 모든 정점에 간선이 있는 완전 그래프 형식의 표현에 유리
+    - 매우 드물음..
+  - 장점 3. 반대도 존재하는지 쉽게 확인 가능
+    - A[v][u] 로 쉽게 참조 가능 (O(1))
+    - 반면, 인접 리스트는 A[v]에서 모든 정점을 한번씩 다 찾아봐야 함
+    - 역방향 참조가 필요하다면 굉장히 유리함
+- 인접 리스트
+  - 인접 행렬의 모든 장점을 커버할정도로 메모리 측면에서 굉장히 유리함
+    - 대부분 문제에서 정점의 개수는 100만개, 간선의 개수는 10만개로, int 기준 인접행렬로 저장 시 4x100,000x100,000로 4조 바이트가 필요
+  - 또한, 참조 시 필요없는 노드가 저장되어있지 않으므로 인접 행렬에 비해 빠르게 참조 가능
+
+### 간선 리스트
+- 필수는 아님
+- 배열을 이용해 구현
+- 간선을 모두 저장함
+  - C++의 경우 vector, Python array list의 동적 배열을 사용해야 함
+  - C는 구현되어있지 않으므로 직접 linked list를 구현해서 적용해야함..
+- 즉, C와 같은 경우에 간선 리스트를 사용하면 유리함
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig8.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 우선, E라는 배열에 모든 간선 관계를 저장하고
+- 그 다음 전체 E에 대해 정렬을 수행
+- 그리고 앞 정점을 기준으로 모두 개수를 세어 차수를 저장
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig9.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 그리고 cnt 배열을 앞에서부터 누적해 나감
+
+```c
+for (int j=0; j<m; j++
+{
+  cnt[e[i][0]] += 1;
+}
+```
+
+- 이 결과를 이용해 정점과 간선의 관계를 파악 가능
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-22-algorithm/fig10.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 각각 3번 정점의 관계는 E 배열의 6번째부터 8-1 번째 까지 나타나있음
+
+### 13023 ABCDE
+- https://www.acmicpc.net/problem/13023
+- 뒤 DFS, BFS에서 좀 더 자세히 알아볼 예정
