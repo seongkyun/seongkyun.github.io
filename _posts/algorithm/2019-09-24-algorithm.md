@@ -209,9 +209,90 @@ int main()
 }
 ```
 
+### 1697 숨바꼭질
+- https://www.acmicpc.net/problem/1697
+  - http://codeplus.codes/9116e7f3d4634964a7c5b3f0f88bb332
+- 그래프가 아닌 문제를 BFS 최단거리 문제로 적용시켜 풀기
+  - 현재 위치를 정점, 위치의 이동을 간선으로 표시.
+  - 경우의 수가 매우 많으므로(100,000개) BFS로 푸는 것이 최선이다.
+	
+- BFS 문제지만, 인접 리스트/행렬을 만들 필요가 없음
+  - 문제의 수식으로 다른 정점을 3개만 계산해 보면 됨!
+  - 큐에 수빈이(N) 위치를 넣어가며 이동시킴
+    - 큐가 빈다 = while 문 빠져나온다 = 수빈이(N)가 동생(K)를 찾았다 -> K=N이 될 때 pop 해야 함
+    - 한번 방문한 곳은 다시 방문하지 않아야 효율적이므로 check 한다.
+
 <center>
 <figure>
 <img src="/assets/post_img/algorithm/2019-09-24-algorithm/fig1.PNG" alt="views">
 <figcaption> </figcaption>
 </figure>
 </center>
+
+- N=5, K=17 예시의 위 그림처럼, 가능한 경우를 가지치기 해 가며 따져보면 됨
+  - q에는 방문 순서대로, 이미 방문한(checked) 곳은 건너 뛰고 진행
+    - q = 5 4 6 10 3 8 7 ... 17
+    - 즉, 17을 몇 번만에 방문했는지가 정답 (5-4-8-16-17)
+
+```c
+#pragma warning (disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <vector>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+
+const int MAX = 200000; // worst case
+bool check[MAX + 1];
+int time[MAX + 1];
+
+queue<int> q;
+
+int main()
+{
+	int N, K;
+	scanf("%d %d", &N, &K);
+	int now;
+	check[N] = true; // N의 자리를 check
+	q.push(N); // N을 큐에 넣고
+	time[N] = 0; // N의 위치에서 시간은 0
+
+	while (!q.empty()) // 큐가 빌 때 까지
+	{
+		now = q.front(); // 현재 위치를 초기화
+		q.pop(); // 큐를 비우고
+		if (0 <= now - 1 && check[now - 1] == false) // 이전 위치를 참조하면
+		{
+			q.push(now - 1); // now-1 위치 방문
+			check[now - 1] = true; // now-1 위치 check
+			time[now - 1] = time[now] + 1; // 현재위치 걸린시간+1만큼 시간 소요 더됨
+		}
+		if (now + 1 < MAX && check[now + 1] == false) // 다음 위치를 방문하면
+		{
+			q.push(now + 1);
+			check[now + 1] = true;
+			time[now + 1] = time[now] + 1;
+		}
+		if (now * 2 < MAX && check[now * 2] == false) // 순간이동을 하면
+		{
+			q.push(now * 2);
+			check[now * 2] = true;
+			time[now * 2] = time[now] + 1;
+		}
+	}
+
+	printf("%d\n", time[K]); // K 번째에 N에서 시작했을 때의 소요 시간이 저장됨
+
+	//system("pause");
+	return 0;
+}
+```
+
+
+
+
+
+
