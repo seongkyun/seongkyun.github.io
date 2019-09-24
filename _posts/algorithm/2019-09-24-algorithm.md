@@ -112,6 +112,103 @@ int main()
 ### 7576 토마토
 
 
+```c
+#pragma warning (disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <vector>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+int nodes[1000][1000]; // 현재 노드 값
+int check[1000][1000]; // 단지 번호 저장
+
+int dx[] = { -1, 1, 0, 0}; // 이동 위치
+int dy[] = { 0, 0, -1, 1};
+
+queue<pair<int, int>>q;
+
+void rotten(int W, int H, int cur_x, int cur_y, int next)
+{
+	while (!q.empty())
+	{
+		cur_x = q.front().first; // 현재 좌표 초기화
+		cur_y = q.front().second;
+		q.pop(); // 초기화 후 pop
+		for (int i = 0; i < 4; i++)
+		{
+			int nx = cur_x + dx[i]; // 다음 좌표 초기화
+			int ny = cur_y + dy[i];
+			if (0 <= nx && nx < W && 0 <= ny && ny < H) // 박스 안쪽이라면
+			{
+				if (nodes[ny][nx] != -1 && check[ny][nx] == 0) // 만약 접근 불가 노드(-1)가 아니고, check 안했다면
+				{
+					q.push(make_pair(nx, ny)); // 접근하고 check
+					check[ny][nx] = check[cur_y][cur_x] + 1; // check 값을 이전 값보다 큰 값으로 초기화
+				}
+			}
+		}
+	}
+
+}
+
+int main()
+{
+	int N, M; // N=H, M=W
+	scanf("%d %d", &M, &N);
+
+	for (int j = 0; j < N; j++)
+	{
+		for (int i = 0; i < M; i++)
+		{
+			scanf("%d", &nodes[j][i]);
+
+
+			if (nodes[j][i] == 1) // 토마토가 저장된 노드라면
+			{
+				q.push(make_pair(i, j)); // 이곳에서 push로 큐에 좌표값 저장
+				check[j][i] = 1; // 그리고 check 표시(큐에 넣고 바로 check 해야하므로)
+			}
+		}
+	}
+
+	int next = 1;
+	for (int j = 0; j < N; j++)
+	{
+		for (int i = 0; i < M; i++)
+		{
+			if (nodes[j][i] == 1)
+			{
+				rotten(M, N, i, j, next); // 전체 노드들 중 1이 들어간 곳에서 연산 시작
+				next++; // 다음 초기화 값 지정
+			}
+		}
+	}
+
+	int maxval = -1;
+	bool ok = true;
+
+	for (int j = 0; j < N; j++)
+	{
+		for (int i = 0; i < M; i++)
+		{
+			if (check[j][i] >= maxval) maxval = check[j][i]; // 최댓값을 찾고(횟수를 의미)
+			if (check[j][i] == 0 && nodes[j][i] != -1) ok = false; // 벽에 가로막힌 case 세고
+		}
+	}
+
+	if (ok) // 결과 출력
+		printf("%d\n", maxval - 1);
+	else
+		printf("%d\n", -1);
+
+	system("pause");
+	return 0;
+}
+```
+
 <center>
 <figure>
 <img src="/assets/post_img/algorithm/2019-09-24-algorithm/fig1.PNG" alt="views">
