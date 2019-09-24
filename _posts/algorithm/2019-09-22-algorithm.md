@@ -8,6 +8,8 @@ comments: true
 
 # 알고리즘 기초-플러드 필
 - 어떤 위치위 연결된 모든 위치를 찾는 알고리즘
+- 우선, 접근 가능한 방법 배열인 dx, dy를 만든 후
+- bfs로 참조를 시작하는데, 현재 노드를 기준으로 다음 참조 노드 값을 dx, dy를 이용해 만든다.
 
 ### 2667 단지번호붙이기
 - https://www.acmicpc.net/problem/2667
@@ -104,10 +106,91 @@ int main()
 	//system("pause");
 	return 0;
 }
-
 ```
-
 
 ### 4963 섬의 개수
 - https://www.acmicpc.net/problem/4963
   - https://www.acmicpc.net/source/share/eeebe2e472d44fc081f1ed68eb0b512d
+- 위의 문제와 상당히 유사하다.
+
+```c
+#pragma warning (disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <vector>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+int nodes[50][50]; // 현재 노드 값
+int check[50][50]; // 단지 번호 저장
+//int cnts[50 * 50];
+
+int dx[] = { -1, 1, 0, 0, -1, 1, 1, -1 }; // 대각선 위치까지 참조
+int dy[] = { 0, 0, -1, 1, -1, 1, -1, 1 }; // 대각선 위치까지 참조
+
+void bfs(int W, int H, int cur_x, int cur_y, int cnt)
+{
+	queue<pair<int, int>> q; // x, y 좌표를 위한 큐 pair 설정
+	q.push(make_pair(cur_x, cur_y));
+	check[cur_y][cur_x] = cnt;
+	//cnts[cnt]++;
+	while (!q.empty())
+	{
+		cur_x = q.front().first;
+		cur_y = q.front().second;
+		q.pop();
+		for (int i = 0; i < 8; i++) // 대각선 다음위치까지 참조
+		{
+			int nx = cur_x + dx[i];
+			int ny = cur_y + dy[i];
+			if (0 <= nx && nx < W && 0 <= ny && ny < H)
+			{
+				if (nodes[ny][nx] == 1 && check[ny][nx] == 0)
+				{
+					q.push(make_pair(nx, ny));
+					check[ny][nx] = cnt;
+					//cnts[cnt]++;
+				}
+			}
+		}
+	}
+}
+
+int main()
+{
+	int W, H;
+	while (1)
+	{
+		scanf("%d %d", &W, &H);
+		if (W == 0 && H == 0) break;
+
+		for (int j = 0; j < H; j++)
+		{
+			for (int i = 0; i < W; i++)
+			{
+				scanf("%1d", &nodes[j][i]);
+				check[j][i] = 0;
+			}
+		}
+
+		int cnt = 0;
+		for (int j = 0; j < H; j++)
+		{
+			for (int i = 0; i < W; i++)
+			{
+				if (nodes[j][i] == 1 && check[j][i] == 0)
+				{
+					cnt++;
+					bfs(W, H, i, j, cnt);
+				}
+			}
+		}
+		printf("%d\n", cnt);
+	}
+
+	//system("pause");
+	return 0;
+}
+```
