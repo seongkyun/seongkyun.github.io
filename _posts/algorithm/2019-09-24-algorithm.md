@@ -291,8 +291,52 @@ int main()
 }
 ```
 
+### BFS
 
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-24-algorithm/fig2.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
 
+- 이 경우, A->E의 최단 소요 루트는 위로만 가는 것임
+  - A->B, B->C, ..., D->E 이동 간 각자 빠른 길만 선택하면 됨
+- 만약, 위 쪽의 길 중 한 번만 선택해야 한다면?
+  - 한 번만 위로 빠르게 지나갈 수 있다면?
+  
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-24-algorithm/fig3.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
 
+- 같은 B 더라도, 이전에 위로 갔는지, 아래로 갔는지에 따라서 서로 다른 정점이 된다.
+  - 의미가 서로 달라짐
+  - 즉, __서로 같은 정점은 같은 간선을 갖고 있음을 의미한다.__
+- 다음에 선택 가능한 경우의 수의 종류에 따라 서로 다른 정점이 된다.
+  - 따라서 위 그림에서 위와 아래 B는 서로 다름
+    - 파란 간선을 사용한 횟수를 기준으로 나누므로
+
+<center>
+<figure>
+<img src="/assets/post_img/algorithm/2019-09-24-algorithm/fig4.PNG" alt="views">
+<figcaption> </figcaption>
+</figure>
+</center>
+
+- 즉, 할 수 있는 선택이 다르면 위 처럼 다른 정점이 됨
+  - C0와 C1은 서로 다른 상태
+
+### 14226 이모티콘
+- https://www.acmicpc.net/problem/14226
+  - https://www.acmicpc.net/source/share/88648734b074475494ad8253b121cc68
+- BFS에서 하나의 정점이 서로 다른 두 개의 정보를 저장하고 있으면 안됨
+- 화면에 있는 이모티콘 개수가 5개인 경우
+  - 클립보드에 있는 이모티콘의 개수에 따라서 복사하기 연산의 결과가 다름
+- 즉, 화면의 이모티콘 개수 S와 클립보드의 이모티콘 개수 C가 중요함
+  - 정점을 나타내는 정보가S와 C로 구분됨
+- 차 후 try...
 
 
