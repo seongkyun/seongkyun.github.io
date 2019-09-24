@@ -332,11 +332,84 @@ int main()
 ### 14226 이모티콘
 - https://www.acmicpc.net/problem/14226
   - https://www.acmicpc.net/source/share/88648734b074475494ad8253b121cc68
+- 초기 화면에 이모티콘은 1개
+  - 1. 화면의 이모티콘을 클립보드에 저장
+    - ex. 화면 이모티콘 7개 -삭제-> 6개, 1초 소요
+  - 2. 클립보드 이모티콘을 화면에 붙여넣음
+    - ex. 화면 이모티콘 7개 -붙여넣기-> 7+?개, 1초 소요
+      - 갯수를 알기 위해선 클립보드 이모티콘의 수(C)를 알아야 함
+  - 3. 화면의 이모티콘 하나를 삭제
+- S개 이모티콘을 만드는데 걸리는 시간의 최솟값을 구하기
+
 - BFS에서 하나의 정점이 서로 다른 두 개의 정보를 저장하고 있으면 안됨
 - 화면에 있는 이모티콘 개수가 5개인 경우
   - 클립보드에 있는 이모티콘의 개수에 따라서 복사하기 연산의 결과가 다름
-- 즉, 화면의 이모티콘 개수 S와 클립보드의 이모티콘 개수 C가 중요함
-  - 정점을 나타내는 정보가S와 C로 구분됨
-- (문제가 이해가 안감)
+- __즉, 화면의 이모티콘 개수 S와 클립보드의 이모티콘 개수 C가 중요함__
+  - 정점을 나타내는 정보가S와 C로 나타나게 됨
 
+- 복사: (S, C) -> (S, S)
+- 붙여넣기: (S, C) -> (S+C, C)
+- 삭제: (S, C) -> (S-1, C)
 
+- 위 문제처럼, S 갯수를 기준으로 그래프를 그려보면 된다.
+  - 소요 시간은 모두 1초로 동일함
+  - 단, 이동은 C의 갯수별로 달라진다.
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <tuple>
+#include <queue>
+#include <cstring>
+using namespace std;
+//emozi [S][C] 순서
+int emozi[1001][1001]; // -1: 비 방문, dist >= 0: 방문(거리는 항상 0이상이므로)
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	memset(emozi, -1, sizeof(emozi)); // emozi -1로 초기화(비 방문)
+	queue<pair<int, int>> q;
+	q.push(make_pair(1, 0)); // 초기 조건(S=1, C=0)
+	emozi[1][0] = 0; // 현재 위치 방문
+	while (!q.empty())
+	{
+		int s, c;
+		s = q.front().first; // 화면과 클립보드의 이모티콘 개수 초기화
+		c = q.front().second;
+		q.pop(); // 큐 pop
+		if (emozi[s][s] == -1) // S -> C
+		{// 화면 이모티콘 복사해서 클립보드 저장
+			emozi[s][s] = emozi[s][c] + 1; // +1은 -1로 초기화 되어있으므로
+			q.push(make_pair(s, s));
+		}
+		if (s + c <= n && emozi[s + c][c] == -1)  // C -> S
+		{// 클립보드 이모티콘 화면에 저장
+			emozi[s + c][c] = emozi[s][c] + 1;
+			q.push(make_pair(s + c, c));
+		}
+		if (s - 1 >= 0 && emozi[s - 1][c] == -1)  // S-1
+		{// 화면에서 이모티콘 하나 삭제
+			emozi[s - 1][c] = emozi[s][c] + 1;
+			q.push(make_pair(s - 1, c));
+		}
+	}
+	int ans = -1; // 첫 번째 값으로 초기화
+	// 클립보드에 존재 할 수 있는 이모티콘의 개수는 최대 n개
+	for (int i = 0; i <= n; i++)
+	{
+		if (emozi[n][i] != -1)
+		{
+			//if (ans > emozi[n][i])
+			if (ans == -1 || ans > emozi[n][i])
+			{
+				ans = emozi[n][i]; // 클립보드 이모티콘 개수의 최솟값
+			}
+		}
+	}
+	printf("%d\n", ans);
+
+	system("pause");
+	return 0;
+}
+```
