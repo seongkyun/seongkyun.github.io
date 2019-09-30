@@ -101,3 +101,262 @@ int main()
 	return 0;
 }
 ```
+
+### 11726 2xn 타일링
+- 2xn 크기의 직사각형을 1x2, 2x1 타일로 채우는 방법의 수를 구하는 프로그램을 작성한다.
+	- 출력은 2xn 크기의 직사각형을 채우는 방법의 수를 10,007로 나눈 나머지를 출력
+- 두 종류의 타일을 마지막에 어떤 걸 썼는지에 따라 달라진다.
+	- 마지막에 1x2 1개를 썼을 때와(ㅣ 모양), 2x1 2개를 썼을 때 (= 모양)의 경우가 차이 남
+- D[N]: 2xN 크기의 직사각형을 채우는 방법의 수
+	- 마지막에 1x2 1개를 썼을 때 (+1) + D[N-1]
+		- 마지막 세로 1칸을 빼면 전체 길이 N에서 N-1이 되므로
+  - 마지막에 2x1 2개를 썼을 때 (+1) + D[N-2]
+		- 마지막에 가로 2칸짜리 위아래로 하나씩 빼면 전체 길이 N에서 N-2가 되므로
+- 따라서
+	- D[N] = D[N-1] + D[N-2]
+
+- D[N]을 정의하고, 경우의 수를 나눠 그 경우에 대해 정의한다.
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+
+int memo[1001];
+
+int calc_TD(int n) // TD 방식으로 n길이의 직사각형을 채우는 방법의 수
+{
+	memo[0] = 1; // 최소 단위 정의
+	if (n == 1) // 최소 단위 정의
+		memo[n] = 1;
+	if (memo[n] > 0) // 해당 길이(n)의 직사각형을 채우는 방법의 수가 정해졌으면
+		return memo[n]; // 그대로 반환한다(중복 계산 필요 없음)
+	
+	memo[n] = (calc_TD(n - 1) + calc_TD(n - 2)) % 10007;
+	// 아니라면, 정의에 의해 값을 채우고 반환한다.
+
+	return memo[n];
+}
+
+int calc_BU(int n) // BU 방식으로 n길이의 직사각형을 채우는 방법의 수
+{
+	memo[0] = 1; // 최소 단위 정의
+	memo[1] = 1; // 최소 단위 정의
+	for (int i = 2; i <= n; i++)
+	{ // 2부터 n 길이의 직사각형에 대해
+		memo[i] = (memo[i - 1] + memo[i - 2]) % 10007; // 정의대로 값을 채워나간다.
+	}
+	return memo[n];
+}
+
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	int result = calc_BU(n);
+	printf("%d\n", result);
+	//system("pause");
+	return 0;
+}
+```
+
+### 11727 2xn 타일링 2
+- 위의 문제에서 타일의 종류가 1개 추가된 경우
+- 동일하게
+	- D[N]: N 길이의 직사각형을 채우는 방법의 수
+- 하지만 타일 종류가 추가되었으므로
+	- 2x2 타일로 마지막을 채우는 경우, 2x2 1개(+1) + D[N-2]
+		- 가로 2칸이 줄어 N-2 길이의 직사각형을 채우는 방법의 수
+- 따라서
+	- D[N] = D[N-1] + D[N-2] + D[N-2]
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+
+using namespace std;
+
+int memo[1001];
+
+int calc_TD(int n) // TD 방식으로 n 길이의 정사각형을 채우기
+{
+	memo[0] = 1;
+	if (n == 1)
+		memo[n] = 1;
+	if (memo[n] > 0)
+		return memo[n];
+	
+	memo[n] = (calc_TD(n - 1) + 2 * calc_TD(n - 2)) % 10007;
+
+	return memo[n];
+}
+
+int calc_BU(int n) // BU 방식으로 n 길이의 정사각형을 채우기
+{
+	memo[0] = 1;
+	memo[1] = 1;
+	for (int i = 2; i <= n; i++)
+	{
+		memo[i] = (memo[i - 1] + 2 * memo[i - 2]) % 10007;
+	}
+	return memo[n];
+}
+
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	int result = calc_TD(n);
+	printf("%d\n", result);
+	//system("pause");
+	return 0;
+}
+```
+
+### 9095 1, 2, 3 더하기
+- 정수 N을 1, 2, 3으로 나타내는 방법의 수를 센다.
+- D[N]: 1, 2, 3의 합으로 N을 나타내는 방법의 수
+	- 경우의 수 1: 마지막 숫자가 1일 때
+		- 마지막 1로 하고, D[N-1]을 1, 2, 3의 조합 합으로 나타내는 방법의 수
+	- 경우의 수 2: 마지막 숫자가 2일 때
+		- 마지막 2로 하고, D[N-2]을 1, 2, 3의 조합 합으로 나타내는 방법의 수
+	- 경우의 수 3: 마지막 숫자가 3일 때
+		- 마지막 3로 하고, D[N-3]을 1, 2, 3의 조합 합으로 나타내는 방법의 수
+- D[N] = D[N-1] + D[N-2] + D[N-3]
+- 초기값의로 D[0] = 1로 설정
+	- 0을 1, 2, 3의 합으로 나타낼 수 있는 경우는 모두 안 쓰는 경우로 1가지로 셈.
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <vector>
+
+using namespace std;
+
+int memo[12];
+
+int calc_TD(int n) // TD 방식으로 n을 1, 2, 3으로 나타내는 방법의 수
+{
+	if (n == 0)
+	{// 최소 경우의 수 정의
+		memo[n] = 1;
+		return memo[n];
+	}
+	else if (n == 1)
+	{// n=1일 때
+		memo[n] = calc_TD(n - 1);
+	}
+	else if (n == 2)
+	{// n=2일 때
+		memo[n] = calc_TD(n - 1) + calc_TD(n - 2);
+	}
+	else
+	{// 나머지 일반적인 경우
+		memo[n] = calc_TD(n - 1) + calc_TD(n - 2) + calc_TD(n - 3);
+	}
+	
+	return memo[n];
+}
+
+int calc_BU(int n) // BU 방식으로 n을 1, 2, 3으로 나타내는 경우의 수
+{
+	memo[0] = 1; // 최소 경우의 수 정의
+	
+	for (int i = 1; i <= n; i++)
+	{ // 1부터 숫자 n까지
+		if (i - 1 >= 0)
+		{ // 1번째부터 n까지
+			memo[i] += memo[i - 1];
+		} 
+		if (i - 2 >= 0)
+		{ // 2번째부터 n까지
+			memo[i] += memo[i - 2];
+		}
+		if (i - 3 >= 0)
+		{ // 3번째부터 n까지
+			memo[i] += memo[i - 3];
+		}
+	}
+
+	return memo[n]; // 배열을 완성하고 리턴
+}
+
+int main()
+{
+	int n, c;
+	scanf("%d", &c);
+	calc_TD(11);
+
+	while (c--)
+	{
+		scanf("%d", &n);
+		printf("%d\n", memo[n]);
+	}
+	//system("pause");
+	return 0;
+}
+```
+
+### 15988 1, 2, 3 더하기 3
+- 정수 N을 1, 2, 3의 합으로 나타내는 방법의 수를 구한다.
+- N은 양수이며, 1,000,000보다 작거나 같다
+- 각 테스트 케이스의 방법의 수를 1,000,000,009로 나눈 나머지를 출력
+
+- 출력의 범위를 고려해야 한다.
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <vector>
+
+using namespace std;
+
+long long memo[1000001];
+long long mod = 1000000009;
+
+int calc_BU(int n)
+{
+	memo[0] = 1;
+
+	for (int i = 1; i <= n; i++)
+	{
+		if (i - 1 >= 0)
+		{
+			memo[i] += memo[i - 1];
+		}
+		if (i - 2 >= 0)
+		{
+			memo[i] += memo[i - 2];
+		}
+		if (i - 3 >= 0)
+		{
+			memo[i] += memo[i - 3];
+		}
+		memo[i] %= mod;
+	}
+
+	return memo[n];
+}
+
+int main()
+{
+	int c;
+	long long n;
+	scanf("%d", &c);
+	calc_BU(1000001);
+
+	while (c--)
+	{
+		scanf("%lld", &n);
+		printf("%lld\n", memo[n]);
+	}
+	//system("pause");
+	return 0;
+}
+```
+
