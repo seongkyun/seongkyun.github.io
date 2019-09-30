@@ -360,3 +360,114 @@ int main()
 }
 ```
 
+### 11052 카드 구매하기
+- https://www.acmicpc.net/problem/11052
+	- 조건 참고
+- D[i]: 카드 i개를 구매하는 최대 비용
+	- 카드팩은 각 1개부터 N개까지 담고 있다.
+	- 순서대로 1, 2, 3, 4개....N개까지 담고있는 카드팩들이 있고, 각 카드팩의 가격을 입력받는다.
+	- 각 카드갯수가 담겨있는 팩의 가격은 P[1], P[2], P[3], ..., P[N]으로 정의
+
+- 카드 i개를 구매하는 방법은?
+	- 카드 1개 들어있는 팩을 구매하고, i-1개 구매
+		- P[1] + D[i-1]
+			- 카드 1개를 구매한 금액 + 카드 i-1개 들어있는 팩 구매 최대 비용
+	- 카드 2개 들어있는 팩을 구매하고, i-2개 구매
+		- P[2] + D[i-2]
+			- 카드 2개를 구매한 금액 + 카드 i-2개 들어있는 팩 구매 최대 비용
+	- ...
+	- 카드 i개가 들어있는 팩을 구매하고, 0개 구매
+		- P[i] + D[0]
+- 여기서 문제를 일반화 시켜보면
+	- D[i] = 카드 i개 구매하는 최대 비용
+	- 카드 i개를 구매하는 방법은
+		- 카드 j개 들어있는 카드팩을 구매하고, 카드 i-j개를 구매
+	- 이 때, 최댓값을 물으므로 기존의 값과 최댓값을 비교한다.
+- D[i] = max(D[i], D[i-j] + P[j]), (1<=j<=i)
+	- j의 경우 특정 값을 모르는 변수
+		- 점화식에 변수가 들어가면 변수 범위에 대한 정의가 필요함!
+		- j는 1과 크거나 같거나, i보다 작아야 한다.
+			- j>0, i-j>=0 에 의한 정의
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int d[1001]; // 해당 숫자 최대 가격 저장
+int nums[1001]; // 카드 가격 저장
+
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	
+	for (int i = 1; i <= n; i++)
+	{
+		scanf("%d", &nums[i]); // 카드 가격을 순서대로 저장한다.
+	}
+
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= i; j++)
+		{ // 위의 정의된 j의 범위를 따름
+			d[i] = max(d[i], d[i - j] + nums[j]);
+		}
+	}
+
+	printf("%d\n", d[n]);
+
+	//system("pause");
+	return 0;
+}
+```
+
+### 16194 카드 구매하기 2
+- 위 문제와 동일하지만 최솟값을 구하는 문제
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int d[1001];
+int nums[1001];
+
+int main()
+{
+	int n;
+	scanf("%d", &n);
+	
+	for (int i = 1; i <= n; i++)
+	{
+		scanf("%d", &nums[i]);
+	}
+
+	std::fill_n(d, n + 1, -1); // 아직 구해지지 않은 배열 값을 -1로 초기화한다.
+	d[0] = 0; // 최소 경우의 수를 초기화
+	
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= i; j++)
+		{
+			if (d[i] == -1 || d[i] > d[i - j] + nums[j]) // 초기화 되지 않은 경우거나 새 값이 기존의 값보다 작다면
+				d[i] = d[i - j] + nums[j]; // 초기화한다.
+		}
+	}
+
+	printf("%d\n", d[n]);
+
+	//system("pause");
+	return 0;
+}
+```
+
+	
