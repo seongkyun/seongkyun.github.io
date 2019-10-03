@@ -1,0 +1,290 @@
+---
+layout: post
+title: 191003 백준 알고리즘 문제풀기
+category: baekjoon
+tags: [baekjoon]
+comments: true
+---
+
+## [13460] 구슬 탈출 2
+- 난이도: 극악
+  - 풀이 떠올리는 법은 쉽게 떠올라서 금방 풀을 줄 알았으나, 결국 두 시간 이상 고민하고 풀지 못함
+  - 다른사람 코드를 참고하여 풀음
+  - 자괴감 들고 괴로웠던 
+- 문제
+  - 세로 N, 가로 M 길이의 맵에서 모서리 부분은 모드 #으로 표시된 벽
+    - N, M은 각각 3 이상 10 이하
+  - 그 맵에서 빨간 구슬 R과 파란 구슬 B, 구멍 O, 가로막힌 벽 #, 통과할 수 있는 부분 . 이 주어짐
+  - 조건
+    - 기울이는 동작은 상, 하, 좌, 우로 할 수 있으며, 가로막힌 벽이 있을때까지 계속 그 방향으로 전진
+    - 빨간 구슬과 파란 구슬은 동시에 움직인다.
+    - 각 구슬은 한 칸을 모두 차지한다.
+      - 빨간 구슬과 파란 구슬은 겹칠 수 없음
+    - 기울이는 동작은 구슬이 더 이상 움직이지 않을 때까지 수행
+  - 정답
+    - 보드의 상태가 주어졌을 때, 최소 몇 번만에 빨간 구슬을 구멍을 통해 빼낼 수 있는지 구하기
+  - 성공 조건
+    - 빨간 구슬만 구멍을 통해 빼내는 것이다.
+  - 실패 조건
+    - 파란 구슬이 구멍에 들어가거나, 10번 이상 걸려서 빼내면 실패한다.
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+char map[10][10];
+int check[10][10][10][10]; // ry, rx, by, bx
+
+int dx[] = { -1, 1, 0, 0 }; // 움직이는 방향
+int dy[] = { 0, 0, -1, 1 };
+
+struct ball
+{
+	int rx, ry, bx, by; // 빨간 구슬과 파란 구슬의 좌표 구조체
+};
+
+void bfs(int w, int h, int rx, int ry, int bx, int by)
+{
+	queue<ball> q;
+	check[ry][rx][by][bx] = 1; // 시작 위치를 방문으로 check
+	q.push({ rx,ry,bx,by }); // 큐에 넣음
+
+	int cnt = 0; // 방향 회전한 횟수 카운팅
+
+	while (!q.empty())
+	{
+		int len = q.size();
+		while (len--)
+		{ // 현재 큐
+			int crx, cry, cbx, cby;
+			crx = q.front().rx; // 현재 위치를 초기화
+			cry = q.front().ry;
+			cbx = q.front().bx;
+			cby = q.front().by;
+			q.pop();
+			
+			int mrx, mry, mbx, mby; // 중간 계산용 위치
+
+			if (map[cry][crx] == 'O' && map[cby][cbx] != 'O')
+			{ // 현재 빨간구슬만 구멍이면
+				printf("%d\n", cnt); // 결과 출력후 종료
+				return;
+			}
+
+			for (int i = 0; i < 4; i++)
+			{ // 다음 위치 설정
+				int nrx, nry, nbx, nby;
+
+				mrx = crx;
+				mry = cry;
+				mbx = cbx;
+				mby = cby;
+
+				//빨간구슬 이동(벽 끝까지)
+				while (true)
+				{
+					nrx = mrx + dx[i];
+					nry = mry + dy[i];
+					if (map[nry][nrx] == '#' || map[mry][mrx] == 'O')
+						break;
+					mrx = nrx;
+					mry = nry;
+				}
+
+				//파란구슬 이동(벽 끝까지)
+				while (true)
+				{
+					nbx = mbx + dx[i];
+					nby = mby + dy[i];
+					if (map[nby][nbx] == '#' || map[mby][mbx] == 'O')
+						break;
+					mbx = nbx;
+					mby = nby;
+				}
+
+				if (mrx == mbx && mry == mby)
+				{
+					if (map[mby][mbx] == 'O')
+						continue;
+					if (abs(crx - mrx) + abs(cry - mry) > abs(cbx - mbx) + abs(cby - mby))
+					{ // 구슬 위치가 겹치는 경우, 먼저 왔느냐에 나중에 온 구슬을 한칸 전으로 미룸
+						mrx -= dx[i];
+						mry -= dy[i];
+					}
+					else
+					{
+						mbx -= dx[i];
+						mby -= dy[i];
+					}
+				}
+				if (check[mry][mrx][mby][mbx] == 0)
+				{ // 만들어진 위치 check
+					check[mry][mrx][mby][mbx] = 1;
+					q.push({ mrx,mry,mbx,mby });
+				}
+			}
+		}
+		if (cnt == 10)
+		{
+			printf("-1\n");
+			return;
+		}
+		cnt++;
+	}
+	printf("-1\n");
+	return;
+
+}
+
+int main()
+{
+	int n, m; // n: 세로, m: 가로
+	scanf("%d %d", &n, &m);
+
+	int hx, hy, rx, ry, bx, by;
+
+	for (int j = 0; j < n; j++)
+	{
+		for (int i = 0; i < m; i++)
+		{
+			cin >> map[j][i];
+			if (map[j][i] == 'O')
+			{
+				hx = i;
+				hy = j;
+			}
+			if (map[j][i] == 'R')
+			{
+				rx = i;
+				ry = j;
+			}
+			if (map[j][i] == 'B')
+			{
+				bx = i;
+				by = j;
+			}
+		}
+	}
+
+	bfs(m, n, rx, ry, bx, by);
+
+	//system("pause");
+	return 0;
+}
+```
+
+## [14891] 톱니바퀴
+- https://www.acmicpc.net/problem/14891
+- 난이도: 하
+  - 문제를 보고 풀이 방법이 떠올랐다.
+  - 전체 푸는데 1시간이 걸리지 않음
+- 문제
+  - 전체 4개의 톱니가 있고, 각 톱니에는 8개의 이빨이 있음
+  - 각 톱니에는 N(0)과 S(1) 극성이 있으며, 맞 닿아 있는 톱니 이빨의 극성이 서로 달라야 맞물려 돌아가고, 갖으면 돌지 않음
+  - 톱니이기 때문에 옆 톱니와는 반대 방향으로 돌음
+  - 입력으로 톱니의 상태, 톱니 돌릴 횟수, 톱니 번호, 방향이 순서대로 입력됨
+
+```c
+#pragma warning(disable:4996)
+#include <iostream>
+#include <cstdio>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int t[4][8]; // 톱니 상태 저장용
+
+void left(int arr[])
+{ // 해당 톱니 왼쪽으로 회전시키기
+	int temp = arr[0];
+	for (int i = 0; i < 7; i++)
+	{
+		arr[i] = arr[i + 1];
+	}
+	arr[7] = temp;
+}
+
+void right(int arr[])
+{ // 해당 톱니 오른쪽으로 회전시키기
+	int temp = arr[7];
+	for (int i = 7; i >= 0; i--)
+	{
+		arr[i] = arr[i - 1];
+	}
+	arr[0] = temp;
+}
+
+void rotate(int tn, int dir)
+{
+	int states[] = { 0,0,0,0 }; // 톱니를 회전할지, 방향 어느방향인지의 상태를 담는다.
+	states[tn - 1] = dir; // 현재 톱니의 상태는 현재 방향의 상태로 초기화
+
+	int cur = dir; // 현재 톱니의 방향을 정하고
+	for (int i = tn - 1; i > 0; i--) // 현재 톱니(tn)기준 왼쪽 톱니들의 회전조건 검사
+	{
+		if (t[i][6] != t[i - 1][2]) // 만약 맞물려 있는 톱니 이빨의 극성이 서로 다르다면
+		{
+			cur = 0 - cur; // 현재 톱니와 반대로 방향을 정하고
+			states[i - 1] = cur; // 그 방향으로 상태를 설정
+		}
+		else break; // 만약 맞물려 있지 않다면 그 왼쪽 톱니들은 더 볼 필요가 없다.
+	}
+
+	cur = dir; // 다시 현재 톱니 상태를 초기화하고
+	for (int i = tn - 1; i < 4 - 1; i++) // 현재 톱니(tn)기준 오른쪽 톱니들의 회전조건 검사
+	{
+		if (t[i][2] != t[i + 1][6]) // 맞물려 있는 톱니 이빨의 극성이 서로 다르다면
+		{
+			cur = 0 - cur; // 반대 방향으로 설정 후
+			states[i + 1] = cur; // 해당 톱니 상태를 초기화
+		}
+		else break; // 중간에 끊겨있다면 더 살펴보지 않아야 하므로 break
+	}
+
+	for (int i = 0; i < 4; i++)
+	{ // 전체 state에 따라 왼쪽, 오른쪽으로 각각 회전시킴
+		if (states[i] == -1)
+		{
+			left(t[i]);
+		}
+		else if (states[i] == 1)
+		{
+			right(t[i]);
+		}
+	}
+}
+
+int main()
+{
+	for (int j = 0; j < 4; j++)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			scanf("%1d", &t[j][i]);
+		}
+	}
+
+	int k;
+	scanf("%d", &k);
+	int tn, dir;
+	while (k--)
+	{ // 톱니 번호와 회전 방향을 입력받고
+		scanf("%d %d", &tn, &dir);
+		
+		rotate(tn, dir); // 회전시킨다.
+	}
+  // 문제의 조건에 맞게 답을 출력함
+	int answer = t[0][0] * 1 + t[1][0] * 2 + t[2][0] * 4 + t[3][0] * 8;
+
+	printf("%d\n", answer);
+
+	//system("pause");
+	return 0;
+}
+```
