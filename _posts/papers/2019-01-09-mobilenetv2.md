@@ -188,3 +188,5 @@ Sandler, Mark, et al. "Mobilenetv2: Inverted residuals and linear bottlenecks." 
 http://eremo2002.tistory.com/48
 
 http://hugrypiggykim.com/2018/11/17/mobilenet-v2-inverted-residuals-and-linear-bottlenecks/
+
+https://medium.com/@sunwoopark/slow-paper-mobilenetv2-inverted-residuals-and-linear-bottlenecks-6eacaa696b54
