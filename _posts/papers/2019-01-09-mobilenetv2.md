@@ -69,13 +69,21 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
 - 이러한 방법으로 어떤 manifold of interest 부분이 entire space가 될 때까지 차원을 축소 시킬 수 있음
   - 의미있는 정보와 의미 없는 정보가 담긴 정보량들에 대해, 의미없는 정보를 버리고 의미있는 정보만이 남도록 정보가 존재하는 차원을 줄이고, 이로 인해 메모리의 효율성이 좋아지는것을 의미
 - 하지만, 차원을 줄이는 과정(Sub-space로 엠베딩 시키는 과정)에서 쓰이는 ReLU와 같은 비선형 함수에 의해 문제가 발생
-  - if) ReLU를 지난 출력이 S인 경우, S가 non-zero라면, S에 맵핑 된 input의 각 값은 선형변환 된 것.
+  - 만약 ReLU를 지난 출력이 S인 경우, S가 non-zero라면, S에 맵핑 된 input의 각 값은 선형변환 된 것.
   - 하지만, 0 이하의 값은 버려져 정보의 손실이 발생하게 됨.(쓸모있는 정보가 손실 됨)
+    - 즉, 입력되는 채널의 정보를 activation space에 전부 담지 못하는 현상이 발생됨
   - 이를 방지하고자 channel reduction이 아닌 channel expansion을 이용
   - 채널을 확장시키는 경우, 채널의 깊이가 깊어져 low-dimensional sub-space로 embed해도 비선형 변환(ReLU)에 의한 정보의 손실이 적어짐.
+  
+  - 또한, 연산량을 줄이기 위해 1x1 convolution로 과도하게 압축하다보니 여기에서도 정보손실이 발생
+  - 1x1xL을 convolution filter의 개수, M을 linear transform W의 열(row) 개수라고 할 때,
+    - M<L: 출력값이 필터보다 작은 channel pooling의 경우 정보손실 발생
+    - M>=L: 출력값이 필터보다 크거나 같은 channel expansion의 경우에는 정보가 보존됨
+  - 하지만 M<L인 경우 입력 X의 manifold 차원수가 충분히 작으면 (X가 sparse) M<L의 1x1 conv 필터를 갖고도 X의 정보를 보존 할 수 있다.
 
-- 정리하자면,
 1. Manifold of interest 부분이 ReLU(비선형 변환)를 거친 후에도 Non-zero volume를 갖는다면, linear transformation에 해당
+  - Linear transformation은 정보손실이 없다.
+  - 즉, 차원수가 충분히 큰 space에서 ReLU를 사용하면 정보가 손실될 가능성이 크게 줄어든다.
 2. Input manifold가 input의 low-dimensional sub-space에 놓여있다면, ReLU가 input manifold에 대해 완전한 정보의 보호가 가능해짐
 
 - 만약 Manifold of interest가 low-dimension이라 가정하면, convolution block에 linear bottleneck layer를 삽입해 이를 capture 할 수 있게 됨.
@@ -123,8 +131,16 @@ Authors: Mark Sandler, Andrew Howard, Menglong Zhu, Andrey Zhmoginov, Liang-Chie
 <figcaption>MobileNet V2, ShuffleNet 과의 연산량 비교</figcaption>
 </figure>
 </center>
-  
+ 
 - MobileNet V2와 ShuffleNet간의 연산량을 비교할 때, MobileNet V2의 연산량이 더 적음을 알 수 있음
+
+### 정리
+- Real Image를 input으로 받았을 때 네트워크의 어떤 레이어들을 Manifold of interest라고 한다면, input manifold를 충분히 담지 못하는 space에서 ReLU를 수행하면 정보의 손실이 발생한다.
+- 하지만 차원수가 충분히 큰 space에서 ReLU를 사용하면 정보가 손실될 가능성이 크게 줄어든다.
+- 저차원 데이터에 conv 층을 적용하면 많은 정보를 추출 할 수 없다.
+- 따라서 더 많은 데이터를 추출하기 위해 저차원의 압축된 데이터를 압축을 먼저 풀거(차원 확장) conv 층을 적용시킨 다음 projection층을 통해 데이터를 다시 압축시키는 과정을 거친다.
+- 위의 일련이 과정이 바로 Inverted Residual Block이 하는 일이다.
+- 마지막 ReLU 함수를 지나기 전에 Channel expansion을 해서 input manifold를 충분히 큰 space에 담아 놓고, ReLU를 적용시킴으로써 정보 손실을 최소화한다. 여기서 더 나아가서 Linear Bottleneck을 마지막에 두지 말고 앞으로 가져와 Expansion -> Projection 구조 + Shortcut connection을 사용한다.
 
 ## Memory efficiency inference
 - Inverted Residual block의 bottleneck layer은 memory를 효율적으로 사용 할 수 있게 해줌
