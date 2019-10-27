@@ -17,6 +17,10 @@ comments: true
 ## Validation set(6.3GB)
 - `wget http://www.image-net.org/challenges/LSVRC/2012/nnoupb/ILSVRC2012_img_val.tar`
 
+## 추가내용
+- 2019년 10월 27일 기준 다운로드 링크가 짤렸으므로 아래 링크에 접속하여 토렌트로 다운로드 가능
+  - https://academictorrents.com/collection/imagenet-2012 (from "daeho kim")
+
 ## 압축 풀기
 - __학습 데이터셋 압축 풀기__
 - `mkdir train && mv ILSVRC2012_img_train.tar train/ && cd train`
