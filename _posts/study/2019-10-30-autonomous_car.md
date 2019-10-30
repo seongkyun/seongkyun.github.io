@@ -412,3 +412,6 @@ comments: true
 - [현대자동차그룹, APTIV와 Joint venture 설립](https://tech.hyundaimotorgroup.com/kr/press-release/hyundai-motor-group-and-aptiv-to-form-autonomous-driving-joint-venture/)
 - [현대기아차 전략적 협업](https://tech.hyundaimotorgroup.com/kr/article/who-are-hyundai-motor-groups-strategic-collaborators/)
 - [현대모비스 미래 기술 집중 전략](https://tech.hyundaimotorgroup.com/kr/article/hyundai-mobis-is-transforming-into-a-future-technology-focused-company/)
+- [세계 최초 AI 자동차 고장진단 시스템 개발](https://tech.hyundaimotorgroup.com/kr/article/worlds-first-ai-fault-detection-and-diagnostics-by-the-hmg/)
+  - 구동계 부분 부품의 고장 시 발생하는 이음의 특징을 추출해 딥러닝 모델을 학습시킴
+  - 사람의 정확도 8.7%의 10배 수준인 87%의 정확도를 보임
