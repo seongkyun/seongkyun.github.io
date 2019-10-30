@@ -84,3 +84,37 @@ comments: true
     - 운전자 케어 UI/UX
     - 다중 차량 무선충전
     - 인포테인먼트
+- 자율주행 소프트웨어 구조
+  - Cloud map, GPS, INS/IMU, Vehicle State, Lidar 등을 이용한 Localization (Map matching)
+  - Lidar, Camera 등의 센서에서 얻어진 정보들을 이용해 Object detecion, tracking, Lane detection 등을 수행
+  - 위의 결과들과 RNDF, Traffic light information을 토대로 Navigation 
+    - Global/local path planning, Path following, Speed planning
+  - Navigation 결과를 VCU(Vehicle Control Unit)로 전달
+    - Steering, Brake, Acceleration
+
+### 자율주행 주요 기술
+- 컴퓨터 플랫폼: Nvidia Drive PX2, Xavier, Mobileye EyeQ, TI TDA 3X 등의 인공지능 플랫폼
+- V2X 통신: C-ITS, 5G, WAVE(도로 인프라 및 주변차량 정보 수집/취합)
+- 보안: 전장 플랫폼 보안, 내/외부 네트워크 보안, KMS(암복호화 키 관리 시스템), AFW(어플리케이션 방화벽)
+- AI: 강화학습, 딥러닝 학습
+  - 인지: 차선, 보행자, 차량 검출등의 Object detection
+  - 판단: 의도 판단, 경로 예측
+  - 제어: 사용자 개인화 기반 최적 제어
+
+### 자율주행 차량의 센서
+- 주로 인지를 위해 사용
+- 핵심센서는 다음과 같음
+  - 카메라: 대상 물체에 대한 형태 정보를 제공하며 차선, 표지판, 신호등, 차량, 보행자 등을 탐지하기 위한 정보를 센싱
+  - 라이다: 레이저를 이용해 현재위치부터 목표물까지의 거리, 방향, 속도, 온도 등의 특성을 감지하며 전파에 가까운 성질을 가진 레이터 광선을 이용하여 활용가능범위가 매우 넓음
+  - 레이다: 전자기파를 발사해 반사 신호 분석을 통해 거리, 높이, 방향, 속도 등 주변정보를 습득
+- 센서들은 외적인 요인들로 인해 클리닝 문제, 내구성 문제 등이 발생 할 수 있기 때문에 해당 문제 또한 중요함
+  - 정상적인 자율주행을 위해선 최적 상태의 센서가 유지되어야 함
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-10-30-autonomous_car/fig1.jpg" alt="views">
+<figcaption>현대자동차 넥쏘에 적용 센서들</figcaption>
+</figure>
+</center>
+
+### 카메라
