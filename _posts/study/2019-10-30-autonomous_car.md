@@ -261,3 +261,48 @@ comments: true
   - 사물의 움직이는 패턴을 학습하는 관계형 추론 모델의 적용도 가능
     - 딥마인드 논문으로 화면 내 공들의 움직임을 6프레임만 학습시키면 향 후 150프레임까지 실제와 거의 일치하는 수준으로 예측
 - 이러한 관계형 추론 모델을 이용해 상대적 관계를 이해할 경우 급차선변경이나 과속하는 차량의 정보를 토대로 해당 차량의 움직임을 미리 예측해 사고를 사전에 방지하는것 또한 가능해짐    
+
+---
+- 출처: https://www.hyundai.co.kr/TechInnovation/Autonomous/Autonomous.hub
+
+## 고속도로 자율주행
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-10-30-autonomous_car/fig3.JPG" alt="views">
+<img src="/assets/post_img/study/2019-10-30-autonomous_car/fig4.JPG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+## 도심 자율주행
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-10-30-autonomous_car/fig5.JPG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+## 자율주차
+- 자율 발레 파킹(AVPS, Automated Valet Parking System)
+- 운전자의 개입 없이 스스로 이동하여 빈 공간을 찾아 차량을 주차/출차 하는 기술
+- 전기차의 경우 알아서 충전소를 찾아 충전하고 다시 주차장으로 귀환해서 주차를 수행하게 됨
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-10-30-autonomous_car/fig6.JPG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+## 능동안전(ADAS)
+- Adaptive Driver Assistance System
+- 사고 발생 시/위협 감지 시 스스로 운전자에게 위험을 경고하고 브레이킹/핸들조향을 수행
+
+<center>
+<figure>
+<img src="/assets/post_img/study/2019-10-30-autonomous_car/fig7.JPG" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
