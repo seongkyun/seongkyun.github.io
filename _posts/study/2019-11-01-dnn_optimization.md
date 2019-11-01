@@ -53,7 +53,7 @@ $$\hat{x_i}\leftarrow \frac{x_i-\mu_B}{\sqrt{\sigma_B^2+\epsilon}}$$
 
 - 정규화 후에 배치 정규화 계층마다 이 정규화된 데이터에 대한 고유한 스케일링(Scaling, $\gamma$), 쉬프팅(Shifting, $\beta$) 수행
   - $y_i\leftarrow\gamma\hat{x_i}+\beta$
-- 초깃값은 $\gamma=1,\; \beta=0$으로 설정되며 학습과정에서 적절한 값으로 
+- 초깃값은 $\gamma=1,\; \beta=0$으로 설정되며 학습과정에서 적절한 값으로 조정해 나감
 
 ## 일반화(Regularization)
 - 네트워크의 과적합 학습을 방지하기위해 아래와 같은 regularization 기법들을 사용함
