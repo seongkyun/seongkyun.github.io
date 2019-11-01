@@ -41,4 +41,10 @@ $$\sigma_B^2 \leftarrow \frac{1}{n}\sum_{i=1}^{n}(x_i-\mu_B)^2$$
 
 $$\hat{x_i}\leftarrow \frac{x_i-\mu_B}{\sqrt{\sigma_B^2+\epsilon}}$$
 
+- 정규화에서 $x_i-\mu_B$가 평균을 0으로 만들고, $\sqrt{\sigma_B^2+\epsilon}$가 분산을 1로 만듦
+- 표준편차로 나누면 분산이 1이 됨
+- $\epsilon$은 0으로 나눠지는것을 방지하기 위한 아주 작은 상수
 
+- 정규화 후에 배치 정규화 계층마다 이 정규화된 데이터에 대한 고유한 스케일링(Scaling, $\gamma$), 쉬프팅(Shifting, $\beta$) 수행
+  - $y_i\leftarrow\gamma\hat{x_i}+\beta$
+- 초깃값은 $\gamma=1,\; \beta=0$으로 설정되며 학습과정에서 적절한 값으로 
