@@ -71,7 +71,7 @@ $$\hat{x_i}\leftarrow \frac{x_i-\mu_B}{\sqrt{\sigma_B^2+\epsilon}}$$
 - Loss function에 $\frac{1}{2}\lambda W^2$를 더하는것이 어떻게 weight parameter에 penalty를 부과하는것인가?
   - $\frac{1}{2}\lambda W^2$를 loss function에 더함으로써 __gradient descent 과정에서 위 항을 미분한 $\lambda W$ 를 항상 더하게 됨__
   - 이에 따라 weight $W$의 update 과정에서 $W\leftarrow W-\eta(\frac{\partial L}{\partial W}+\lambda W)$가 되므로, weight 값이 그만큼 더 보정되게 됨 ($\eta$: learning rate)
-- Loss function 값에 $\lambda |W|$를 더하는 sparsity(L1 regularization)도 있으며, L1, L2 regularization을 동시에 적용 가능
+- Loss function 값에 $\lambda \|W\|$를 더하는 sparsity(L1 regularization)도 있으며, L1, L2 regularization을 동시에 적용 가능
 - 하지만 일반적으로 L2 regularization만을 사용하는것이 더 좋은 결과를 가져옴
 
 <center>
