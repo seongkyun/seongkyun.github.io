@@ -96,4 +96,41 @@ Authors: Mingxing Tan, and Quoc V. Le
     - $\alpha\dot\beta^2\dot\gamma^2\approx 2$
     - $\alpha\geq1, \beta\geq1, \gamma\geq1$
 
+- 우선 depth, width, resolution은 각각 알파, 베타, 감마로 나타내며 각각의 비율은 $\alpha\dot\beta^2\dot\gamma^2\approx 2$ 조건을 만족해야 함
+- 여기서 width와 resolution에 제곱항이 들어간 이유는 depth는 2배 키워주면 FLOPS도 비례해서 2배 증가하지만, width와 resolution은 공간 방향으로 2차원이므로 제곱 배 증가하기 때문임
+  - 따라서 제곱을 곱해서 계산함
+- 다음에 전체 모델 사이즈는 알파, 베타, 감마에 똑같은 파이만큼 제곱해서 조절하게 됨
+- EfficientNet의 알파, 베타, 감마 값은 간단한 grid search를 통해 구하는 방식을 제안하며, 처음 단계에서는 파이를 1로 고정한 뒤 타겟 데이터셋에서 좋은 성능을 보이는 알파, 베타, 감마 값을 찾아냄
+- 이 논문에선 $\alpha=1.2$, $\beta=1.1$, $\gamma=1.15$를 사용하며, 이 3개의 scaling factor들을 고정한 뒤 $\phi$를 키워주며 모델의 사이즈를 키워주며 실험
+
+- 기존 사람이 디자인한 CNN, AutoML을 통해 찾은 CNN들과 비교를 한 결과는 아래와 같음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-11-07-efficientnet/fig6.png" alt="views">
+<figcaption>ImageNet 실험결과</figcaption>
+</figure>
+</center>
+
+- 결과를 보면 알 수 있듯이 기존 ConvNet들에 비해 비슷한 정확도를 보이면서 parameter 수와 FLOPS 수를 굉장히 많이 절약 할 수 있음
+- 또한 기존에 ImageNet 데이터셋에서 가장 높은 정확도를 달성했던 GPipe보다 더 높은 정확도를 달성함
+  - 동시에 parameter수와 FLOPS 수도 굉장히 많이 절약함
+- 실험 결과가 상당히 의미있고 좋음
+- 이 외에도 다양한 실험 결과들은 논문에서 확인 가능
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-11-07-efficientnet/fig7.png" alt="views">
+<figcaption>Class Activation Map 실험결과</figcaption>
+</figure>
+</center>
+
+- 마지막으로 모델이 이미지를 분류할 때 영상 내 어느 영역에 집중했는지 확인 할 수 있는 class activation map(CAM)을 뽑았을 때, 3개의 caling factor를 각각 고려하는 경우보다 동시에 고려했을 때 더 정교한 CAM을 얻을 수 있었음
+
+## 결론
+- 직관적이고 간단한 방식을 적용해 우수한 성능을 내는 점이 인상깊었음
+
+
+
+
 
