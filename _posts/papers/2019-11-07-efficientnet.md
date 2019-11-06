@@ -1,12 +1,12 @@
 ---
 layout: post
-title: EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks
+title: EfficientNet：Rethinking Model Scaling for Convolutional Neural Networks
 category: papers
 tags: [Deep learning]
 comments: true
 ---
 
-# EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks
+# EfficientNet：Rethinking Model Scaling for Convolutional Neural Networks
 
 Original paper: https://arxiv.org/pdf/1905.11946.pdf
 
