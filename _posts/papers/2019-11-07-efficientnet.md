@@ -90,13 +90,13 @@ Authors: Mingxing Tan, and Quoc V. Le
 - 모델 구조는 MnasNet과 거의 유사하며, 위와 같이 구성됨
 - 이 모델을 base로 하여 3가지 scaling factor를 동시에 고려하는 __Compund Scaling__ 을 적용하여 실험을 수행
   - Depth: $d=\alpha^{\phi}$
-  - Width: $w=\beth^{\phi}$
+  - Width: $w=\beta^{\phi}$
   - Resolution: $r=\gamma^{\phi}$
   - 단, 다음의 조건을 만족
-    - $\alpha\bullet\beta^2\bullet\gamma^2\approx 2$
+    - $\alpha\cdot \beta^2\cdot \gamma^2\approx 2$
     - $\alpha\geq1, \beta\geq1, \gamma\geq1$
 
-- 우선 depth, width, resolution은 각각 알파, 베타, 감마로 나타내며 각각의 비율은 $\alpha\bullet\beta^2\bullet\gamma^2\approx 2$ 조건을 만족해야 함
+- 우선 depth, width, resolution은 각각 알파, 베타, 감마로 나타내며 각각의 비율은 $\alpha\cdot \beta^2\cdot \gamma^2\approx 2$ 조건을 만족해야 함
 - 여기서 width와 resolution에 제곱항이 들어간 이유는 depth는 2배 키워주면 FLOPS도 비례해서 2배 증가하지만, width와 resolution은 공간 방향으로 2차원이므로 제곱 배 증가하기 때문임
   - 따라서 제곱을 곱해서 계산함
 - 다음에 전체 모델 사이즈는 알파, 베타, 감마에 똑같은 파이만큼 제곱해서 조절하게 됨
