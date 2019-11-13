@@ -111,7 +111,7 @@ Authors: Leon A. Gatys, Alexander S. Ecker, and Matthias Bethge
   - Style과 texture는 공간정보와 무관해야 함
   - 따라서 각 레이어의 feature map 사이의 상관관계(correlation)를 나타내는 Gram matrix를 사용
 - 레이어 l에서의 Gram matrix는 아래와 같이 정의됨  
-  - Style image: $\vv{a}$
+  - Style image: $\vec{a}$
   - Layer: $l$
   - $F^l$: l번째 layer의 feature map
   - $G_{ij}^{l}$: $\sum_k F_{ik}^{l}F_{jk}^{l}$
