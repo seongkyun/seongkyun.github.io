@@ -121,7 +121,7 @@ Authors: Leon A. Gatys, Alexander S. Ecker, and Matthias Bethge
 - 위의 레이어별 feature 그림에서는 'conv1_1(a)', 'conv1_1, conv2_1(b)', 'conv1_1, conv2_1, conv3_1(c)', 'conv1_1, conv2_1, conv3_1, conv4_1(d)', 'conv1_1, conv2_1, conv3_1, conv4_1, conv5_1(e)' 레이어에서 입력된 이미지를 재구성한 결과를 보여줌
   - 깊은 레이어에 대한 정보가 많이 포함될수록 이미지가 가진 전역적인 레이아웃 정보가 아닌, 마지 이미지가 줌인 되는듯한 스타일을 얻어내는 것을 확인 할 수 있음
   
-### Loss function  
+### Loss function의 정의
 - 실제 style transfer 알고리즘은 아래와 같음
 
 <center>
@@ -131,4 +131,60 @@ Authors: Leon A. Gatys, Alexander S. Ecker, and Matthias Bethge
 </figure>
 </center>
 
+- Content image p, style image a에 대해 합성할 이미지인 x를 noise image로 초기화
+- 각 이미지 p, a, x를 ImageNet pretrained VGG19에 foward pass 수행
+- 이미지 p와 x에 대해서 content feature 기반의 content loss 계산
+- 이미지 a와 x에 대해서 style feature 기반의 style loss 계산
+- Content loss와 style loss를 합해 total loss 계산
+- Total loss를 back propagation해서 noise image x를 업데이트
+  - 여기서 네트워크 자체의 weight parameter는 업데이트 되지 않으며, 생성하려는 입력 이미지 x의 픽셀 값들만 아래와 같이 업데이트됨
+  - $\vec{x}=\vec{x}-\lambda\frac{\partial L_{total}}{\partial \vec{x}}$
 
+#### Content loss
+- Content image p와 합성할 이미지 x 사이의 content loss는 아래와 같이 계산
+  - 먼저 content image p에 대해
+  - Content image p를 네트워크에 feed forward
+  - Content image p를 입력으로 feature map들이 계산된 네트워크에서 레이어 l의 feature map을 P라고 할 때, P는 아래와 같이 정의됨
+    - $P^l$, where $P_{ij}^{l}$ is the activation value of $i^{th}$ filter at position $j$ in layer $l$
+  - 마찬가지로 합성할 영상 x에 대해서도 동일하게 정의
+  - 합성할 영상 x를 네트워크에 feed forward
+  - 합성할 영상 x를 입력으로 feature map들이 계산된 네트워크에서 레이어 l의 feature map을 F라고 할 때, F는 아래와 같이 정의됨
+    - $F^l$, where $F_{ij}^{l}$ is the activation value of $i^{th}$ filter at position $j$ in layer $l$
+- 레이어 l에서의 content loss는 아래와 같이 정의됨
+  - $L_{content}(\vec{p}, \vec{x}, l)=\frac{1}{2}\sum_{i, j}(F_{ij}^l-P_{ij}^l)^2$
+
+#### Style loss
+- Style image a와 합성할 이미지 x 사이의 style loss는 아래와 같이 계산됨
+  - Style image a에 대해
+  - Style image a를 네트워크에 feed forward
+  - Style image a에 대한 레이어 l에서의 Gram matrix A는 아래와 같이 정의됨
+    - $A^l$, where $A_{ij}^l$ is the inner product between $F_i^l$ and $F_j^l$ in layer $l$
+  - 동일하게 합성될 영상 x에 대해
+  - 합성될 영상 x를 네트워크에 feed forward
+  - 합성될 영상 x에 대한 레이어 l에서의 Gram matrix G는 아래와 같이 정의됨
+    - $G^l$, where $G_{ij}^l$ is the inner product between $F_i^l$ and $F_j^l$ in layer $l$
+- 레이어 l에서의 style loss는 아래와 같이 정의됨
+  - $E_l=\frac{1}{4N_{l}^{2}M_{l}^{2}}\sum_{i,j}(G_{ij}^{l}-A_{ij}^{l})^2$, where $N_l$ is number of feature maps at layer $l$, $M_l$ is height $\times$ width of feature maps at layer $l$
+- Style feature의 경우 여러 레이어를 동시에 사용하므로 total style loss는 아래와 같음
+  - $L_{style}(\vec{a}, \vec{x})=\sum_{l=0}^{L}w_l E_l$, where $w_l$ is weighting factors of the layer to the total loss
+
+#### Total loss
+- Content loss와 style loss를 결합한 total loss는 아래와 같음
+  - $L_{total}(\vec{p}, \vec{a}, \vec{x})=\alpha L_{content}(\vec{p}, \vec{x})+\beta L_{style}(\vec{a}, \vec{x})$
+- 여기서 content loss와 style loss에 대해 각각 가중치를 적용시킴
+  - 가중치를 어떻게 하느냐에 따라 조금 더 content를 살릴지, style를 살릴지 결정 할 수 있음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-11-13-style_transfer/fig6.png" alt="views">
+<figcaption>가중치 조절에 따른 합성된 이미지 x의 결과</figcaption>
+</figure>
+</center>
+
+- Style loss에 가중치를 크게 주면(좌측 상단) 스타일 중심적인 이미지 x가 생성됨
+- Content loss에 가중치를 크게 주면(우측 하단) 컨텐츠 중심적인 이미지 x가 생성됨
+
+## 구현
+- https://www.popit.kr/neural-style-transfer-%EB%94%B0%EB%9D%BC%ED%95%98%EA%B8%B0/
+    
+    
