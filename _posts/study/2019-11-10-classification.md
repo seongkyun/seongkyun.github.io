@@ -13,16 +13,16 @@ comments: true
 ## Image Classification 연구동향
 - 2012년 AlexNet을 기점으로 많은 종류의 classification network들이 제안됨
 - 시간이 흐를수록 연구방향이 바뀌고 있기에 그 흐름을 간단히 정리하면 아래와 같음
-  - 2012년 - 2016년: AlexNet, VGG, GoogLeNet, ResNet, DenseNet, SENet 등 사람이 이런저런 시도를 하며 그럴싸한 네트워크를 디자인
-  - 2016년 말 - 2018년: AutoML을 이용한 Neural Architecture Search(NAS)를 이용해 최적의 구조를 찾고, 탐색에 필요한 시간을 획기적으로 줄이고, 줄인 만큼 큰 구조를 만들어내는데 집중
+  - __2012년 - 2016년:__ AlexNet, VGG, GoogLeNet, ResNet, DenseNet, SENet 등 사람이 이런저런 시도를 하며 그럴싸한 네트워크를 디자인
+  - __2016년 말 - 2018년:__ AutoML을 이용한 Neural Architecture Search(NAS)를 이용해 최적의 구조를 찾고, 탐색에 필요한 시간을 획기적으로 줄이고, 줄인 만큼 큰 구조를 만들어내는데 집중
     - Neural Architecture Search with Reinforcement Learning (2016.11)
     - NASNet, ENAS, PNASNet, DARTS, AmoebaNet 등 많은 연구 수행
-  - 2018년 - 2019년 초중반: AutoML에서 찾은 구조를 기반으로 사람이 튜닝을 하며 성능을 향상시킴
+  - __2018년 - 2019년 초중반:__ AutoML에서 찾은 구조를 기반으로 사람이 튜닝을 하며 성능을 향상시킴
     - GPipe, EfficientNet 등 많은 연구 진행
-  - 2019년 초중반: 수십억장의 web-scale extra labeled images등 무수히 많은 데이터를 잘 활용하여 ResNext로도 SOTA 달성
+  - __2019년 초중반:__ 수십억장의 web-scale extra labeled images등 무수히 많은 데이터를 잘 활용하여 ResNext로도 SOTA 달성
     - Billion-scale semi-supervised learning for image classification (2019.05)
     - Fixing the train-test resolution discrepancy (2019.06)
-  - 2019년 말(현재): Labeled web-scale extra images대신 web-scale extra unlabeled images를 써서 self-training을 활용해 SOTA 달성
+  - __2019년 말(현재):__ Labeled web-scale extra images대신 web-scale extra unlabeled images를 써서 self-training을 활용해 SOTA 달성
 
 - 2016년 NAS 연구가 처음 공개된 이후 많은 논문들이 쏟아져나옴
 - NAS 연구 초반엔 비현실적인 GPU cost를 요구하는 네트워크 구조들이였기에 꿈만 같은 연구로 여겨졌음
