@@ -140,4 +140,21 @@ Authors: Qizhe Xie, Eduard Hovy, Minh-Thang Luong, Quoc V. Le
   - EfficientNet-L2 역시 괜찮은 정확도(Top-1 acc 49.6%)를 보임
   - 이는 EfficientNet 자체가 natural adversarial example에 꽤 견고한 모델임을 보여주며, 견고한 baseline architecture에 Noisy Student를 적용시킨다면 결과가 훨씬 더 좋아질 수 있음을 의미함
   
-  
+### Adversarial Attack 실험결과
+- Adversarial attack에 얼마나 robust하게 버티는지 평가한 실험
+  - Adversarial attack은 네트워크가 오작동하게 만드는 noise 성분으로 생각하면 됨
+    - 사람이 보기엔 adversarial attack을 당한 영상도 전과 동일하게 판단되지만, 딥러닝 네트워크는 adversarial attack받은 영상은 전혀 다른것으로 판단
+    - 참고: https://www.slideshare.net/NaverEngineering/ss-86897066
+- Adversarial attack에 많이 사용되는 FGSM공격을 EfficientNet에 가했을 때 성능을 측정하고, EfficientNet에 Noisy Student를 적용시켰을 때의 성능을 비교
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-11-14-self_training/fig7.png" alt="views">
+<figcaption></figcaption>
+</figure>
+</center>
+
+- 기본 EfficientNet과 Nosiy Student가 적용된 모델을 비교했을때, 전반적으로 Noisy Student 모델이 adversarial attack에 robust함을 보여줌
+
+## 결론
+- ImageNet 데이터셋의 accuracy 증가에 초점을 맞춰 수행한 연구지만, 부가적으로 모델의 robustness가 매우 증가한점이 인상깊음
