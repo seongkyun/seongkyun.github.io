@@ -54,3 +54,37 @@ comments: true
   - Batch size가 너무 크면 generalization 능력을 떨어트리게 됨
   - https://seongkyun.github.io/papers/2019/01/04/Dont_decrease_the_lr/
   - https://arxiv.org/abs/1609.04836
+
+## 2. Data Regularization/Normalization
+- 데이터 셋 정규화 시킬것(Normalization)
+  - 데이터 셋을 training, validation, test set으로 나누고
+  - 나뉘어진 training set에 대해 평균, 분산을 구해 data normalization을 수행
+- 일반화 방법인 data augmentation을 너무 많이 시키게 되면 under-fitting이 발생하게 됨
+- Pre-trained model을 사용할 때는 항상 입력되는 값을 신경써야 함
+  - 학습된 네트워크에 입력되는 데이터가 어느 값 분포를 갖도록 정규화 되었는지 신경써야 함
+    - 0~1 사이의 분포인지, -1~1 사이의 분포인지, 0~255 사이의 분포인지..
+
+## 3. Implementation issues
+- 좀 더 간단한 문제를 풀어보기
+  - Object detection을 하고 싶다면, 일단 객체의 위치만 찾거나 classification만 하도록 학습시켜보기
+- 우연히 찍어서 정답이 맞을 확률을 확인해보기
+  - 예를 들어 10개의 클래스를 맞추는 문제에서 우연히 답을 맞추는 negative log loss는 -ln(0.1)=2.302가 됨
+- Loss function을 custom하게 만들어 적용한다면, 해당 loss가 잘 동작하는지 일일이 확인할 필요가 있음
+  - 라이브러리가 제공하는 loss를 사용한다면 해당 loss function이 어떤 형식의 input을 받는지를 명확히 해야 함
+    - Pytorch의 경우, NLL Loss와 CrossEntropy Loss는 다른 입력을 받음
+      - CE loss의 경우 one-hot 입력을 사용함
+  - Total loss가 여러 작은 loss function term들의 합이라면, 각 term의 scale factor를 조절해야 할 수 있음
+  - Loss 외에도 accuracy를 사용해야 할 수 있음
+    - Metric을 loss로 잡는것이 정확한지, accuracy로 잡는것이 정확할지를 판단해야 함
+- Network architecture를 직접 만들었다면, 하나하나 제대로 동작하는지 확실히해야 함
+  - 학습중 weight parameter update가 수행되지 않는 frozen layer가 있는지 확인하기
+  - 네트워크의 표현력(expressiveness, expressive power)이 부족 할 수 있음
+    - 이는 네트워크의 효율화나 크기를 키워 극복 가능
+  - Input이 (k, H, W)=(64, 64, 64)로 모두 같은 dimension 크기를 갖는다면 학습이 잘 되고 있는지 중간에서 확인하기 어려움
+    - Prime number로 vector(feature map)를 생성하게 조절해서 잘 동작하는지 확인해보기
+- Optimizer를 직접 만들었다면(gradient descent algorithm), gradient가 떨어지도록 잘 동작하는지를 확인해보기
+  - http://ufldl.stanford.edu/tutorial/supervised/DebuggingGradientChecking/
+  - http://cs231n.github.io/neural-networks-3/#gradcheck
+  - https://www.coursera.org/lecture/machine-learning/gradient-checking-Y3s6r
+  
+  
