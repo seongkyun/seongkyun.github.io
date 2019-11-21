@@ -64,7 +64,7 @@ comments: true
   - 학습된 네트워크에 입력되는 데이터가 어느 값 분포를 갖도록 정규화 되었는지 신경써야 함
     - 0~1 사이의 분포인지, -1~1 사이의 분포인지, 0~255 사이의 분포인지..
 
-## 3. Implementation issues
+## 3. Implementation Issues
 - 좀 더 간단한 문제를 풀어보기
   - Object detection을 하고 싶다면, 일단 객체의 위치만 찾거나 classification만 하도록 학습시켜보기
 - 우연히 찍어서 정답이 맞을 확률을 확인해보기
@@ -87,4 +87,40 @@ comments: true
   - http://cs231n.github.io/neural-networks-3/#gradcheck
   - https://www.coursera.org/lecture/machine-learning/gradient-checking-Y3s6r
   
-  
+## 4. Training Issues
+- 네트워크에 샘플링된 매우 작은 크기의 데이터를 입력시켜 학습시킨다음 잘 동작하는지를 확인하기
+- Network weight parameter의 초기화가 중요함
+  - 초기화에 따라 네트워크가 잘 학습되지 않을 수 있음
+  - (Xavier)[http://proceedings.mlr.press/v9/glorot10a/glorot10a.pdf]나 (He)[https://www.cv-foundation.org/openaccess/content_iccv_2015/papers/He_Delving_Deep_into_ICCV_2015_paper.pdf]의 방법을 사용
+  - 하지만 어떤 구조라도 최고의 parameter initialization 방법은 pre-trained model의 weight 값으로 초기화 시킨 후 fine-tuning 하는 방법
+    - https://seongkyun.github.io/papers/2019/11/06/imagenet_transfer/
+- Hyperparameter를 조절해보기
+  - 일반적으로 최적의 학습용 하이퍼파라미터를 찾기위해 하나하나 직접 시도해보긴 어렵지만, 대부분의 논문에서 실험적으로 사용한 세팅을 그대로 가져다 사용하는것을 추천
+    - Learning rate, LR decaying 등등
+  - 하이퍼파라미터를 잘못 설정해도 네트워크가 학습되지 않고 gradient exploding이 되는경우가 허다함!
+- Regularization(data augmentation, dropout, weight decay 등)과 Normalization(Batch normalization 등) 방법들을 줄여보기
+  - (여기)[https://course.fast.ai/] 에서는 overfitting 문제 해결 전 underfitting시키는 요소들을 제거시켜 우선적으로 overfitting 상태로 네트워크를 만들어보라고 함
+- Loss가 전반적으로 우하향 하고 있다면(줄고 있다면), 일단 좀 더 기다려보기
+- 각 딥러닝 framework들은 phase에 따라(training/test) batch normalization, dropout등이 다르게 동작하는것을 인지하기
+- __학습 과정 시각화하기(중요)__
+  - 각 layer의 activations, weights, updates를 모니터링 할 것
+  - 변화량이 적어야(약 0.001정도) 학습이 다 된것임
+    - https://cs231n.github.io/neural-networks-3/#summary
+  - Tensorboard나 Crayon을 사용하면 됨
+- Activation 값들의 평균이 0을 상회하는지 확인하기
+  - Batch norm이나 ELU activation function 사용하기
+- Weight, biases의 분포는 gaussian 분포를 따르는것이 좋음
+  - 단, LSTM은 예외
+  - 해당 값들이 inf로 발산하는지를 주시해야 함
+- Optimizer를 잘 쓰면 빠르게/효율적으로 학습 가능함
+  - 매우 정리 잘 되어있는 좋은 글: https://ruder.io/optimizing-gradient-descent/
+  - Momentum SGD + step lr decaying을 사용하거나, Adam을 사용하는것이 일반적
+- Exploding/Vanishing gradients
+  - Gradient clipping을 처리해야 할 수도 있음
+  - Activation의 표준편차는 주로 0.5에서 2 사이이며, 이를 벗어나면 vanishing/exploding activation을 의심해봐야 함
+- Increase/Decrease Learning Rate
+  - 현재 lr에서 0.1이나 10을 곱하면서 학습 진행시키기
+- RNN의 학습 시의 NaN은 큰 문제
+  - 처음 100 iteration안에 NaN이 출력된다면 lr을 줄여봐야 함
+  - 0으로 나눌 때 뿐만 아니라 log에 0이나 음수가 들어가도 나올 수 있으니 알고있어야 함
+  - Layer by layer로 조사해보면서 NaN을 찾아야 할 수도 있음
