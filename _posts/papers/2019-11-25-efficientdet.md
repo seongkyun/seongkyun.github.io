@@ -137,7 +137,7 @@ Authors: Mingxing Tan, Ruoming Pang, Quoc V. Le (Google)
 - 그림 5에선 input 1과 input 2의 weight를 training step에 따라 plot 한 결과를 확인 할 수 있음
   - 학습이 계속될수록 weight가 빠르게 변하는 것을 확인 할 수 있음
   - 이는 feture들이 동등하지 않게 output feature에 기여하고 있음을 의미함
-  - Fast fusion을 적용시켜도 SoftMax fusion과 양상이 비슷한것을 확인 할 수 
+  - Fast fusion을 적용시켜도 SoftMax fusion과 양상이 비슷한것을 확인 할 수 있음
   
 ## EfficientDet
 - 위에서 설명한 BiFPN을 기반으로 EfficientDet이라는 1-stage detection method를 제안함
@@ -199,4 +199,4 @@ Authors: Mingxing Tan, Ruoming Pang, Quoc V. Le (Google)
 - 본 논문에선 2018년을 기점으로 다양한 detection method들의 성능을 단숨에 서열정리함
 - 성능보다도 inference time의 관점에서 매우 효율적
   - MS COCO와 같은 연구용 데이터셋 뿐만 아니라 실제 데이터셋과 같은 실제(practical) application에서도 충분히 적용가능한 방법
-- Object detection에서도 EfficientNet의 방법이 적용되었으니, 조만간 Semantic/Instance segmentation에도 적용된 논문들이 나올 수 있  
+- Object detection에서도 EfficientNet의 방법이 적용되었으니, 조만간 Semantic/Instance segmentation에도 적용된 논문들이 나올 수 있음
