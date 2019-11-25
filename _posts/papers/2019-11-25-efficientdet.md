@@ -139,6 +139,64 @@ Authors: Mingxing Tan, Ruoming Pang, Quoc V. Le (Google)
   - 이는 feture들이 동등하지 않게 output feature에 기여하고 있음을 의미함
   - Fast fusion을 적용시켜도 SoftMax fusion과 양상이 비슷한것을 확인 할 수 
   
+## EfficientDet
+- 위에서 설명한 BiFPN을 기반으로 EfficientDet이라는 1-stage detection method를 제안함
 
+### EfficientDet Architecture
 
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-11-25-efficientdet/fig6.png" alt="views">
+<figcaption>EfficientDet 구조</figcaption>
+</figure>
+</center>
 
+- EfficientDet의 구조는 위의 그림과 같음
+  - 별다른 특이점 없이 그냥 그림 그대로 deconv 된 feature를 concat/connect 하여 사용함
+
+### Compund Scaling
+- Backbone network에는 EfficientNet-B0~B6를 사용했으며, ImageNet pre-trained network를 사용함
+- 실험에 사용한 Compound Scaling configuration은 아래와 같음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-11-25-efficientdet/fig7.png" alt="views">
+<figcaption>Compound Scaling for EfficientDet</figcaption>
+</figure>
+</center>
+
+- EfficientNet의 Compound Scaling처럼 input의 resolution과 backbone network의 크기를 늘려줌
+- 또한 논문에서 제안한 BiFPN과 Box/class network도 동시에 키워줌
+  - 각 네트워크별로 어떻게 키웠는지는 위 그림 우측의 (1), (2), (3)에서 확인 가능함
+
+## 실험 결과
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-11-25-efficientdet/fig7.png" alt="views">
+<figcaption>MS COCO 결과</figcaption>
+</figure>
+</center>
+
+- 제안하는 모델은 MS COCO에서 가장 높은 mAP를 달성함
+  - 2019년 11월 기준 SOTA 성능을 보임
+- 기존 방식들 대비 연산 효율이 압도적으로 좋음
+
+<center>
+<figure>
+<img src="/assets/post_img/papers/2019-11-25-efficientdet/fig8.png" alt="views">
+<figcaption>EfficientDet의 model size, inference latency 비교</figcaption>
+</figure>
+</center>
+
+- 모델의 크기(parameter 수), inference latency를 GPU와 CPU에서 측정한 실험 결과
+- 단순히 FLOPS가 적다고 해서 항상 inference latency가 적다는 보장이 없으므로 실제 inference time을 보여줌
+  - 정말 유용한 비교 방법인듯
+- 위의 그림을 보면, 제안하는 방법이 정확도도 높고 모델 크기도 작고 inference time도 작아서 빠르게 동작하고 있음을 보여주고 있음
+- 모델 학습에 관한 자세한 training strategy는 논문에서 확인 가능함
+
+## 결론
+- 본 논문에선 2018년을 기점으로 다양한 detection method들의 성능을 단숨에 서열정리함
+- 성능보다도 inference time의 관점에서 매우 효율적
+  - MS COCO와 같은 연구용 데이터셋 뿐만 아니라 실제 데이터셋과 같은 실제(practical) application에서도 충분히 적용가능한 방법
+- Object detection에서도 EfficientNet의 방법이 적용되었으니, 조만간 Semantic/Instance segmentation에도 적용된 논문들이 나올 수 있  
