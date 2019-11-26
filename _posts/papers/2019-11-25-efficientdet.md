@@ -17,7 +17,7 @@ Authors: Mingxing Tan, Ruoming Pang, Quoc V. Le (Google)
 
 ## Introduction
 - 
-(EfficientNet)[https://seongkyun.github.io/papers/2019/11/07/efficientnet/] 이 classification task를 타겟으로 작성된 논문이라면, 본 논문은 object detection task를 타겟으로 작성된 논문
+[EfficientNet](https://seongkyun.github.io/papers/2019/11/07/efficientnet/) 이 classification task를 타겟으로 작성된 논문이라면, 본 논문은 object detection task를 타겟으로 작성된 논문
 
 <center>
 <figure>
@@ -31,7 +31,7 @@ Authors: Mingxing Tan, Ruoming Pang, Quoc V. Le (Google)
 - 특히 연산량, 연산 속도 관점에서는 굉장히 효율적인 모델을 제안함
 
 ## Main Challenge and Solution
-- Speed와 accuracy는 서로 trade-off 관계를 갖기 때문에((참고)[https://arxiv.org/abs/1611.10012]) 높은 정확도와 효율을 동시에 가져가기는 어려움
+- Speed와 accuracy는 서로 trade-off 관계를 갖기 때문에([참고](https://arxiv.org/abs/1611.10012)) 높은 정확도와 효율을 동시에 가져가기는 어려움
 - 본 논문에서는 object detection에서 속도와 정확도를 모두 높게 가져가는 모델을 설계할 때 고려해야 할 점 중 크게 2가지를 challenge로 삼음
 
 ### Challenge 1. Efficient Multi-scale Feature Fusion
