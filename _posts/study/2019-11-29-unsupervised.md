@@ -2,7 +2,7 @@
 layout: post
 title: Unsupervised Visual Representation Learning Overview (Self-Supervision)
 category: study
-tags: [CNN, Convolution]
+tags: [CNN, Deep learning, Unsupervised learning]
 comments: true
 ---
 
