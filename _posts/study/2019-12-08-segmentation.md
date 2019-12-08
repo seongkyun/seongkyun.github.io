@@ -197,7 +197,7 @@ comments: true
 
 <center>
 <figure>
-<img src="/assets/post_img/study/2019-12-08-segmentation/fig13.png" alt="views" height="300">
+<img src="/assets/post_img/study/2019-12-08-segmentation/fig13.png" alt="views">
 <figcaption></figcaption>
 </figure>
 </center>
