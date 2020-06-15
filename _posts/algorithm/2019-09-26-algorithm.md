@@ -82,7 +82,7 @@ int fibonacci (int n)
 
 <center>
 <figure>
-<img src="/assets/post_img/algorithm/2019-09-26-algorithm/fig1.PNG" alt="views">
+<img src="/assets/post_img/algorithm/2019-09-26-algorithm/del_fig1.PNG" alt="views">
 <figcaption> </figcaption>
 </figure>
 </center>
